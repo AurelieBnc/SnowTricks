@@ -16,7 +16,7 @@ git clone git@github.com:AurelieBnc/SnowTricks.git
 
 MAILER_DSN=gmail://email:password@default?
 
-DATABASE_URL="mysql://user_db:password_db@127.0.0.1:3306/snowtricks?serverVersion=8.0.34"
+DATABASE_URL="mysql://root:root@127.0.0.1:3306/demo?serverVersion=8"
 
 
 ```
