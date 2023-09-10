@@ -1,0 +1,105 @@
+:root{
+    --brown: #633737;
+    --red-dark: #B04C46;
+    --red-light: #C7524B;
+    --darkcolor: #D9C7A6;
+    --mid-color: #D9D9D9;
+    --lightcolor: #f7f9fc;
+    --light: whitesmoke;
+    --background: snow;
+}
+
+/*//// Importation des polices ////*/
+/*Police navbar*/
+@font-face {
+    font-family: RetroJump;
+    src: url('../fonts/RetroJump.ttf');
+}
+
+/*Police h1*/
+@font-face {
+    font-family: Retroking;
+    src: url('../fonts/Retroking.ttf');
+}
+
+/*Police p */
+@font-face {
+    font-family: RetroTeam;
+    src: url('../fonts/RetroTeam.otf');
+}
+
+h1 {
+    font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
+    size: 5rem;
+}
+
+p {
+    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
+}
+
+body, html {
+    background-color: var(--background);
+    height: 100%;
+}
+
+#bg-head {  
+    background-image: url('../images/background/snowboard2.png') !important;
+    /* Full height */
+    height: 100% !important; 
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+#main-nav-bar>div>ul>li>a {
+    font-family: 'RetroJump','Roboto','Arial','Helvetica','sans-serif' !important;
+    color: var(--mid-color) !important;
+    font-size: 70px;
+    padding-right: 40px !important;
+}
+
+#main-nav-bar>div>ul>li>a:hover {
+    color: var(--darkcolor) !important;
+}
+
+#footer-desk>div>span {
+    color: var(--mid-color)!important;
+}
+
+/* #footer-phone>ul>li>a>i {
+    color: var(--darkcolor);
+    font-size: 50px;
+} */
+
+#main-logo {
+    height: 3rem;
+}
+
+#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon {
+    color: var(--darkcolor);
+    font-size: 50px;
+}
+
+#load-button {
+    border: solid var(--darkcolor) !important;
+    text-decoration: none !important;
+}
+
+#load-text, #spinner-icon {
+    color: var(--darkcolor);
+    background-color: var(--light) !important;
+    text-decoration: none !important;
+}
+
+#first-arrow-icon {
+    height: 100px;
+    width: 100px;
+    margin-bottom: 220px;
+}
+
+#second-arrow-icon {
+    height: 100px;
+    width: 100px;
+}
