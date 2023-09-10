@@ -45,4 +45,29 @@ class PostRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    /**
+	 * returns the list of the first fifteen articles
+	 */
+	public function postListMaxFifteen(): array
+    {
+       return $this->createQueryBuilder('p')
+           ->orderBy('p.id', 'ASC')
+           ->setMaxResults(15)
+           ->getQuery()
+           ->getResult()
+        ;
+	}
+
+    /**
+     * returns the total number of items
+     */
+    public function countPostList(): int
+    {
+       $result = $this->createQueryBuilder('p')
+        ->getQuery()
+        ->getResult()
+        ;
+        return  count($result);
+    }
 }

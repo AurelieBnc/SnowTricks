@@ -83,11 +83,14 @@ body, html {
 }
 
 #load-button {
-    border: solid var(--darkcolor);
+    border: solid var(--darkcolor) !important;
+    text-decoration: none !important;
 }
 
 #load-text, #spinner-icon {
-    background-color: var(--light);
+    color: var(--darkcolor);
+    background-color: var(--light) !important;
+    text-decoration: none !important;
 }
 
 #first-arrow-icon {

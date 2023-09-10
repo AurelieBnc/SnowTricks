@@ -18,11 +18,11 @@
     {# la navbarTop ne s'affiche qu'à partir de px, la navbarBottom prend le relais pour les plus petits affichages #}
     <nav id="main-nav-bar" class="navbar bg-dark border-bottom border-body d-none d-lg-block m-0 p-0" style="max-height:min-content "  data-bs-theme="dark">
         <div class="container-fluid m-0 p-0">
-            <a class="navbar-brand px-5 py-0" href=""><img id="main-logo" src="{{ asset('images/mainMenu/logoText.png') }}" alt="snowtricks logo">
+            <a class="navbar-brand px-5 py-0" href="{{ path("home") }}"><img id="main-logo" src="{{ asset('images/mainMenu/logoText.png') }}" alt="snowtricks logo">
             </a>
             <ul class="navbar-nav d-flex flex-row justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link active pe-2" aria-current="page" href="">Accueil</a>
+                    <a class="nav-link active pe-2" aria-current="page" href="{{ path("home") }}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link pe-2" href="#">Stricks</a>
