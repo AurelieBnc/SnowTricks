@@ -1,3 +1,6 @@
+/******************************/
+/* General*/
+
 :root{
     --brown: #633737;
     --red-dark: #B04C46;
@@ -10,6 +13,7 @@
 }
 
 /*//// Importation des polices ////*/
+
 /*Police navbar*/
 @font-face {
     font-family: RetroJump;
@@ -28,12 +32,12 @@
     src: url('../fonts/RetroTeam.otf');
 }
 
-h1 {
+h1,h2 {
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
     size: 5rem;
 }
 
-p {
+h3 {
     font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
@@ -77,20 +81,23 @@ body, html {
     height: 3rem;
 }
 
-#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon {
+#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon {
     color: var(--darkcolor);
     font-size: 50px;
 }
 
+
+/******************************/
+/* HomePage*/
+
 #load-button {
     border: solid var(--darkcolor) !important;
-    text-decoration: none !important;
+
 }
 
 #load-text, #spinner-icon {
     color: var(--darkcolor);
     background-color: var(--light) !important;
-    text-decoration: none !important;
 }
 
 #first-arrow-icon {
@@ -99,7 +106,37 @@ body, html {
     margin-bottom: 220px;
 }
 
+#first-arrow-sm-icon {
+    height: 300px;
+    width: 300px;
+    margin-bottom: 150px;
+}
+
 #second-arrow-icon {
     height: 100px;
     width: 100px;
+}
+
+#second-arrow-sm-icon {
+    height: 300px;
+    width: 300px;
+}
+
+/******************************/
+/* RetailPost*/
+
+.bg-edit-button {
+    background-color: var(--darkcolor) !important;
+}
+
+#edit-button {
+    background-color: var(--darkcolor) !important;
+}
+
+#category-button {
+    background-color: red !important;
+}
+.button-deco {
+    border: solid var(--darkcolor) !important;
+    font-weight: bold;
 }
