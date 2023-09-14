@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SnowTricks{% endblock %}
+
+{% block head %}
+<div id="bg-head" style=" height: 100%;"  class="row text-center m-0 p-0">
+    <div class="d-flex justify-content-end p-3 ">
+        <div id="edit-button" class="col-1">
+            <p class="px-2">
+                <a href=""><i class="fa-solid fa-pencil bg-edit-button" style="color: #D9C7A6;"></i></a>
+            </p>
+            <p class="px-2">
+                <a href=""><i class="fa-solid fa-trash bg-edit-button" style="color: #B04C46;"></i></a>
+            </p>
+        </div>
+
+    </div>
+    <h1 class="d-flex align-items-end justify-content-center text-center">Nom du TRICKS</h1>
+    <div style="height:200px"></div>
+
+</div>
+{% endblock %}
+
+{% block body %}
+<h1 id="tricks-list" class="text-center fs-2 my-5">Liste des Médias</h1>
+
+<div class="d-sm-none d-lg-block">
+
+    <div class="row col-12 pb-5 d-lg-flex m-0">
+        {# traitement des images (respect d'une taille prédéfinie pour pas tout casser) #}
+        {# {% for media in mediaList %} faire deux boucles une pour image une pour vidéo #}
+        <div class="  col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
+            <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto img-fluid img-thumbnail " alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+        </div>
+        <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
+            {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+            <img src="../images/default/defaultImage.jpg" style="max-width: 200px; " class="card-img-top m-auto" alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                </div>
+            </div>
+        </div>
+        <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
+            {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+            <img src="../images/default/defaultImage.jpg" style="max-width: 200px; " class="card-img-top m-auto" alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                </div>
+            </div>
+        </div>
+        <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
+            {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+            <img src="../images/default/defaultImage.jpg" style="max-width: 200px; " class="card-img-top m-auto" alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                </div>
+            </div>
+        </div>
+        <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
+            {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+            <img src="../images/default/defaultImage.jpg" style="max-width: 200px; " class="card-img-top m-auto" alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                </div>
+            </div>
+        </div>
+        <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
+            {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+            <img src="../images/default/defaultImage.jpg" style="max-width: 200px; " class="card-img-top m-auto" alt="...">
+            {# utiliser filtre |first sur les images pour n'afficher que la première #}
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                </div>
+            </div>
+        </div>
+        {# {% endfor %} #}
+    </div>
+
+</div>
+
+<div class="row my-5 pb-5 pb-lg-0 pt-0 pt-lg-5 d-lg-none">
+    <div class="d-flex align-items-end justify-content-center  text-center">
+        <a href="" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
+            <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
+            <h3 id="load-text" class="fs-5 m-0 p-3"> Voir les medias </h3>
+        </a>
+    </div>
+</div>
+
+<div class="row  my-5 ">
+    <div style="height: 3rem" class="d-flex mx-auto justify-content-center text-center list-group list-group-horizontal">
+        <span  class="px-5 m-0 list-group-item button-deco">
+            Tricks
+        </span>
+        <span class="px-5 m-0 list-group-item button-deco">
+            Créé le xx/xx/xxxx
+        </span>
+        <span class="px-5 m-0 list-group-item button-deco">
+            Mise à jour le xx/xx/xxxx
+        </span>
+        <span class="px-5 m-0 list-group-item button-deco">
+            Autheur : blabla lui
+        </span>
+    </div>
+</div>
+
+
+<div style="height:400px"></div>
+{% endblock %}
