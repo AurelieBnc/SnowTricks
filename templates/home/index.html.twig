@@ -5,48 +5,60 @@
 {% block head %}
 <div id="bg-head" style=" height: 100%;"  class="row text-center m-0 p-0">
     <div style="height:200px"></div>
+
     <h1 class="d-flex align-items-end justify-content-center text-center">Site communautaire de partage de Tricks</h1>
-    <div class="d-flex align-items-end justify-content-sm-center justify-content-lg-end">
-        <a href="#tricks-list"><img id="first-arrow-icon" src="../images/icon/arrowBottom.png" style="font-size: xxx-large" alt="arrow bottom"></a>
+    <h1 class="d-lg-none d-flex align-items-end justify-content-center text-center" style="font-size: 5rem;">Site communautaire de partage de Tricks</h1>
+    <div class="d-sm-none d-lg-block">
+        <div class="d-flex align-items-end justify-content-end">
+            <a href="#tricks-list"><img id="first-arrow-icon" src="../images/icon/arrowBottom.png" alt="arrow bottom"></a>
+        </div>
     </div>
+    <div class="d-lg-none d-flex align-items-end justify-content-center">
+        <a href="#tricks-list"><img id="first-arrow-sm-icon" src="../images/icon/arrowBottom.png" alt="arrow bottom"></a>
+    </div>
+
 </div>
 {% endblock %}
 
 {% block body %}
-<h1 id="tricks-list" class="text-center fs-2 my-5">Liste des Tricks</h1>
+<h2 id="tricks-list" class="text-center fs-2 my-5">Liste des Tricks</h2>
 <div class="row d-flex col-12 pb-5">
 
     {% for post in postList %}
+    {# refaire une carte pour l'affichage sm #}
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
-        <img src="https://placehold.co/150x100" class="card-img-top" alt="...">
+        {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
+        <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto" alt="...">
         {# utiliser filtre |first sur les images pour n'afficher que la première #}
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-                <p class="ps-1">{{ post.title }}</p>
-                <div class="d-flex justify-content-end ">
-                    <p class="px-2"><a href=""><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
-                    </p>
-                    <p class="px-2"><a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
-                    </p>
-                </div>
-            </div>
+        <div class="card-body list-group-item mt-auto">
+            <h3 class="card-text p-2">{{ post.title }}</h3>
+        </div>
+        <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">
+            <p class="px-2 m-0"><a href=""><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+            </p>
+            <p class="px-2 m-0"><a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+            </p>
         </div>
     </div>
     {% endfor %}
 
-    {% if countPostList is defined and countPostList > 10 and loader is defined %}
-    <div class="row my-5 pb-5 pb-lg-0 pt-0 pt-lg-5">
-        <div class="d-flex align-items-end justify-content-center  text-center">
-            <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded ">
+    {% if countPostList is defined and countPostList > 15 and loader is defined %}
+    <div class=" mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
+        <div class="d-flex align-items-end justify-content-center text-center">
+            <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
                 <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
-                <p id="load-text" class="fs-5 m-0 p-3"> Load more </p>
+                <h3 id="load-text" class="fs-5 m-0 p-3"> Load more </h3>
             </a>
 
         </div>
     {% endif %}
-
-        <div class="d-flex align-items-end justify-content-end mb-2">
-            <a href="#bg-head"><img id="second-arrow-icon" src="../images/icon/arrowTop.png" style="font-size: xxx-large" alt="arrow top"></a>
+        <div class="d-sm-none d-lg-block">
+            <div class="d-flex align-items-end justify-content-end">
+                <a href="#main-nav-bar"><img id="second-arrow-icon" src="../images/icon/arrowTop.png" alt="arrow top"></a>
+            </div>
+        </div>
+        <div class="d-lg-none d-flex align-items-end justify-content-center justify-content-end mb-2 pb-2">
+            <a href="#main-nav-bar"><img id="second-arrow-sm-icon" src="../images/icon/arrowTop.png" alt="arrow top"></a>
         </div>
     </div>
 </div>
