@@ -10,7 +10,7 @@ use App\Entity\Post;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
+    #[Route('/home', name: 'homepage')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $repo = $entityManager->getRepository(Post::class);

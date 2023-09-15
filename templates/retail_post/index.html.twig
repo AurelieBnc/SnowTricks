@@ -26,7 +26,7 @@
 
     </div>    
     <div class="d-sm-none d-lg-block">
-        <h1 class="d-flex align-items-end justify-content-center text-center">Nom du Tricks</h1>
+        <h1 class="d-flex align-items-end justify-content-center text-center">{{ post.title }}</h1>
     </div>
     <h1 class="d-lg-none d-flex align-items-center justify-content-center text-center" style="font-size: 5rem;">Nom du Tricks</h1>
 
@@ -39,7 +39,7 @@
 
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
         {# traitement des images (respect d'une taille prédéfinie pour pas tout casser) #}
-        {# {% for media in mediaList %} faire deux boucles une pour image une pour vidéo #}
+        {% for media in mediaList %} {#faire deux boucles une pour image une pour vidéo #}
         <div class="  col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto img-fluid img-thumbnail " alt="...">
             {# utiliser filtre |first sur les images pour n'afficher que la première #}
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-        {# {% endfor %} #}
+        {% endfor %}
     </div>
 
 </div>
@@ -104,19 +104,22 @@
 </div>
 
 <div class="col-12 col-lg-10 m-auto">
-    <p class=" p-3 shadow "><span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse nesciunt mollitia repudiandae reiciendis doloribus, id unde incidunt dignissimos? Delectus, eaque! Reprehenderit obcaecati harum consequatur animi fugit saepe laboriosam, deleniti aliquam.</span><span>Consectetur quidem officiis architecto ipsam sint modi voluptatum velit impedit atque. Praesentium id aspernatur ea, ut, enim neque voluptas voluptatibus nihil dolorum omnis provident et incidunt sit! Libero, ea accusamus!</span><span>Incidunt illum totam itaque pariatur laborum dicta quo enim, sapiente nisi quaerat quisquam? Ut, rem nulla. Ipsum aut perferendis vitae corrupti eligendi reprehenderit quisquam ipsam alias, accusamus voluptates est expedita?</span><span>Aliquid, velit iusto reiciendis suscipit exercitationem molestias et laboriosam dolorum magni, ducimus eligendi sit provident optio incidunt. Libero quidem minima voluptates, magnam dolorum debitis possimus? Laudantium, delectus error. Asperiores, suscipit!</span><span>Nam ullam, architecto porro in consectetur ipsum quia inventore consequuntur rerum quidem eligendi facere incidunt eius eveniet illum. Soluta illo tempora aut, reprehenderit consectetur ipsum. Odio alias et quia ullam.</span><span>Quia voluptas provident suscipit expedita architecto nesciunt unde doloribus odit itaque hic eum ab, quis distinctio nostrum dignissimos, maiores impedit nobis modi est eaque fugiat? Beatae sit adipisci eum dolorum.</span><span>Nemo, commodi voluptate cupiditate officiis omnis quo quas est esse in, enim ipsum quod voluptatum atque dolorum. Id temporibus dolor, nesciunt molestias fuga odio expedita sit nulla voluptatibus totam deleniti.</span><span>Est autem porro hic enim ducimus ad esse laboriosam magnam illo? Iusto esse tenetur consectetur accusamus perferendis quidem molestiae minus. Enim soluta perspiciatis facilis pariatur, tenetur quo quas illo iure?</span><span>Optio, rem! Blanditiis aut veritatis porro ea facilis delectus error voluptas tenetur inventore vero cum autem, nobis quo, iste vitae fugiat architecto obcaecati libero repellat atque nesciunt laborum, enim dolores.</span><span>Excepturi, beatae! Quam inventore sunt quisquam nesciunt neque deleniti assumenda nobis necessitatibus, odit facere, libero, alias nihil ipsam maxime magni temporibus fugiat excepturi corrupti a officiis! Ratione voluptas veniam mollitia?</span></p>
+    <p class=" p-3 shadow text-break"><span>{{ post.content }}</span></p>
 </div>
 <div class="col-12 col-lg-8 m-auto">
     <div class="row my-5 pb-5 ">
         <div style="height: 3rem" class="d-flex mx-auto justify-content-center text-center list-group list-group-horizontal">
             <p  class="px-5 m-0 list-group-item ">
-                Tricks
+                {{ post.category.title }}
             </p>
             <p class="px-5 m-0 list-group-item ">
-                Créé le xx/xx/xxxx
+                Créé le {{ post.createdAt | date("d/m/Y",
+                "Europe/Paris") }}
             </p>
             <p class="px-5 m-0 list-group-item ">
-                Mise à jour le xx/xx/xxxx
+                Mise à jour le {{ post.updateDate |
+                    date("d/m/Y",
+                    "Europe/Paris") }}
             </p>
             <p class="px-5 m-0 list-group-item ">
                 Autheur : blabla lui
@@ -141,56 +144,55 @@
 </div>
 
 <div class="col-12 col-lg-8 m-auto">
-    {# {% for comment in comments %} #}
-        <div class="pt-5 px-5 justify-content-around shadow pb-3">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="pe-3">
-                    {# {% for user in users %}
-                    {% if comment.id_user is same as user.id %} #}
-                    <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
-                    {# {% if user.avatar is not null %} 
-                        src="{{ ROOT }}images/avatar_upload/"
-                        {% else %} #}
-                        src="images/default/default-avatar.png" 
-                        {# {% endif %}  #}
-                        alt="..." />
-                    <h3 class="fs-5 text-center">userTestPseudo</h3>
-                    {# {% endif %}
-                    {% endfor %} #}
-                </div>
-                <div class="p-3 pt-5 bg-edit-button button-deco flex-fill">
-                    <p class="small">commentaire Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus reiciendis voluptate excepturi sit delectus. Animi quaerat placeat quos ea minima? Error rem quisquam repellat excepturi quia eum illum repudiandae ducimus!</p>
-                    <p class="blockquote-footer d-flex justify-content-end mt-2">Le xx/xx/xxxx</p>
-                </div>
+{# {% for comment in comments %} #}
+    <div class="pt-5 px-5 justify-content-around shadow pb-3">
+        <div class="d-flex justify-content-between mb-3">
+            <div class="pe-3">
+                {# {% for user in users %}
+                {% if comment.id_user is same as user.id %} #}
+                <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
+                {# {% if user.avatar is not null %} 
+                    src="{{ ROOT }}images/avatar_upload/"
+                    {% else %} #}
+                    src="images/default/default-avatar.png" 
+                    {# {% endif %}  #}
+                    alt="..." />
+                <h3 class="fs-5 text-center">userTestPseudo</h3>
+                {# {% endif %}
+                {% endfor %} #}
             </div>
-    {# {% endfor %} #}
-
-            <div class="d-flex justify-content-between mb-3">
-                <div class="pe-3">
-                    <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
-                        src="images/default/default-avatar.png" 
-                        alt="..." />
-                    <h3 class="fs-5 text-center">userTestPseudo</h3>
-                </div>
-                <div class="p-3 pt-5 bg-edit-button button-deco flex-fill">
-                    <p class="small">commentaire Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus reiciendis voluptate excepturi sit delectus.</p>
-                    <p class="blockquote-footer d-flex justify-content-end mt-2">Le xx/xx/xxxx</p>
-                </div>
+            <div class="p-3 pt-5 bg-edit-button button-deco flex-fill">
+                <p class="small text-break">commentaire Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus reiciendis voluptate excepturi sit delectus. Animi quaerat placeat quos ea minima? Error rem quisquam repellat excepturi quia eum illum repudiandae ducimus!</p>
+                <p class="blockquote-footer d-flex justify-content-end mt-2">Le xx/xx/xxxx</p>
             </div>
         </div>
-</div>
-    {# {% if countCommentList is defined and countCommentList > 15 and loader is defined %} #}
-    <div class=" mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
-        <div class="d-flex align-items-end justify-content-center text-center">
-            <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
-                <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
-                <h3 id="load-text" class="fs-5 m-0 p-3"> Load more </h3>
-            </a>
+{# {% endfor %} #}
 
+        <div class="d-flex justify-content-between mb-3">
+            <div class="pe-3">
+                <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
+                    src="images/default/default-avatar.png" 
+                    alt="..." />
+                <h3 class="fs-5 text-center">userTestPseudo</h3>
+            </div>
+            <div class="p-3 pt-5 bg-edit-button button-deco flex-fill">
+                <p class="small">commentaire Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus reiciendis voluptate excepturi sit delectus.</p>
+                <p class="blockquote-footer d-flex justify-content-end mt-2">Le xx/xx/xxxx</p>
+            </div>
         </div>
-    {# {% endif %} #}
     </div>
 </div>
+{# {% if countCommentList is defined and countCommentList > 15 and loader is defined %} #}
+<div class="d-lg-none mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
+    <div class=" d-flex align-items-end justify-content-center text-center">
+        <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
+            <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
+            <h3 id="load-text" class="fs-5 m-0 p-3"> Load more </h3>
+        </a>
+    </div>
+{# {% endif %} #}
+</div>
+
 
 <div style="height:150px"></div>
 
