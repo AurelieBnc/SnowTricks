@@ -72,21 +72,22 @@ background-repeat: no-repeat; background-size: cover;"  class="row text-center m
 <div class="col-12 col-lg-8 m-auto">
     <div class="row my-5 pb-5 ">
         <div style="height: 3rem" class="d-flex mx-auto justify-content-center text-center list-group list-group-horizontal">
-            <p  class="px-5 m-0 list-group-item ">
+            <h3 class="m-0 list-group-item fs-4">
                 {{ post.category.title }}
-            </p>
-            <p class="px-5 m-0 list-group-item ">
+            </h3>
+            <h3 class="m-0 list-group-item fs-4">
+                Auteur : blabla lui
+            </h3>
+            <h3 class="m-0 list-group-item fs-4">
                 Créé le {{ post.createdAt | date("d/m/Y",
                 "Europe/Paris") }}
-            </p>
-            <p class="px-5 m-0 list-group-item ">
+            </h3>
+            <h3 class="m-0 list-group-item fs-4">
                 Mise à jour le {{ post.updateDate |
                     date("d/m/Y",
                     "Europe/Paris") }}
-            </p>
-            <p class="px-5 m-0 list-group-item ">
-                Auteur : blabla lui
-            </p>
+            </h3>
+
         </div>
     </div>
 </div>
@@ -146,7 +147,7 @@ background-repeat: no-repeat; background-size: cover;"  class="row text-center m
     </div>
 </div>
 {# {% if countCommentList is defined and countCommentList > 15 and loader is defined %} #}
-<div class="d-lg-none mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
+<div class="mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
     <div class=" d-flex align-items-end justify-content-center text-center">
         <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
             <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
