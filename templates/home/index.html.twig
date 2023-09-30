@@ -27,15 +27,29 @@
     <h2 id="tricks-list" class="text-center my-5">Liste des Tricks</h2>
 </div>
     <h2 id="tricks-list-sm" class="d-lg-none text-center my-5" style="font-size: 4rem;">Liste des Tricks</h2>
+
 <div class="row d-flex col-12 pb-5">
+
     {% for post in postList %}
-    {# refaire une carte pour l'affichage sm #}
+    
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
-        {# <img src="https://placehold.co/150x100" class="card-img-top" alt="..."> #}
         <a href= "{{ path('retail_post', {'id': post.id }) }}">
-            <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto" alt="...">
+
+        {% set defaultPicture = 1 %}
+            {% for picture in pictureList %}
+                {% if post.id is same as picture.post.id %}
+                    {% if picture.name is not null %}
+                        {% set defaultPicture = 0 %}
+                        <img src="{{ picture.name }}" class="card-img-top m-auto" alt="...">
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if defaultPicture is same as 1 %}
+                <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto" alt="...">
+            {% endif %}
+
         </a>
-        {# utiliser filtre |first sur les images pour n'afficher que la première #}
+
         <div class="card-body list-group-item mt-auto">
             <div class="d-sm-none d-lg-block">
                 <h3 class="card-text pt-2 ps-2 pb-0">{{ post.title }}</h3>
@@ -62,6 +76,7 @@
             </p>
         </div>
     </div>
+
     {% endfor %}
 
     {% if countPostList is defined and countPostList > 15 and loader is defined %}
