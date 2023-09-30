@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,7 +11,7 @@ use App\Entity\Post;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'home')]
+    #[Route('/home', name: 'homepage')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $repo = $entityManager->getRepository(Post::class);
@@ -18,11 +19,16 @@ class HomeController extends AbstractController
         $countPostList = $repo->countPostList();
         $loader = true;
 
+        $mediaRepo = $entityManager->getRepository(Media::class);
+        $pictureList = $mediaRepo->findAll();
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'postList' => $postList,
             'countPostList' => $countPostList,
-            'loader' => $loader
+            'loader' => $loader,
+            'pictureList' => $pictureList,
+
         ]);
     }
 
@@ -32,9 +38,13 @@ class HomeController extends AbstractController
         $repo = $entityManager->getRepository(Post::class);
         $postList = $repo->findAll();
 
+        $mediaRepo = $entityManager->getRepository(Media::class);
+        $pictureList = $mediaRepo->findAll();
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'postList' => $postList,
+            'pictureList' => $pictureList,
         ]);
     }
 }
