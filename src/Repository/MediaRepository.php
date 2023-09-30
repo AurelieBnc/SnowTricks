@@ -46,7 +46,11 @@ class MediaRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-    public function pictureList($idPost) : array
+    /**
+     * function to get only pictures of a post
+     * @return array<string>
+     */
+    public function pictureList(int $idPost) : array
     {
         return $this->createQueryBuilder('m')
             ->select('m.name')
@@ -58,7 +62,11 @@ class MediaRepository extends ServiceEntityRepository
        ;
     }
 
-    public function videoUrlList($idPost) : array
+    /**
+     * function to get only urls video of a post
+     * @return array<string>
+     */
+    public function videoUrlList(int $idPost) : array
     {
         return $this->createQueryBuilder('m')
             ->select('m.videoUrl')
