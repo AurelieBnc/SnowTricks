@@ -139,6 +139,7 @@ body, html {
 .button-deco {
     border: solid var(--darkcolor) !important;
     font-weight: bold;
+    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
 #avatar-user {
