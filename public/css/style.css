@@ -55,7 +55,11 @@ body, html {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-  }
+}
+
+.bg-light-form {
+    background-color: var(--lightcolor) !important;
+}
 
 #main-nav-bar>div>ul>li>a {
     font-family: 'RetroJump','Roboto','Arial','Helvetica','sans-serif' !important;
@@ -144,4 +148,11 @@ body, html {
 
 #avatar-user {
     height: 100px;
+}
+
+/******************************/
+/* Register */
+
+a:hover {
+    color: var(--darkcolor) !important;
 }

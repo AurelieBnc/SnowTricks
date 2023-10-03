@@ -18,18 +18,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
+    // #[Assert\NotBlank]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[Assert\NotBlank]
+    // #[Assert\NotBlank]
     #[ORM\Column]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[Assert\NotBlank]
+    // #[Assert\NotBlank]
     #[ORM\Column]
     private ?string $password = null;
 
