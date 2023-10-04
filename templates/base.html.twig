@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    {# todo : modifier le break point du changement de menu #}
     {# la navbarTop ne s'affiche qu'à partir de px, la navbarBottom prend le relais pour les plus petits affichages #}
     <nav id="main-nav-bar" class="navbar bg-dark border-bottom border-body d-none d-lg-block m-0 p-0" style="max-height:min-content "  data-bs-theme="dark">
         <div class="container-fluid m-0 p-0">
@@ -31,7 +32,7 @@
                     <a class="nav-link pe-2" href="{{ path("app_register") }}">Connexion</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="#">Deconnexion</a>
+                    <a class="nav-link pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
                 </li>
             </ul>
         </div>
@@ -44,6 +45,8 @@
         {% endblock %}
 
     </div>
+
+    {# todo faire le lien de connexion dans le menu mobile #}
     <footer>
         <nav id="footer-desk" class="navbar fixed-bottom bg-dark border-body d-none d-md-block" data-bs-theme="dark">
             <div class="container-fluid d-flex justify-content-center">
