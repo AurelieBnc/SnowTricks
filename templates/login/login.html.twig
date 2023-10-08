@@ -27,8 +27,10 @@
                     <label for="password" class="form-label fw-bold fs-1 d-flex justify-content-center">Mot de passe</label>
                     <input type="password" class="form-control text-center" id="password" name="_password" placeholder="Chuuuut ...">
                 </div>
-
+                {# <input type="hidden" name="go_to" value="{{ path('homepage') }}">
+                <input type="hidden" name="back_to" value="{{ path('forgot_password') }}"> #}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
 
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="my-3 fs-3 button-deco">Je me connecte !</button>
@@ -36,5 +38,5 @@
             </form>
         </div>
     </div>
-
+{# todo faire le lien de mot de passe oublié #}
 {% endblock %}
