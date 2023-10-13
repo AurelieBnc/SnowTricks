@@ -20,11 +20,11 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
-                target_path_parameter: homepage
+                default_target_path: app_home
 
             logout:
                 path: app_logout
-                target: homepage
+                target: app_home
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

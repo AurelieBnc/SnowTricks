@@ -11,7 +11,7 @@ use App\Entity\Post;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'homepage')]
+    #[Route('/home', name: 'app_home')]
     public function index(EntityManagerInterface $entityManager): Response
     {
         $repo = $entityManager->getRepository(Post::class);
@@ -23,7 +23,6 @@ class HomeController extends AbstractController
         $pictureList = $mediaRepo->findAll();
 
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
             'postList' => $postList,
             'countPostList' => $countPostList,
             'loader' => $loader,

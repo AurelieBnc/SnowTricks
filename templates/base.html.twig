@@ -19,11 +19,11 @@
     {# la navbarTop ne s'affiche qu'à partir de px, la navbarBottom prend le relais pour les plus petits affichages #}
     <nav id="main-nav-bar" class="navbar bg-dark border-bottom border-body d-none d-lg-block m-0 p-0" style="max-height:min-content "  data-bs-theme="dark">
         <div class="container-fluid m-0 p-0">
-            <a class="navbar-brand px-5 py-0" href="{{ path("homepage") }}"><img id="main-logo" src="{{ asset('images/mainMenu/logoText.png') }}" alt="snowtricks logo">
+            <a class="navbar-brand px-5 py-0" href="{{ path("app_home") }}"><img id="main-logo" src="{{ asset('images/mainMenu/logoText.png') }}" alt="snowtricks logo">
             </a>
             <ul class="navbar-nav d-flex flex-row justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link active pe-2" aria-current="page" href="{{ path("homepage") }}">Accueil</a>
+                    <a class="nav-link active pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link pe-2" href="#">Stricks</a>
@@ -56,7 +56,7 @@
         <nav id="footer-phone" class="navbar fixed-bottom bg-dark border-body d-block d-lg-none">
 
             <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around py-3">
-                <li class="nav-item"><a class="nav-link" href="{{ path("homepage") }}" title="Accueil"><i id="house-icon"
+                <li class="nav-item"><a class="nav-link" href="{{ path("app_home") }}" title="Accueil"><i id="house-icon"
                             class="fa-solid fa-house p-2"></i></a></li>
                 <li class="nav-item"><a class="nav-link" href="" title="Ajout Stricks"><i id="bookmark-icon"
                             class="fa-solid fa-bookmark p-2"></i></a></li>
