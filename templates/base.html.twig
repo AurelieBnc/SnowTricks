@@ -15,9 +15,8 @@
 </head>
 
 <body>
-    {# todo : modifier le break point du changement de menu #}
-    {# la navbarTop ne s'affiche qu'à partir de px, la navbarBottom prend le relais pour les plus petits affichages #}
-    <nav id="main-nav-bar" class="navbar bg-dark border-bottom border-body d-none d-lg-block m-0 p-0" style="max-height:min-content "  data-bs-theme="dark">
+    {# la navbarTop ne s'affiche qu'à partir de 576 px, la navbarBottom prend le relais pour les plus petits affichages #}
+    <nav id="main-nav-bar" class="navbar bg-dark border-bottom border-body d-none d-md-block m-0 p-0" style="max-height:min-content "  data-bs-theme="dark">
         <div class="container-fluid m-0 p-0">
             <a class="navbar-brand px-5 py-0" href="{{ path("app_home") }}"><img id="main-logo" src="{{ asset('images/mainMenu/logoText.png') }}" alt="snowtricks logo">
             </a>
@@ -39,21 +38,20 @@
     </nav>
     {% block head %}
     {% endblock %}
-    <div class="container-fluid mb-5 pb-3"> {# container général de la page #}
+    {# container général de la page #}
+    <div class="container-fluid mb-5 pb-3"> 
         {% block body %}
 
         {% endblock %}
-
     </div>
 
-    {# todo faire le lien de connexion dans le menu mobile #}
     <footer>
-        <nav id="footer-desk" class="navbar fixed-bottom bg-dark border-body d-none d-md-block" data-bs-theme="dark">
+        <nav id="footer-desk" class="navbar fixed-bottom bg-dark border-body d-none d-sm-block" data-bs-theme="dark">
             <div class="container-fluid d-flex justify-content-center">
                 <span class="navbar-brand m-0">Footer</span>
             </div>
         </nav>
-        <nav id="footer-phone" class="navbar fixed-bottom bg-dark border-body d-block d-lg-none">
+        <nav id="footer-phone" class="navbar fixed-bottom bg-dark border-body d-block d-md-none">
 
             <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around py-3">
                 <li class="nav-item"><a class="nav-link" href="{{ path("app_home") }}" title="Accueil"><i id="house-icon"
