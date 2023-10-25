@@ -14,6 +14,8 @@ class RetailPostController extends AbstractController
     #[Route('/retailpost/{id}', name: 'retail_post')]
     public function index(int $id, EntityManagerInterface $entityManager): Response
     {
+        //$hasAccess = $this->isGranted('ROLE_ADMIN');
+
         $pictureList = null;
         $videoUrlList = null;
 

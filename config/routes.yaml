@@ -3,3 +3,12 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+app_logout:
+    path: /logout
+    methods: GET
+
+login:
+    path: /login
+    controller: App\Controller\LoginController::index
+    methods: GET|POST

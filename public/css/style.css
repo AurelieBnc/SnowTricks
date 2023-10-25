@@ -55,7 +55,11 @@ body, html {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-  }
+}
+
+.bg-light-form {
+    background-color: var(--lightcolor) !important;
+}
 
 #main-nav-bar>div>ul>li>a {
     font-family: 'RetroJump','Roboto','Arial','Helvetica','sans-serif' !important;
@@ -81,7 +85,7 @@ body, html {
     height: 3rem;
 }
 
-#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon {
+#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon, #logout-icon {
     color: var(--darkcolor);
     font-size: 50px;
 }
@@ -139,8 +143,16 @@ body, html {
 .button-deco {
     border: solid var(--darkcolor) !important;
     font-weight: bold;
+    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
 #avatar-user {
     height: 100px;
+}
+
+/******************************/
+/* Register */
+
+a:hover {
+    color: var(--darkcolor) !important;
 }
