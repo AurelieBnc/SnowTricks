@@ -27,12 +27,15 @@
                 <li class="nav-item">
                     <a class="nav-link pe-2" href="#">Stricks</a>
                 </li>
+                {% if not is_granted('ROLE_USER') %}
                 <li class="nav-item">
                     <a class="nav-link pe-2" href="{{ path("app_register") }}">Connexion</a>
                 </li>
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -58,10 +61,11 @@
                             class="fa-solid fa-house p-2"></i></a></li>
                 <li class="nav-item"><a class="nav-link" href="" title="Ajout Stricks"><i id="bookmark-icon"
                             class="fa-solid fa-bookmark p-2"></i></a></li>
-                <li class="nav-item"><a class="nav-link" href="" title="Connexion"><i id="bracket-icon"
-                            class="fa-solid fa-right-to-bracket p-2"></i></a></li>
-                {# <li class="nav-item"><a class="nav-link" href="" title="Deconnexion"><i
-                            class="fa-solid fa-right-from-bracket p-2"></i></a></li> #}
+                {% if not is_granted('ROLE_USER') %}
+                <li class="nav-item"><a class="nav-link" href="{{ path("app_register") }}" title="Connexion"><i id="bracket-icon" class="fa-solid fa-right-to-bracket p-2"></i></a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ path("app_logout") }}" title="Deconnexion"><i id="logout-icon" class="fa-solid fa-right-from-bracket p-2"></i></a></li>
+                {% endif %}
             </ul>
 
         </nav>

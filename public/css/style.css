@@ -85,7 +85,7 @@ body, html {
     height: 3rem;
 }
 
-#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon {
+#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon, #logout-icon {
     color: var(--darkcolor);
     font-size: 50px;
 }
