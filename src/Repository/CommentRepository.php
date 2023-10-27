@@ -45,4 +45,18 @@ class CommentRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    /**
+     * function to get all comments of a post
+     * @return array<Comment>
+     */
+    public function commentList(int $idPost) : array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.post = :val')
+            ->setParameter('val', $idPost)
+            ->getQuery()
+            ->getResult()
+       ;
+    }
 }

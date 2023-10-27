@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Post;
 use App\Entity\Media;
+use App\Entity\Comment;
+
 
 class PostController extends AbstractController
 {
@@ -18,6 +20,7 @@ class PostController extends AbstractController
 
         $pictureList = null;
         $videoUrlList = null;
+        $commentList = null;
 
         $postRepo = $entityManager->getRepository(Post::class);
         $post = $postRepo->find($id);
@@ -25,6 +28,9 @@ class PostController extends AbstractController
         $mediaRepo = $entityManager->getRepository(Media::class);
         $pictureList = $mediaRepo->pictureList($post->getId());
         $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+
+        $commentRepo = $entityManager->getRepository(Comment::class);
+        $commentList = $commentRepo->commentList($post->getId());
 
         // video url display processing
         $urlModifiedList = [];
@@ -36,6 +42,9 @@ class PostController extends AbstractController
             'post' => $post,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
+            'commentList' => $commentList
         ]);
     }
+
+
 }
