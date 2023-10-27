@@ -20,25 +20,25 @@
     src: url('../fonts/RetroJump.ttf');
 }
 
-/*Police h1*/
+/*Police p*/
 @font-face {
     font-family: Retroking;
     src: url('../fonts/Retroking.ttf');
 }
 
-/*Police p */
+/*Police h1 */
 @font-face {
     font-family: RetroTeam;
     src: url('../fonts/RetroTeam.otf');
 }
 
 h1,h2 {
-    font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
+    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
     size: 5rem;
 }
 
 h3 {
-    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
+    font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
 body, html {
@@ -46,8 +46,22 @@ body, html {
     height: 100%;
 }
 
+.span-text {
+    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' !important;
+}
+
 #bg-head {  
     background-image: url('../images/background/snowboard2.png') !important;
+    /* Full height */
+    height: 100% !important; 
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#bg-post {  
     /* Full height */
     height: 100% !important; 
   
