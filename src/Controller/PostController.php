@@ -9,14 +9,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Post;
 use App\Entity\Media;
 use App\Entity\Comment;
-
+use App\Form\CommentType;
+use Symfony\Component\HttpFoundation\Request;
 
 class PostController extends AbstractController
 {
     #[Route('/post/{id}', name: 'post')]
-    public function index(int $id, EntityManagerInterface $entityManager): Response
+    public function index(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
-        //$hasAccess = $this->isGranted('ROLE_ADMIN');
+        // $hasAccess = $this->isGranted('ROLE_ADMIN');
 
         $pictureList = null;
         $videoUrlList = null;
@@ -32,19 +33,36 @@ class PostController extends AbstractController
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentList = $commentRepo->commentList($post->getId());
 
-        // video url display processing
+        // Video url display processing
         $urlModifiedList = [];
         foreach ($videoUrlList as $url) {
             $urlModifiedList [] = str_replace('youtu.be', 'youtube.com/embed', $url);
+        }
+
+        // Create a commentForm
+        $comment = new Comment;
+        $commentForm = $this->createForm(CommentType::class, $comment);
+        $commentForm->handleRequest($request);
+
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $comment->setCreatedAt(new \DateTimeImmutable())
+                    ->setPost($post)
+                    ->setAuthor('moi');
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('post', [
+                'id' => $post->getId()
+            ]);
         }
 
         return $this->render('post/index.html.twig', [
             'post' => $post,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
-            'commentList' => $commentList
+            'commentList' => $commentList,
+            'commentForm' => $commentForm->createView()
         ]);
     }
-
 
 }
