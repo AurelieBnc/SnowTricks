@@ -125,7 +125,7 @@
                 {% endfor %} #}
             </div>
             <div class="p-3 col-10 pt-5  button-deco bg-white flex-fill">
-                <p class="small text-break">{{ comment.content|raw }}</p>
+                <p class="small text-break">{{ comment.content }}</p>
                 <p class="blockquote-footer d-flex justify-content-end mt-2">Le {{ comment.createdAt | date("d/m/Y",
                     "Europe/Paris") }}</p>
             </div>

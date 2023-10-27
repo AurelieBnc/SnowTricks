@@ -18,9 +18,8 @@ class ResetPasswordRequestFormType extends AbstractType
                 'label_attr' =>['class'=> 'fw-bold fs-4 d-flex text-center sjustify-content-center'],
                 'attr' => [
                     'autocomplete' => 'email',
-                    'class' => 'font-weight-light',
+                    'class' => 'font-weight-light text-center',
                     'placeholder' => 'alice@delabas.fr',
-                    'class' => 'text-center'
                 ],
                 'constraints' => [
                     new NotBlank([

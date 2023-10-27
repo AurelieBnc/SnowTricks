@@ -48,18 +48,16 @@ class ChangePasswordFormType extends AbstractType
                     'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
                     'attr' => [
                         'autocomplete' => 'new-password',
-                        'class' => 'font-weight-light',
+                        'class' => 'font-weight-light text-center',
                         'placeholder' => 'Mot de passe sécurisé',
-                        'class' => 'text-center'
                     ],
                 ],
                 'second_options' => [
                     'label' => 'Répéter le mot de passe',
                     'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
                     'attr' => [
-                        'class' => 'font-weight-light',
+                        'class' => 'font-weight-light text-center',
                         'placeholder' => 'Mot de passe identique',
-                        'class' => 'text-center'
                     ],
                 ],
                 'invalid_message' => 'Les mots de passe doivent être identique.',
