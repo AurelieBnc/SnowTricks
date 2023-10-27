@@ -11,11 +11,12 @@ use App\Entity\Media;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class PostController extends AbstractController
 {
     #[Route('/post/{id}', name: 'post')]
-    public function index(int $id, EntityManagerInterface $entityManager, Request $request): Response
+    public function index(int $id, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         // $hasAccess = $this->isGranted('ROLE_ADMIN');
 
@@ -45,15 +46,19 @@ class PostController extends AbstractController
         $commentForm->handleRequest($request);
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            $comment->setCreatedAt(new \DateTimeImmutable())
+            if ($user) {
+                $comment->setCreatedAt(new \DateTimeImmutable())
                     ->setPost($post)
-                    ->setAuthor('moi');
-            $entityManager->persist($comment);
-            $entityManager->flush();
+                    ->setUser($user);
+                $entityManager->persist($comment);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('post', [
-                'id' => $post->getId()
+                return $this->redirectToRoute('post', [
+                    'id' => $post->getId()
             ]);
+            } else {
+                $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
+            }
         }
 
         return $this->render('post/index.html.twig', [
