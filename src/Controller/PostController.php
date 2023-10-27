@@ -9,9 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Post;
 use App\Entity\Media;
 
-class RetailPostController extends AbstractController
+class PostController extends AbstractController
 {
-    #[Route('/retailpost/{id}', name: 'retail_post')]
+    #[Route('/post/{id}', name: 'post')]
     public function index(int $id, EntityManagerInterface $entityManager): Response
     {
         //$hasAccess = $this->isGranted('ROLE_ADMIN');
@@ -32,8 +32,7 @@ class RetailPostController extends AbstractController
             $urlModifiedList [] = str_replace('youtu.be', 'youtube.com/embed', $url);
         }
 
-        return $this->render('retail_post/index.html.twig', [
-            'controller_name' => 'RetailPostController',
+        return $this->render('post/index.html.twig', [
             'post' => $post,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,

@@ -33,7 +33,7 @@
     {% for post in postList %}
     
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
-        <a href= "{{ path('retail_post', {'id': post.id }) }}">
+        <a href= "{{ path('post', {'id': post.id }) }}">
 
         {% set defaultPicture = 1 %}
             {% for picture in pictureList %}
