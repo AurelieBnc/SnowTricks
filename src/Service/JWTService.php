@@ -87,7 +87,7 @@ class JWTService
     /**
      * Function to check if token is secure
      */
-    public function check(string $token, string $secret) 
+    public function check(string $token, string $secret): bool 
     {
         $header = $this->getHeader($token);
         $payload = $this->getPayload($token);
