@@ -55,6 +55,13 @@ class PostController extends AbstractController
 
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             if ($user) {
+                if ($user->isVerified() === false) {
+                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                    $this->redirectToRoute('post', [
+                        'id' => $post->getId(),
+                        'loader' => $loader
+                ]);
+                }
                 $comment->setCreatedAt(new \DateTimeImmutable())
                     ->setPost($post)
                     ->setUser($user);

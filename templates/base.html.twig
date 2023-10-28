@@ -42,8 +42,15 @@
     {% endblock %}
     {# container général de la page #}
     <div class="container-fluid mb-5 pb-3"> 
-        {% block body %}
-        {% endblock %}
+    {% for message in app.flashes('verification') %}
+        <div class="alert alert-info alert-dismissible fade show">
+            {{ message }} 
+            <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    {% block body %}
+    {% endblock %}
     </div>
 
     <footer>
