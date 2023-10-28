@@ -52,7 +52,7 @@ class PostRepository extends ServiceEntityRepository
 	public function postListMaxFifteen(): array
     {
        return $this->createQueryBuilder('p')
-           ->orderBy('p.id', 'ASC')
+           ->orderBy('p.id', 'DESC')
            ->setMaxResults(15)
            ->getQuery()
            ->getResult()
@@ -65,9 +65,9 @@ class PostRepository extends ServiceEntityRepository
     public function countPostList(): int
     {
        $result = $this->createQueryBuilder('p')
-        ->getQuery()
-        ->getResult()
-        ;
-        return  count($result);
+            ->getQuery()
+            ->getResult()
+            ;
+        return count($result);
     }
 }

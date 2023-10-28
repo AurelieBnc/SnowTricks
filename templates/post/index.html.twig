@@ -4,7 +4,7 @@
 
 {% block head %}
 {% if pictureList is empty %}
-    <div id="bg-post" style="background-image: url('../images/background/snowboard1.jpg ');" class="row text-center m-0 p-0">
+    <div id="bg-post" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% else %} 
     <div id="bg-post" style="background-image: url('{{ pictureList.0.name }}');" class="row text-center m-0 p-0">
 {% endif %}
@@ -114,7 +114,7 @@
 <div class="col-12 col-lg-8 m-auto">
 
     <div class="pt-5 px-5 justify-content-around shadow bg-edit-button pb-3">
-        <h2>Commentaires ({{ post.comments|length }})</h2>
+        <h2>Commentaires ({{ post.commentList|length }})</h2>
         {% for comment in commentList %}
         <div class="d-flex justify-content-between mb-3">
             <div class="pe-3 col-2">
@@ -141,16 +141,15 @@
     </div>
 </div>
 
-{# {% if countCommentList is defined and article.comments | length > 15 ou countCommentList > 15 and loader is defined %} #}
+{% if loader is same as 1 %}
 <div class="mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
     <div class=" d-flex align-items-end justify-content-center text-center">
-        {# complete-comment-list #}
-        <a href="{{ path("complete_post_list") }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
+        <a href="{{ path('complete_comment_list', {'post': post.id, 'loader': 0 }) }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
             <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
             <h3 id="load-text" class="fs-5 m-0 p-3"> Load more </h3>
         </a>
     </div>
-{# {% endif %} #}
+{% endif %}
 </div>
 
 

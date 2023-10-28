@@ -20,11 +20,11 @@ class Comment
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\ManyToOne(inversedBy: 'commentList')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\ManyToOne(inversedBy: 'commentList')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

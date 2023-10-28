@@ -55,8 +55,39 @@ class CommentRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->andWhere('c.post = :val')
             ->setParameter('val', $idPost)
+            ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
        ;
+    }
+
+    /**
+     * return the list of the first ten comments of a post
+     * @return array<Comment>
+     */
+    public function commentListMaxTen(int $idPost) : array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.post = :val')
+            ->setParameter('val', $idPost)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+       ;
+    }
+
+    /**
+     * returns the total number of items
+     */
+    public function countCommentList(int $idPost): int
+    {
+       $result = $this->createQueryBuilder('c')
+            ->andWhere('c.post = :val')
+            ->setParameter('val', $idPost)
+            ->getQuery()
+            ->getResult()
+            ;
+        return count($result);
     }
 }

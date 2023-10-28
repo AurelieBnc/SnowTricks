@@ -15,11 +15,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class PostController extends AbstractController
 {
-    #[Route('/post/{id}', name: 'post')]
-    public function index(int $id, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
+    #[Route('/post/{id}/{loader}', name: 'post')]
+    public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
-        // $hasAccess = $this->isGranted('ROLE_ADMIN');
-
         $pictureList = null;
         $videoUrlList = null;
         $commentList = null;
@@ -32,7 +30,17 @@ class PostController extends AbstractController
         $videoUrlList = $mediaRepo->videoUrlList($post->getId());
 
         $commentRepo = $entityManager->getRepository(Comment::class);
-        $commentList = $commentRepo->commentList($post->getId());
+        $countCommentList = $commentRepo->countCommentList($post->getId());
+
+        if ($loader === 1) {
+            $loader = ($countCommentList > 10) ? 1 : 0;
+        }
+
+        if ($loader === 0) {
+            $commentList = $commentRepo->commentList($post->getId());
+        } else {   
+            $commentList = $commentRepo->commentListMaxTen($post->getId());
+        }
 
         // Video url display processing
         $urlModifiedList = [];
@@ -54,7 +62,8 @@ class PostController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('post', [
-                    'id' => $post->getId()
+                    'id' => $post->getId(),
+                    'loader' => $loader
             ]);
             } else {
                 $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
@@ -66,7 +75,17 @@ class PostController extends AbstractController
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
             'commentList' => $commentList,
+            'loader' => $loader,
             'commentForm' => $commentForm->createView()
+        ]);
+    }
+
+    #[Route('/commentList/{post}/{loader}', name: 'complete_comment_list')]
+    public function commentListRedirect(int $post, int $loader): Response
+    {
+        return $this->redirectToRoute('post', [
+            'id' => $post,
+            'loader' => 0
         ]);
     }
 

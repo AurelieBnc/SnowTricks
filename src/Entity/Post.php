@@ -39,12 +39,12 @@ class Post
     private Collection $media;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
-    private Collection $comments;
+    private Collection $commentList;
 
     public function __construct()
     {
         $this->media = new ArrayCollection();
-        $this->comments = new ArrayCollection();
+        $this->commentList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,15 +157,15 @@ class Post
     /**
      * @return Collection<int, Comment>
      */
-    public function getComments(): Collection
+    public function getCommentList(): Collection
     {
-        return $this->comments;
+        return $this->commentList;
     }
 
     public function addComment(Comment $comment): static
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
+        if (!$this->commentList->contains($comment)) {
+            $this->commentList->add($comment);
             $comment->setPost($this);
         }
 
@@ -174,7 +174,7 @@ class Post
 
     public function removeComment(Comment $comment): static
     {
-        if ($this->comments->removeElement($comment)) {
+        if ($this->commentList->removeElement($comment)) {
             // set the owning side to null (unless already changed)
             if ($comment->getPost() === $this) {
                 $comment->setPost(null);
