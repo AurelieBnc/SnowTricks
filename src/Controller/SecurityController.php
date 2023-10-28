@@ -35,6 +35,7 @@ class SecurityController extends AbstractController
                 )
             );
             $user->setRoles(['ROLE_USER']);
+            $user->setIsVerified(false);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -69,14 +70,52 @@ class SecurityController extends AbstractController
             $payload = $jwt->getPayload($token);
             $user = $userRepository->find($payload['userId']);
 
-            if ($user && !$user->isVerified()) {
+            if ($user && $user->isVerified() === false) {
                 $user->setIsVerified(true);
                 $entityManager->flush($user);
 
                 return $this->redirectToRoute('app_login');
             }
         }
-
-        return $this->redirectToRoute('app_login');
+        $this->addFlash('error', 'une erreur est survenue lors de la vérification du Token, merci de nous contacter!');
+        
+        return $this->redirectToRoute('app_home');
     }
+
+    #[Route('/renvoiVerification', name: 'app_retry_verif_email')]
+    public function sendBackVerifyUserEmail(SendEmailService $email, JWTService $jwt, UserRepository $userRepository): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->addFlash('verification', 'Tu dois être connecté pour accéder à cette page');
+            return $this->redirectToRoute('app_login');
+        }
+
+        if($user->isVerified()){
+            $this->addFlash('verification', 'Ton email est déjà vérifié !');
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Generate JWT Token
+        $header = [
+            'typ' => 'JWT',
+            'alg' => 'HS256',
+        ];
+        $payload = ['user_id' => $user->getId()];
+        $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+
+        // Send Verification Email
+        $email->send(
+            'aurelie.test.mail@gmail.com',
+            $user->getEmail(),
+            'Confirmation de ton email',
+            'security/confirm_email.html.twig',
+            [ 'user' => $user, 'token' => $token ]
+        );
+
+        $this->addFlash('success', 'Le nouveau lien a bien été envoyé !');
+        return $this->redirectToRoute('app_home');
+    }
+
 }

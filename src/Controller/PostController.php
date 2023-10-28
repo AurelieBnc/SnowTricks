@@ -60,7 +60,7 @@ class PostController extends AbstractController
                     $this->redirectToRoute('post', [
                         'id' => $post->getId(),
                         'loader' => $loader
-                ]);
+                    ]);
                 }
                 $comment->setCreatedAt(new \DateTimeImmutable())
                     ->setPost($post)
