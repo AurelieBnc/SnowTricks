@@ -38,9 +38,13 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class)]
     private Collection $media;
 
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
+    private Collection $commentList;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
+        $this->commentList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -144,6 +148,36 @@ class Post
             // set the owning side to null (unless already changed)
             if ($medium->getPost() === $this) {
                 $medium->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getCommentList(): Collection
+    {
+        return $this->commentList;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->commentList->contains($comment)) {
+            $this->commentList->add($comment);
+            $comment->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->commentList->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
             }
         }
 

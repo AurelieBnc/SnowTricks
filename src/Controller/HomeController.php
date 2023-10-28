@@ -41,7 +41,6 @@ class HomeController extends AbstractController
         $pictureList = $mediaRepo->findAll();
 
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
             'postList' => $postList,
             'pictureList' => $pictureList,
         ]);
