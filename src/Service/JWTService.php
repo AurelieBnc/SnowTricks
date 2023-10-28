@@ -68,7 +68,7 @@ class JWTService
     public function getHeader(string $token): array
     {
         $array = explode('.', $token);
-        $header = json_decode(base64_decode($array[1]), true);
+        $header = json_decode(base64_decode($array[0]), true);
 
         return $header;
     }
