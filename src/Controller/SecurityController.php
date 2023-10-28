@@ -68,7 +68,7 @@ class SecurityController extends AbstractController
     {
         if ($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret')) ) {
             $payload = $jwt->getPayload($token);
-            $user = $userRepository->find($payload['userId']);
+            $user = $userRepository->find($payload['user_id']);
 
             if ($user && $user->isVerified() === false) {
                 $user->setIsVerified(true);
