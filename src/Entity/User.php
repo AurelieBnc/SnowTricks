@@ -45,6 +45,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Comment::class)]
     private Collection $commentList;
 
+    private $confirm_password;
+
     public function __construct()
     {
         $this->commentList = new ArrayCollection();
@@ -107,6 +109,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Property to confirm password
+     */
+    public function getConfirmPassword(): string
+    {
+        return $this->confirm_password;
+    }
+
+    public function setConfirmPassword(string $confirm_password): static
+    {
+        $this->confirm_password = $confirm_password;
 
         return $this;
     }
