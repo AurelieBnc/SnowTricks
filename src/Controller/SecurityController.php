@@ -56,8 +56,10 @@ class SecurityController extends AbstractController
                 'security/confirm_email.html.twig',
                 [ 'user' => $user, 'token' => $token ]
             );
+
             return $this->redirectToRoute('app_home');
         }
+
         return $this->render('security/registration.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -77,6 +79,7 @@ class SecurityController extends AbstractController
                 return $this->redirectToRoute('app_login');
             }
         }
+
         $this->addFlash('error', 'une erreur est survenue lors de la vérification du Token, merci de nous contacter!');
         
         return $this->redirectToRoute('app_home');
@@ -89,11 +92,13 @@ class SecurityController extends AbstractController
 
         if (!$user) {
             $this->addFlash('verification', 'Tu dois être connecté pour accéder à cette page');
+
             return $this->redirectToRoute('app_login');
         }
 
-        if($user->isVerified()){
+        if ($user->isVerified()) {
             $this->addFlash('verification', 'Ton email est déjà vérifié !');
+
             return $this->redirectToRoute('app_login');
         }
 
@@ -115,6 +120,7 @@ class SecurityController extends AbstractController
         );
 
         $this->addFlash('success', 'Le nouveau lien a bien été envoyé !');
+        
         return $this->redirectToRoute('app_home');
     }
 
