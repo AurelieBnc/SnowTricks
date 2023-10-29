@@ -28,7 +28,7 @@
                 </li>
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("app_register") }}">Connexion</a>
+                    <a class="nav-link pe-2" href="{{ path("security_registration") }}">Connexion</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
@@ -42,8 +42,27 @@
     {% endblock %}
     {# container général de la page #}
     <div class="container-fluid mb-5 pb-3"> 
-        {% block body %}
-        {% endblock %}
+    {% for message in app.flashes('verification') %}
+        <div class="alert alert-info alert-dismissible fade show text-center">
+            {{ message }} 
+            <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-success alert-dismissible fade show text-center">
+        {{ message }} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-danger alert-dismissible fade show text-center">
+        {{ message }} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% block body %}
+    {% endblock %}
     </div>
 
     <footer>
@@ -60,7 +79,7 @@
                             class="fa-solid fa-bookmark p-2"></i></a></li>
                 {# if not app.user #}
                 {% if not is_granted('IS_AUTHENTICATED') %}
-                <li class="nav-item"><a class="nav-link" href="{{ path("app_register") }}" title="Connexion"><i id="bracket-icon" class="fa-solid fa-right-to-bracket p-2"></i></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path("security_registration") }}" title="Connexion"><i id="bracket-icon" class="fa-solid fa-right-to-bracket p-2"></i></a></li>
                 {% else %}
                 <li class="nav-item"><a class="nav-link" href="{{ path("app_logout") }}" title="Deconnexion"><i id="logout-icon" class="fa-solid fa-right-from-bracket p-2"></i></a></li>
                 {% endif %}

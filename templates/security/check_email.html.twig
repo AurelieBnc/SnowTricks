@@ -13,7 +13,7 @@
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
         <p>
             S'il existe un compte correspondant à ton adresse e-mail, un e-mail vient d'être envoyé contenant un lien que tu peux utiliser pour réinitialiser ton mot de passe.
-            Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            {# Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}. #}
         </p>
         <p>Si tu ne reçoies pas d'e-mail, vérifies ton dossier spam ou <a href="{{ path('app_forgot_password_request') }}">Essaies de nouveau</a>.</p>
 

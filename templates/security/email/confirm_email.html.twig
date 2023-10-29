@@ -1,0 +1,11 @@
+<h1>Création de mon compte perso</h1>
+
+<h2> Hello {{user.username}} !</h2>
+<p> Merci de confirmer ton adresse e-mail en cliquant sur le lien suivant:</p> 
+<a href="{{ absolute_url(path('app_verify_email', { token : token } )) }}">Confirmer mon adresse mail</a>.<br>
+<p>Le Lien expirera dans 3 heures.</p><br>
+
+
+<p>
+    Bienvenue!
+</p>
