@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\MediaRepository;
+use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: MediaRepository::class)]
-class Media
+#[ORM\Entity(repositoryClass: PictureRepository::class)]
+class Picture
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -14,9 +14,10 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $videoUrl = null;
+    private ?string $name = null;
 
-    #[ORM\ManyToOne(inversedBy: 'mediaList')]
+    #[ORM\ManyToOne(inversedBy: 'pictureList')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Post $post = null;
 
     public function getId(): ?int
@@ -24,14 +25,14 @@ class Media
         return $this->id;
     }
 
-    public function getVideoUrl(): ?string
+    public function getName(): ?string
     {
-        return $this->videoUrl;
+        return $this->name;
     }
 
-    public function setVideoUrl(?string $videoUrl): static
+    public function setName(?string $name): static
     {
-        $this->videoUrl = $videoUrl;
+        $this->name = $name;
 
         return $this;
     }
@@ -47,5 +48,4 @@ class Media
 
         return $this;
     }
-
 }

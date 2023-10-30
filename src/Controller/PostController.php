@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Post;
 use App\Entity\Media;
 use App\Entity\Comment;
+use App\Entity\Picture;
 use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,8 +27,10 @@ class PostController extends AbstractController
         $post = $postRepo->find($id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $pictureList = $mediaRepo->pictureList($post->getId());
         $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+
+        $pictureRepo = $entityManager->getRepository(Picture::class);
+        $pictureList = $pictureRepo->pictureList($post->getId()); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $countCommentList = $commentRepo->countCommentList($post->getId());
