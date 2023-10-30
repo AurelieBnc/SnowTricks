@@ -66,7 +66,7 @@ Class PictureService
 
         imagecopyresampled($resizePicture, $pictureSource, 0, 0, $src_x, $src_y, $width, $heigth, $squareSize, $squareSize);
 
-        $path = $this->params->get('image_directory').$folder;
+        $path = $this->params->get('images_directory').$folder;
 
         if (!file_exists(($path.'/mini/'))) {
             mkdir($path.'/mini/', 0755, true);
