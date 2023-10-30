@@ -8,6 +8,7 @@ use App\Form\RegistrationType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UserRepository;
 use App\Service\JWTService;
+use App\Service\PictureService;
 use App\Service\SendEmailService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class SecurityController extends AbstractController
 {
     #[Route('/inscription', name: 'security_registration')]
-    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SendEmailService $email, JWTService $jwt): Response
+    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SendEmailService $email, JWTService $jwt, PictureService $pictureService): Response
     {
         $user = new User;
         $form = $this->createForm(RegistrationType::class, $user);
@@ -36,8 +37,18 @@ class SecurityController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
             $user->setRoles(['ROLE_USER']);
             $user->setIsVerified(false);
+
+            // upload avatar
+            $avatar = $form->get('avatar')->getData();
+            $folder = 'avatars';
+
+            $field = $pictureService->add($avatar, $folder, 300, 300);
+
+            $user->setAvatar($field);
+
 
             $entityManager->persist($user);
             $entityManager->flush();
