@@ -22,9 +22,6 @@ class Post
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $slug = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -41,10 +38,14 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $commentList;
 
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Picture::class)]
+    private Collection $pictureList;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
         $this->commentList = new ArrayCollection();
+        $this->pictureList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,18 +73,6 @@ class Post
     public function setContent(string $content): static
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
 
         return $this;
     }
@@ -178,6 +167,36 @@ class Post
             // set the owning side to null (unless already changed)
             if ($comment->getPost() === $this) {
                 $comment->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Picture>
+     */
+    public function getPictureList(): Collection
+    {
+        return $this->pictureList;
+    }
+
+    public function addPictureList(Picture $pictureList): static
+    {
+        if (!$this->pictureList->contains($pictureList)) {
+            $this->pictureList->add($pictureList);
+            $pictureList->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removePictureList(Picture $pictureList): static
+    {
+        if ($this->pictureList->removeElement($pictureList)) {
+            // set the owning side to null (unless already changed)
+            if ($pictureList->getPost() === $this) {
+                $pictureList->setPost(null);
             }
         }
 
