@@ -14,32 +14,14 @@ class Media
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $videoUrl = null;
 
-    #[ORM\ManyToOne(inversedBy: 'media')]
+    #[ORM\ManyToOne(inversedBy: 'mediaList')]
     private ?Post $post = null;
-
-    #[ORM\Column]
-    private ?bool $category = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): static
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getVideoUrl(): ?string
@@ -66,15 +48,4 @@ class Media
         return $this;
     }
 
-    public function isCategoryPicture(): ?bool
-    {
-        return $this->category;
-    }
-
-    public function setCategoryPicture(bool $category): static
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 }

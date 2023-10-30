@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Media;
+use App\Entity\Picture;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,8 +31,8 @@ class HomeController extends AbstractController
         $countPostList = $repo->countPostList();
         $loader = true;
 
-        $mediaRepo = $entityManager->getRepository(Media::class);
-        $pictureList = $mediaRepo->findAll();
+        $pictureRepo = $entityManager->getRepository(Picture::class);
+        $pictureList = $pictureRepo->findAll();
 
         return $this->render('home/index.html.twig', [
             'postList' => $postList,
@@ -49,8 +49,8 @@ class HomeController extends AbstractController
         $repo = $entityManager->getRepository(Post::class);
         $postList = $repo->findAll();
 
-        $mediaRepo = $entityManager->getRepository(Media::class);
-        $pictureList = $mediaRepo->findAll();
+        $pictureRepo = $entityManager->getRepository(Picture::class);
+        $pictureList = $pictureRepo->findAll();
 
         return $this->render('home/index.html.twig', [
             'postList' => $postList,

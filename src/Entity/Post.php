@@ -33,7 +33,7 @@ class Post
     private ?Category $category = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class)]
-    private Collection $media;
+    private Collection $mediaList;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $commentList;
@@ -43,7 +43,7 @@ class Post
 
     public function __construct()
     {
-        $this->media = new ArrayCollection();
+        $this->mediaList = new ArrayCollection();
         $this->commentList = new ArrayCollection();
         $this->pictureList = new ArrayCollection();
     }
@@ -116,15 +116,15 @@ class Post
     /**
      * @return Collection<int, Media>
      */
-    public function getMedia(): Collection
+    public function getMediaList(): Collection
     {
-        return $this->media;
+        return $this->mediaList;
     }
 
     public function addMedium(Media $medium): static
     {
-        if (!$this->media->contains($medium)) {
-            $this->media->add($medium);
+        if (!$this->mediaList->contains($medium)) {
+            $this->mediaList->add($medium);
             $medium->setPost($this);
         }
 
@@ -133,7 +133,7 @@ class Post
 
     public function removeMedium(Media $medium): static
     {
-        if ($this->media->removeElement($medium)) {
+        if ($this->mediaList->removeElement($medium)) {
             // set the owning side to null (unless already changed)
             if ($medium->getPost() === $this) {
                 $medium->setPost(null);

@@ -47,22 +47,6 @@ class MediaRepository extends ServiceEntityRepository
 //    }
 
     /**
-     * function to get only pictures of a post
-     * @return array<string>
-     */
-    public function pictureList(int $idPost) : array
-    {
-        return $this->createQueryBuilder('m')
-            ->select('m.name')
-            ->andWhere('m.post = :post')
-            ->andWhere('m.category = 1')
-            ->setParameter('post', $idPost)
-            ->getQuery()
-            ->getResult()
-       ;
-    }
-
-    /**
      * function to get only urls video of a post
      * @return array<string>
      */
@@ -71,7 +55,6 @@ class MediaRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('m')
             ->select('m.videoUrl')
             ->andWhere('m.post = :post')
-            ->andWhere('m.category = 0')
             ->setParameter('post', $idPost)
             ->getQuery()
             ->getResult()
