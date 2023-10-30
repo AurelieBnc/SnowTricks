@@ -118,18 +118,14 @@
         {% for comment in commentList %}
         <div class="d-flex justify-content-between mb-3">
             <div class="pe-3 col-2">
-                {# {% for user in users %}
-                    {% if comment.id_user is same as user.id %} #}
-                    <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
-                    {# {% if user.avatar is not null %} 
-                        src="{{ ROOT }}images/avatar_upload/"
-                        {% else %} #}
-                        src="../images/default/default-avatar.png" 
-                        {# {% endif %}  #}
-                        alt="..." />
-                    <h3 class="fs-5 text-center">{{ comment.user.username }}</h3>
-                    {# {% endif %}
-                {% endfor %} #}
+                <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
+                    {% if comment.user.avatar is not null %}
+                        src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
+                    {% else %}
+                        src="{{ asset('images/default/default-avatar.png') }}"
+                    {% endif %}
+                    alt="..." />
+                <h3 class="fs-5 text-center">{{ comment.user.username }}</h3>
             </div>
             <div class="p-3 col-10 pt-5  button-deco bg-white flex-fill">
                 <p class="small text-break">{{ comment.content }}</p>
