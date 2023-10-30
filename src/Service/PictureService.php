@@ -17,7 +17,7 @@ Class PictureService
     /**
      * Function to add a picture with a uniqid
      */
-    public function add(UploadedFile $picture, ?string $folder = '', ?int $width = 250, ?int $heigth = 250)
+    public function add(UploadedFile $picture, ?string $folder = '', ?int $width = 250, ?int $heigth = 250):string 
     {
         $field = md5(uniqId(rand(), true)).'.png';
 
@@ -79,7 +79,8 @@ Class PictureService
 
     }
 
-    public function delete(string $field, ?string $folder = '', ?int $width = 250, ?int $heigth =250) {
+    public function delete(string $field, ?string $folder = '', ?int $width = 250, ?int $heigth =250):bool
+    {
         if ($field !== 'default-avatar.png') {
             $success = false;
             $path = $this->params->get('images_directory').$folder;
