@@ -4,10 +4,8 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Post;
-use App\Entity\Media;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,7 +19,7 @@ class CreatePostFormType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, [
-                // 'required' => true,
+                'required' => true,
                 'label' => 'Titre', 
                 'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
                 'attr' => [
@@ -35,7 +33,7 @@ class CreatePostFormType extends AbstractType
             ])
             ->add('content', TextareaType::class, [
                 'label'=> 'Contenu',
-                
+                'required' => true,
                 'attr'=> [
                     'placeholder' => 'Mon nouveau contenu ... ','row'=> 10,
                 ],
