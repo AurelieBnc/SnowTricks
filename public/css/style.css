@@ -61,7 +61,7 @@ body, html {
     background-size: cover;
 }
 
-#bg-post {  
+#bg-post1, #bg-post2 {  
     /* Full height */
     height: 100% !important; 
   
@@ -162,6 +162,11 @@ body, html {
 
 #avatar-user {
     height: 100px;
+}
+
+#youtube-logo {
+    height: 25px;
+    width: auto;
 }
 
 /******************************/
