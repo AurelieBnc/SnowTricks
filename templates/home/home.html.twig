@@ -4,7 +4,7 @@
 
 {% block head %}
 <div id="bg-head" style=" height: 100%;"  class="row text-center m-0 p-0">
-    <div style="height:200px"></div>
+    <div style="height:200px;"></div>
     <div class="d-sm-none d-lg-block">
         <h1 class="d-flex align-items-end justify-content-center text-center">Site communautaire de partage de Tricks</h1>
     </div>
@@ -40,7 +40,7 @@
                 {% if post.id is same as picture.post.id %}
                     {% if picture.name is not null %}
                         {% set defaultPicture = 0 %}
-                        <img src="{{ picture.name }}" class="card-img-top m-auto" alt="...">
+                        <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto" alt="...">
                     {% endif %}
                 {% endif %}
             {% endfor %}

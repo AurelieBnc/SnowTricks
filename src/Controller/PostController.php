@@ -11,11 +11,75 @@ use App\Entity\Media;
 use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\CommentType;
+use App\Form\CreatePostFormType;
+use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class PostController extends AbstractController
 {
+    #[Route('/post/create', name: 'post_create')]
+    public function createPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    {
+        $post = new Post;
+
+        $postForm = $this->createForm(CreatePostFormType::class, $post);
+        $postForm->handleRequest($request);
+
+        if ($postForm->isSubmitted() && $postForm->isValid()) {
+            if ($this->getUser()) {
+                // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
+                //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
+                //     $this->redirectToRoute('login');
+                // }
+        //todo ajouter erreur non connecté + authorisation
+
+                $post->setCreatedAt(new \DateTimeImmutable()); 
+                
+                $pictureList = $postForm->get('pictureList')->getData();
+                
+                foreach ($pictureList as $picture) {
+                    $folder = 'postImages';
+                    $field = $pictureService->add($picture, $folder);
+
+                    $picture = new Picture;
+                    $picture->setName($field);
+                    $post->addPicture($picture);
+                }
+
+                $media = new Media;
+                $url = $postForm->get('media')->getData();
+                $media->setVideoUrl($url);
+                $post->addMedia($media);
+
+                $entityManager->persist($post);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Ton article a bien été ajouté !');
+
+                return $this->redirectToRoute('app_home');
+            } else {
+                $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
+            }
+        }
+
+        return $this->render('post/create_post.html.twig', [
+            'form' => $postForm,
+            'editMode' => $post->getId() !== null,
+        ]);
+    }
+
+    // #[Route('/post/{id}/edit', name: 'post_edit')]
+    // public function editPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    // {
+
+    //     //$post->setUpdateDate(new \DateTimeImmutable()); 
+
+    //     echo "coucou";
+    //     die();
+
+    // } 
+
     #[Route('/post/{id}/{loader}', name: 'post')]
     public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
@@ -98,5 +162,7 @@ class PostController extends AbstractController
             'loader' => 0
         ]);
     }
+
+
 
 }
