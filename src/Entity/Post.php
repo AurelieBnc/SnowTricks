@@ -32,13 +32,13 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class, cascade:['persist'])]
     private Collection $mediaList;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $commentList;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Picture::class)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Picture::class, cascade:['persist'])]
     private Collection $pictureList;
 
     public function __construct()
@@ -121,22 +121,22 @@ class Post
         return $this->mediaList;
     }
 
-    public function addMedium(Media $medium): static
+    public function addMedia(Media $media): static
     {
-        if (!$this->mediaList->contains($medium)) {
-            $this->mediaList->add($medium);
-            $medium->setPost($this);
+        if (!$this->mediaList->contains($media)) {
+            $this->mediaList->add($media);
+            $media->setPost($this);
         }
 
         return $this;
     }
 
-    public function removeMedium(Media $medium): static
+    public function removeMedia(Media $media): static
     {
-        if ($this->mediaList->removeElement($medium)) {
+        if ($this->mediaList->removeElement($media)) {
             // set the owning side to null (unless already changed)
-            if ($medium->getPost() === $this) {
-                $medium->setPost(null);
+            if ($media->getPost() === $this) {
+                $media->setPost(null);
             }
         }
 
@@ -181,7 +181,7 @@ class Post
         return $this->pictureList;
     }
 
-    public function addPictureList(Picture $pictureList): static
+    public function addPicture(Picture $pictureList): static
     {
         if (!$this->pictureList->contains($pictureList)) {
             $this->pictureList->add($pictureList);
@@ -191,7 +191,7 @@ class Post
         return $this;
     }
 
-    public function removePictureList(Picture $pictureList): static
+    public function removePicture(Picture $pictureList): static
     {
         if ($this->pictureList->removeElement($pictureList)) {
             // set the owning side to null (unless already changed)
