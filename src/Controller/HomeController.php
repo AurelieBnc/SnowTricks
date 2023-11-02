@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function index(EntityManagerInterface $entityManager, ?UserInterface $user): Response
+    public function home(EntityManagerInterface $entityManager, ?UserInterface $user): Response
     {
         if ($user) {
             if ($user->isVerified() === false) {
@@ -34,7 +34,7 @@ class HomeController extends AbstractController
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('home/home.html.twig', [
             'postList' => $postList,
             'countPostList' => $countPostList,
             'loader' => $loader,
@@ -52,7 +52,7 @@ class HomeController extends AbstractController
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();
 
-        return $this->render('home/index.html.twig', [
+        return $this->render('home/home.html.twig', [
             'postList' => $postList,
             'pictureList' => $pictureList,
         ]);
