@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier un lien vidéo Youtube{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div class="d-sm-none d-lg-block">
+    <h1 class="m-auto my-5 d-flex align-items-end justify-content-center text-center">
+        Modifier mon lien vidéo Youtube
+    </h1>
+</div>
+<h1 class="m-auto my-5 d-lg-none d-flex align-items-center justify-content-center text-center" style="font-size: 5rem;">
+    Modifier mon lien vidéo Youtube
+</h1>
+
+<div class="my-5 col-12 col-lg-8 m-auto">
+    {% for message in app.flashes('verification') %}
+    <div class="alert alert-info alert-dismissible fade show text-center">
+        {{ message }} 
+        <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('login') %}
+    <div class="alert alert-info alert-dismissible fade show text-center">
+        {{ message }} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
+        <div class="mx-auto mx-lg-3 my-lg-3 p-0">
+            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+ 
+        {{ form_errors(form) }}
+
+        {{ form_start(form) }}
+
+        {{ form_label(form.videoUrl) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
+        {{ form_widget(form.videoUrl) }} 
+            
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="my-3 fs-3 button-deco">            
+                Envoyer !
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+</div>
+
+{% endblock %}
