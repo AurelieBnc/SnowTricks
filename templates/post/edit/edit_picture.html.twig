@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un article{% endblock %}
+{% block title %}Modifier une image{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -16,10 +16,23 @@
 </h1>
 
 <div class="my-5 col-12 col-lg-8 m-auto">
+    {% for message in app.flashes('verification') %}
+    <div class="alert alert-info alert-dismissible fade show text-center">
+        {{ message }} 
+        <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% for message in app.flashes('login') %}
+    <div class="alert alert-info alert-dismissible fade show text-center">
+        {{ message }} 
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
         <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
-{# 
-        {{ form_errors(form) }} #}
+ 
+        {{ form_errors(form) }}
 
         {{ form_start(form) }}
 
