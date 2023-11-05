@@ -59,10 +59,10 @@
         <div class="d-sm-none d-lg-block">
             <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">   
                 <p class="px-3 m-0" >
-                    <a href=""><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="px-2 m-0">
-                    <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}"><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
                 </p>
             </div>            
         </div>
