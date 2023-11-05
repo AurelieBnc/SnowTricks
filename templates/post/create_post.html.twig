@@ -14,19 +14,11 @@
 
 <div class="d-sm-none d-lg-block">
     <h1 class="m-auto my-5 d-flex align-items-end justify-content-center text-center">
-        {% if editMode is same as false %}
             Créer un article
-        {% else %}
-            Editer mon article
-        {% endif %}
     </h1>
 </div>
 <h1 class="m-auto my-5 d-lg-none d-flex align-items-center justify-content-center text-center" style="font-size: 5rem;">
-    {% if editMode is same as false %}
-        Créer un article
-    {% else %}
-        Editer mon article
-    {% endif %}
+    Créer un article
 </h1>
 
 <div class="my-5 col-12 col-lg-8 m-auto">
@@ -47,11 +39,7 @@
             
         <div class="d-flex justify-content-center">
             <button type="submit" class="my-3 fs-3 button-deco">            
-            {% if editMode is same as false %}
                 Ajouter un nouveau strick !
-            {% else %}
-                Enregistrer les modifications !
-            {% endif %}
             </button>
         </div>
 
@@ -59,7 +47,6 @@
 
     </div>
 </div>
-
 
 {% endblock %}
 
