@@ -15,6 +15,7 @@ class PictureType extends AbstractType
         $builder
             ->add('name', FileType::class, [
                 'label' => 'Télécharge la nouvelle image',
+                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'required' => true,
             ])
         ;
