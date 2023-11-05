@@ -12,6 +12,7 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\CommentType;
 use App\Form\CreatePostFormType;
+use App\Form\PictureType;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -65,20 +66,60 @@ class PostController extends AbstractController
 
         return $this->render('post/create_post.html.twig', [
             'form' => $postForm,
-            'editMode' => $post->getId() !== null,
         ]);
     }
 
-    // #[Route('/post/{id}/edit', name: 'post_edit')]
-    // public function editPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
-    // {
+    #[Route('/post/{post_id}/edit/picture/{id}', name: 'post_edit_picture')]
+    public function editPicture(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
+    {
+        $user = $this->getUser();
 
-    //     //$post->setUpdateDate(new \DateTimeImmutable()); 
+        $postRepo = $entityManager->getRepository(Post::class);
+        $post = $postRepo->find($post_id);
 
-    //     echo "coucou";
-    //     die();
+        $pictureRepo = $entityManager->getRepository(Picture::class);
+        $picture = $pictureRepo->find($id);
 
-    // } 
+        $editPicture = new Picture;
+
+        $pictureForm = $this->createForm(PictureType::class, $editPicture);
+        $pictureForm->handleRequest($request);
+        
+        if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
+            if ($user) {
+                if ($user->isVerified() === false) {
+                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                    $this->redirectToRoute('app_home', [
+                    ]);
+                }
+
+                $picturedata = $pictureForm->get('name')->getData();
+                $folder = 'postImages';
+                $field = $pictureService->add($picturedata, $folder);
+                $pictureService->delete($picture->getName(), $folder);
+
+                $picture->setName($field);
+                $picture->setPost($post);
+                $post->addPicture($picture);
+
+                $entityManager->persist($picture);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('post_edit', [
+                    'id' => $post->getId(),
+                ]);
+            } else {
+                $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
+            }
+        }
+
+        return $this->render('post/edit/edit_picture.html.twig', [
+            'form' => $pictureForm,
+            'picture' => $picture,
+        ]);
+
+    }
+
 
     #[Route('/post/{id}/{loader}', name: 'post')]
     public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
