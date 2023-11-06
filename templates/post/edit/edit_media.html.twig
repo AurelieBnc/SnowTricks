@@ -16,19 +16,7 @@
 </h1>
 
 <div class="my-5 col-12 col-lg-8 m-auto">
-    {% for message in app.flashes('verification') %}
-    <div class="alert alert-info alert-dismissible fade show text-center">
-        {{ message }} 
-        <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-    {% for message in app.flashes('login') %}
-    <div class="alert alert-info alert-dismissible fade show text-center">
-        {{ message }} 
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
+    {% include('partial/flash_edit.html.twig') %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
         <div class="mx-auto mx-lg-3 my-lg-3 p-0">
             <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
