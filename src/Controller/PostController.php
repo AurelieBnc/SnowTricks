@@ -23,18 +23,24 @@ class PostController extends AbstractController
     #[Route('/post/create', name: 'post_create')]
     public function createPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
+        $user = $this->getUser();
         $post = new Post;
 
         $postForm = $this->createForm(CreatePostFormType::class, $post);
         $postForm->handleRequest($request);
 
         if ($postForm->isSubmitted() && $postForm->isValid()) {
-            if ($this->getUser()) {
+            if ($user) {
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
                 //     $this->redirectToRoute('login');
                 // }
-        //todo ajouter erreur non connecté + authorisation
+                if ($user->isVerified() === false) {
+                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                    $this->redirectToRoute('app_home', [
+                    ]);
+                }
+            //todo ajouter erreur non connecté + authorisation
 
                 $post->setCreatedAt(new \DateTimeImmutable()); 
                 
@@ -49,10 +55,12 @@ class PostController extends AbstractController
                     $post->addPicture($picture);
                 }
 
-                $media = new Media;
-                $url = $postForm->get('media')->getData();
-                $media->setVideoUrl($url);
-                $post->addMedia($media);
+                if (null !== $postForm->get('media')->getData()) {
+                    $media = new Media;
+                    $url = $postForm->get('media')->getData();
+                    $media->setVideoUrl($url);
+                    $post->addMedia($media);
+                }
 
                 $entityManager->persist($post);
                 $entityManager->flush();
@@ -223,10 +231,12 @@ class PostController extends AbstractController
                     $post->addPicture($picture);
                 }
 
-                $media = new Media;
-                $url = $postForm->get('media')->getData();
-                $media->setVideoUrl($url);
-                $post->addMedia($media);
+                if (null !== $postForm->get('media')->getData()) {
+                    $media = new Media;
+                    $url = $postForm->get('media')->getData();
+                    $media->setVideoUrl($url);
+                    $post->addMedia($media);
+                }
 
                 $entityManager->persist($post);
                 $entityManager->flush();
