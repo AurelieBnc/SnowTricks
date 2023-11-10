@@ -3,9 +3,12 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block head %}
+{% dump(post.headerImage) %}
 {% if pictureList is empty %}
     <div id="bg-post1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
-{% else %} 
+{% elseif post.headerImage is not null %} 
+<div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ post.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% else %}
     <div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% endif %}
         <div class="p-3">

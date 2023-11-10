@@ -41,6 +41,9 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Picture::class, cascade:['persist'])]
     private Collection $pictureList;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $headerImage = null;
+
     public function __construct()
     {
         $this->mediaList = new ArrayCollection();
@@ -199,6 +202,18 @@ class Post
                 $pictureList->setPost(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getHeaderImage(): ?string
+    {
+        return $this->headerImage;
+    }
+
+    public function setHeaderImage(?string $headerImage): static
+    {
+        $this->headerImage = $headerImage;
 
         return $this;
     }
