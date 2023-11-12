@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Trick;
 use App\Entity\Picture;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Trick;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends AbstractController
@@ -39,7 +39,6 @@ class HomeController extends AbstractController
             'countTrickList' => $countTrickList,
             'loader' => $loader,
             'pictureList' => $pictureList,
-
         ]);
     }
 

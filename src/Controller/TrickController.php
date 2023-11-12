@@ -85,10 +85,10 @@ class TrickController extends AbstractController
     {
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($trick_id); 
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id); 
 
-        $headerImageForm = $this->createForm(HeaderImageType::class, $post);
+        $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
 
         if ($user) {
             $headerImageForm->handleRequest($request);
@@ -99,11 +99,11 @@ class TrickController extends AbstractController
                     $this->redirectToRoute('app_home');
                 }
                 // permet de récupérer le nom de l'image
-                $post->setHeaderImage($headerImageForm->get('headerImage')->getData());
+                $trick->setHeaderImage($headerImageForm->get('headerImage')->getData());
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $post->getId(),
+                    'id' => $trick->getId(),
                 ]);
             }
         } else {
@@ -112,7 +112,7 @@ class TrickController extends AbstractController
         
         return $this->render('trick/edit/edit_header_image.html.twig', [
             'headerImageForm' => $headerImageForm->createView(),
-            'headerImage' => $post->getHeaderImage(),
+            'headerImage' => $trick->getHeaderImage(),
         ]);
     }
 
@@ -122,8 +122,8 @@ class TrickController extends AbstractController
     {
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($trick_id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($id);
@@ -141,19 +141,19 @@ class TrickController extends AbstractController
                 }
 
                 $picturedata = $pictureForm->get('name')->getData();
-                $folder = 'postImages';
+                $folder = 'trickImages';
                 $field = $pictureService->add($picturedata, $folder);
                 $pictureService->delete($picture->getName(), $folder);
 
                 $picture->setName($field);
-                $picture->setPost($post);
-                $post->addPicture($picture);
+                $picture->setTrick($trick);
+                $trick->addPicture($picture);
 
                 $entityManager->persist($picture);
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $post->getId(),
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -172,8 +172,8 @@ class TrickController extends AbstractController
         //todo flusher l'url media au début pour éviter de la modifier a chaque display
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($trick_id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($id);
@@ -194,14 +194,14 @@ class TrickController extends AbstractController
                 $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
                 $media->setVideoUrl($modifyUrl); 
 
-                $media->setPost($post);
-                $post->addMedia($media);
+                $media->setTrick($trick);
+                $trick->addMedia($media);
 
                 $entityManager->persist($media);
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $post->getId(),
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -227,14 +227,14 @@ class TrickController extends AbstractController
         $videoUrlList = null;
         $commentList = null;
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($post->getId()); 
+        $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         // Video url display processing
         $urlModifiedList = [];
@@ -244,7 +244,7 @@ class TrickController extends AbstractController
             $url->setVideoUrl($modifyUrl);
         }
 
-        $trickForm = $this->createForm(TrickFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $trick);
         if ($user) {
             $trickForm->handleRequest($request);
             if ($trickForm->isSubmitted() && $trickForm->isValid()) {
@@ -258,33 +258,33 @@ class TrickController extends AbstractController
                     ]);
                 }
 
-                $post->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable()); 
                 
                 $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
-                    $folder = 'postImages';
+                    $folder = 'trickImages';
                     $field = $pictureService->add($picture, $folder);
 
                     $picture = new Picture;
                     $picture->setName($field);
-                    $post->addPicture($picture);
+                    $trick->addPicture($picture);
                 }
 
                 if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
                     $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
-                    $post->addMedia($media);
+                    $trick->addMedia($media);
                 }
 
-                $entityManager->persist($post);
+                $entityManager->persist($trick);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Ton trick a bien été modifié !');
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $post->getId(),
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -292,7 +292,7 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/edit/edit_trick.html.twig', [
-            'post' => $post,
+            'trick' => $trick,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
             'mediaList' => $videoUrlList,
@@ -308,26 +308,26 @@ class TrickController extends AbstractController
         $videoUrlList = null;
         $commentList = null;
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($post->getId()); 
+        $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
-        $countCommentList = $commentRepo->countCommentList($post->getId());
+        $countCommentList = $commentRepo->countCommentList($trick->getId());
 
         if ($loader === 1) {
             $loader = ($countCommentList > 10) ? 1 : 0;
         }
 
         if ($loader === 0) {
-            $commentList = $commentRepo->commentList($post->getId());
+            $commentList = $commentRepo->commentList($trick->getId());
         } else {   
-            $commentList = $commentRepo->commentListMaxTen($post->getId());
+            $commentList = $commentRepo->commentListMaxTen($trick->getId());
         }
 
         // Video url display processing
@@ -346,12 +346,12 @@ class TrickController extends AbstractController
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('trick', [
-                        'id' => $post->getId(),
+                        'id' => $trick->getId(),
                         'loader' => $loader
                     ]);
                 }
                 $comment->setCreatedAt(new \DateTimeImmutable())
-                    ->setPost($post)
+                    ->setTrick($trick)
                     ->setUser($user);
                 $entityManager->persist($comment);
                 $entityManager->flush();
@@ -359,7 +359,7 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
 
                 return $this->redirectToRoute('trick', [
-                    'id' => $post->getId(),
+                    'id' => $trick->getId(),
                     'loader' => $loader
                 ]);
             } 
@@ -368,7 +368,7 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/trick.html.twig', [
-            'post' => $post,
+            'trick' => $trick,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
             'commentList' => $commentList,
@@ -377,11 +377,11 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/commentList/{post}/{loader}', name: 'complete_comment_list')]
-    public function commentListRedirect(int $post, int $loader): Response
+    #[Route('/commentList/{trick}/{loader}', name: 'complete_comment_list')]
+    public function commentListRedirect(int $trick, int $loader): Response
     {
         return $this->redirectToRoute('trick', [
-            'id' => $post,
+            'id' => $trick,
             'loader' => 0
         ]);
     }
