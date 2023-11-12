@@ -18,12 +18,12 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Post::class)]
-    private Collection $posts;
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Trick::class)]
+    private Collection $tricks;
 
     public function __construct()
     {
-        $this->posts = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -44,29 +44,29 @@ class Category
     }
 
     /**
-     * @return Collection<int, Post>
+     * @return Collection<int, Trick>
      */
-    public function getPosts(): Collection
+    public function getTricks(): Collection
     {
-        return $this->posts;
+        return $this->tricks;
     }
 
-    public function addPost(Post $post): static
+    public function addTrick(Trick $trick): static
     {
-        if (!$this->posts->contains($post)) {
-            $this->posts->add($post);
-            $post->setCategory($this);
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks->add($trick);
+            $trick->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removePost(Post $post): static
+    public function removeTrick(Trick $trick): static
     {
-        if ($this->posts->removeElement($post)) {
+        if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($post->getCategory() === $this) {
-                $post->setCategory(null);
+            if ($trick->getCategory() === $this) {
+                $trick->setCategory(null);
             }
         }
 

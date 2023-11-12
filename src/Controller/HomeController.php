@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Post;
+use App\Entity\Trick;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends AbstractController
@@ -26,17 +26,17 @@ class HomeController extends AbstractController
             }
         }
 
-        $repo = $entityManager->getRepository(Post::class);
-        $postList = $repo->postListMaxFifteen();
-        $countPostList = $repo->countPostList();
+        $repo = $entityManager->getRepository(Trick::class);
+        $trickList = $repo->trickListMaxFifteen();
+        $countTrickList = $repo->countTrickList();
         $loader = true;
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();
 
         return $this->render('home/home.html.twig', [
-            'postList' => $postList,
-            'countPostList' => $countPostList,
+            'trickList' => $trickList,
+            'countTrickList' => $countTrickList,
             'loader' => $loader,
             'pictureList' => $pictureList,
 
@@ -46,14 +46,14 @@ class HomeController extends AbstractController
     #[Route('/trick-list', name: 'complete_trick_list')]
     public function tricktList(EntityManagerInterface $entityManager): Response
     {
-        $repo = $entityManager->getRepository(Post::class);
-        $postList = $repo->findAll();
+        $repo = $entityManager->getRepository(Trick::class);
+        $trickList = $repo->findAll();
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();
 
         return $this->render('home/home.html.twig', [
-            'postList' => $postList,
+            'trickList' => $trickList,
             'pictureList' => $pictureList,
         ]);
     }

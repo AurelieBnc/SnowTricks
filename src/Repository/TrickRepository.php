@@ -2,44 +2,44 @@
 
 namespace App\Repository;
 
-use App\Entity\Post;
+use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Post>
+ * @extends ServiceEntityRepository<Trick>
  *
- * @method Post|null find($id, $lockMode = null, $lockVersion = null)
- * @method Post|null findOneBy(array $criteria, array $orderBy = null)
- * @method Post[]    findAll()
- * @method Post[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Trick|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Trick|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Trick[]    findAll()
+ * @method Trick[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TrickRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Post::class);
+        parent::__construct($registry, Trick::class);
     }
 
 //    /**
-//     * @return Post[] Returns an array of Post objects
+//     * @return Trick[] Returns an array of Trick objects
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
+//        return $this->createQueryBuilder('t')
+//            ->andWhere('t.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
+//            ->orderBy('t.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Post
+//    public function findOneBySomeField($value): ?Trick
 //    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
+//        return $this->createQueryBuilder('t')
+//            ->andWhere('t.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()
@@ -47,12 +47,12 @@ class TrickRepository extends ServiceEntityRepository
 //    }
 
     /**
-	 * returns the list of the first fifteen articles
+	 * returns the list of the first fifteen tricks
 	 */
-	public function postListMaxFifteen(): array
+	public function trickListMaxFifteen(): array
     {
-       return $this->createQueryBuilder('p')
-           ->orderBy('p.id', 'DESC')
+       return $this->createQueryBuilder('t')
+           ->orderBy('t.id', 'DESC')
            ->setMaxResults(15)
            ->getQuery()
            ->getResult()

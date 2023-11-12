@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Post;
+use App\Entity\Trick;
 use App\Entity\Media;
 use App\Entity\Comment;
 use App\Entity\Picture;
@@ -26,9 +26,9 @@ class TrickController extends AbstractController
     public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
-        $post = new Post;
+        $trick = new Trick;
 
-        $trickForm = $this->createForm(TrickFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $trick);
         if ($user) {
             $trickForm->handleRequest($request);
 
@@ -44,27 +44,27 @@ class TrickController extends AbstractController
                     ]);
                 }
 
-                $post->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable()); 
                 
                 $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
-                    $folder = 'postImages';
+                    $folder = 'trickImages';
                     $field = $pictureService->add($picture, $folder);
 
                     $picture = new Picture;
                     $picture->setName($field);
-                    $post->addPicture($picture);
+                    $trick->addPicture($picture);
                 }
 
                 if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
                     $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
-                    $post->addMedia($media);
+                    $trick->addMedia($media);
                 }
 
-                $entityManager->persist($post);
+                $entityManager->persist($trick);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Ton trick a bien été ajouté !');
