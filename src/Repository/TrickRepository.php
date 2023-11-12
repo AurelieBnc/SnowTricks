@@ -62,7 +62,7 @@ class TrickRepository extends ServiceEntityRepository
     /**
      * returns the total number of items
      */
-    public function countPostList(): int
+    public function countTrickList(): int
     {
        $result = $this->createQueryBuilder('p')
             ->getQuery()
