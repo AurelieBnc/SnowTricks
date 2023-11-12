@@ -80,7 +80,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{post_id}/edit/headerImage', name: 'post_edit_header_image')]
+    #[Route('/{post_id}/edit/headerImage', name: 'trick_edit_header_image')]
     public function editHeaderImage(int $post_id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
