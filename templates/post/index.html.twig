@@ -3,10 +3,12 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block head %}
-{% if pictureList is empty %}
-    <div id="bg-post1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
-{% else %} 
+{% if post.headerImage is not null %} 
+    <div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ post.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% elseif pictureList is not empty %}
     <div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% else %}
+    <div id="bg-post1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% endif %}
         <div class="p-3">
             <div class="d-sm-none d-lg-block">
@@ -45,7 +47,7 @@
         {% endfor %}
         {% for videoUrl in videoUrlList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
-            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ videoUrl.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         {% endfor %}
     </div>
@@ -113,7 +115,7 @@
 <div class="col-12 col-lg-8 m-auto">
 
     <div class="pt-5 px-5 justify-content-around shadow bg-edit-button pb-3">
-        <h2>Commentaires ({{ post.commentList|length }})</h2>
+        <h2>Commentaires <span class="span-text">({{ post.commentList|length }})</span></h2>
         {% for comment in commentList %}
         <div class="d-flex justify-content-between mb-3">
             <div class="pe-3 col-2">

@@ -88,13 +88,14 @@ Class PictureService
             $mini = $path.'/mini/'.$width.'x'.$heigth.'-'.$field;
 
             if (file_exists($mini)) {
+                unlink($mini);
                 $success =true;
             }
 
             $original = $path.'/'.$field;
 
             if (file_exists($original)) {
-                unlink($mini);
+                unlink($original);
                 $success = true;
             }
 

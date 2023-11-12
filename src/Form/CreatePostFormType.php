@@ -20,8 +20,8 @@ class CreatePostFormType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => 'Titre', 
-                'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
+                'label' => 'Titre de l\'article', 
+                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'attr' => [
                     'placeholder' => 'De quel trick vas tu parlé?',
                     'class' => 'text-center'
@@ -32,10 +32,10 @@ class CreatePostFormType extends AbstractType
                 ],
             ])
             ->add('content', TextareaType::class, [
-                'label'=> 'Contenu',
+                'label' => false,
                 'required' => true,
                 'attr'=> [
-                    'placeholder' => 'Mon nouveau contenu ... ','row'=> 10,
+                    'placeholder' => 'Mon nouveau contenu ... ','row'=> 50,
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
@@ -44,19 +44,25 @@ class CreatePostFormType extends AbstractType
             ])
             ->add('pictureList', FileType::class, [
                 'label' => 'Télécharges tes images',
+                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false,
-            ] )
+            ])
             ->add('media', TextType::class, [
                 'label' => 'Ajoutes ton lien Url Vidéo',
+                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'mapped' => false,
                 'required' => false,
-            ] )
+            ])
             ->add('category', EntityType::class, [
                 'label' => 'Choisis la catégorie de l\'article',
+                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'class' => Category::class,
                 'choice_label' => 'title',
+                'attr' => [
+                    'class' => 'text-center col-sm-10 col-lg-4'
+                ],
             ])
         ;
     }

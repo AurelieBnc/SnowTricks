@@ -34,20 +34,13 @@
     
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
         <a href= "{{ path('post', {'id': post.id, 'loader': 1}) }}">
-
-        {% set defaultPicture = 1 %}
-            {% for picture in pictureList %}
-                {% if post.id is same as picture.post.id %}
-                    {% if picture.name is not null %}
-                        {% set defaultPicture = 0 %}
-                        <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto" alt="...">
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-            {% if defaultPicture is same as 1 %}
-                <img src="../images/default/defaultImage.jpg" class="card-img-top m-auto" alt="...">
-            {% endif %}
-
+        {% if post.headerImage is not null %} 
+            <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ post.headerImage) }}" class="card-img-top m-auto" alt="...">
+        {% elseif post.pictureList is not empty %}
+            <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ post.pictureList.0.name) }}" class="card-img-top m-auto" alt="...">
+        {% else %}
+            <img src="{{ asset('images/default/defaultImage.jpg') }}" class="card-img-top m-auto" alt="...">
+        {% endif %}
         </a>
 
         <div class="card-body list-group-item mt-auto">
@@ -59,10 +52,10 @@
         <div class="d-sm-none d-lg-block">
             <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">   
                 <p class="px-3 m-0" >
-                    <a href=""><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="px-2 m-0">
-                    <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                    <a href="{{ path('post_edit', {'id': post.id}) }}"><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
                 </p>
             </div>            
         </div>

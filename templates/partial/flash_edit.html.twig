@@ -1,0 +1,14 @@
+{% for message in app.flashes('verification') %}
+<div class="alert alert-info alert-dismissible fade show text-center">
+    {{ message }} 
+    <a href="{{ path('app_retry_verif_email') }}"> J'ai besoin d'un nouveau lien !</a>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% for message in app.flashes('login') %}
+<div class="alert alert-info alert-dismissible fade show text-center">
+    {{ message }} 
+    <a href="{{ path('app_login') }}"> Je me connecte !</a>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}

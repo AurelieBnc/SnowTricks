@@ -53,7 +53,6 @@ class MediaRepository extends ServiceEntityRepository
     public function videoUrlList(int $idPost) : array
     {
         return $this->createQueryBuilder('m')
-            ->select('m.videoUrl')
             ->andWhere('m.post = :post')
             ->setParameter('post', $idPost)
             ->getQuery()

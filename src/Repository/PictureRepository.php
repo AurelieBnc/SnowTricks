@@ -53,7 +53,6 @@ class PictureRepository extends ServiceEntityRepository
     public function pictureList(int $idPost) : array
     {
         return $this->createQueryBuilder('p')
-            ->select('p.name')
             ->andWhere('p.post = :post')
             ->setParameter('post', $idPost)
             ->getQuery()
