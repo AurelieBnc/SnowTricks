@@ -24,7 +24,7 @@
                     <a class="nav-link active pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("post_create") }}">Ajouter un Strick</a>
+                    <a class="nav-link pe-2" href="{{ path("trick_create") }}">Ajouter un Strick</a>
                 </li>
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
@@ -65,7 +65,7 @@
             <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around py-3">
                 <li class="nav-item"><a class="nav-link" href="{{ path("app_home") }}" title="Accueil"><i id="house-icon"
                             class="fa-solid fa-house p-2"></i></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path("post_create") }}" title="Ajout Stricks"><i id="bookmark-icon"
+                <li class="nav-item"><a class="nav-link" href="{{ path("trick_create") }}" title="Ajout Stricks"><i id="bookmark-icon"
                             class="fa-solid fa-bookmark p-2"></i></a></li>
                 {# if not app.user #}
                 {% if not is_granted('IS_AUTHENTICATED') %}

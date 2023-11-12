@@ -19,9 +19,10 @@ use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+#[Route('/trick')]
 class PostController extends AbstractController
 {
-    #[Route('/post/create', name: 'post_create')]
+    #[Route('/create', name: 'trick_create')]
     public function createPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
@@ -385,7 +386,4 @@ class PostController extends AbstractController
             'loader' => 0
         ]);
     }
-
-
-
 }
