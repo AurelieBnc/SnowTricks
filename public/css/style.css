@@ -36,7 +36,7 @@ h1,h2 {
     font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
     size: 5rem;
 }
-
+/*todo âsser toutes les polices H en h3*/
 h3 {
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
@@ -45,7 +45,7 @@ body, html {
     background-color: var(--background);
     height: 100%;
 }
-
+/* supprimer la police retroteam */
 .span-text {
     font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' !important;
 }
@@ -174,4 +174,12 @@ body, html {
 
 a:hover {
     color: var(--darkcolor) !important;
+}
+
+/******************************/
+/* PostEdit */
+
+.image-mini {
+    height: 100px;
+    width: auto;
 }

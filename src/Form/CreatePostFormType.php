@@ -48,13 +48,13 @@ class CreatePostFormType extends AbstractType
                 'multiple' => true,
                 'mapped' => false,
                 'required' => false,
-            ] )
+            ])
             ->add('media', TextType::class, [
                 'label' => 'Ajoutes ton lien Url Vidéo',
                 'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'mapped' => false,
                 'required' => false,
-            ] )
+            ])
             ->add('category', EntityType::class, [
                 'label' => 'Choisis la catégorie de l\'article',
                 'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
