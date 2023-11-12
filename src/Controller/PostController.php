@@ -304,7 +304,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{id}/{loader}', name: 'post')]
+    #[Route('/{id}/{loader}', name: 'trick')]
     public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
@@ -348,7 +348,7 @@ class PostController extends AbstractController
 
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
-                    $this->redirectToRoute('post', [
+                    $this->redirectToRoute('trick', [
                         'id' => $post->getId(),
                         'loader' => $loader
                     ]);
@@ -359,7 +359,7 @@ class PostController extends AbstractController
                 $entityManager->persist($comment);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post', [
+                return $this->redirectToRoute('trick', [
                     'id' => $post->getId(),
                     'loader' => $loader
                 ]);
@@ -381,7 +381,7 @@ class PostController extends AbstractController
     #[Route('/commentList/{post}/{loader}', name: 'complete_comment_list')]
     public function commentListRedirect(int $post, int $loader): Response
     {
-        return $this->redirectToRoute('post', [
+        return $this->redirectToRoute('trick', [
             'id' => $post,
             'loader' => 0
         ]);
