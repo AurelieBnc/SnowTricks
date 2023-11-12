@@ -3,7 +3,7 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block head %}
-{% dump(post.headerImage) %}
+
 {% if pictureList is empty %}
     <div id="bg-post1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% elseif post.headerImage is not null %} 
@@ -15,7 +15,7 @@
             <div class="d-sm-none d-lg-block">
                 <div class="d-flex justify-content-end align-items-end p-0">   
                     <p class="px-2 m-0 bg-edit-button button-deco" >
-                        <a href="#"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                        <a href="{{ path('post_edit_header_image', {'post_id': post.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                     </p>
                     <p class="px-2 m-0 bg-edit-button button-deco">
                         <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
@@ -24,7 +24,7 @@
             </div>
             <div class="d-flex justify-content-end align-items-end p-0">
                 <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
-                    <a href="#"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
+                    <a href="{{ path('post_edit_header_image', {'post_id': post.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
                     <a href=""><i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i></a>
