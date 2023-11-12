@@ -23,12 +23,12 @@
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">
         </div>
-        {{ form_errors(form) }}
+        {{ form_errors(headerImageForm) }}
 
-        {{ form_start(form) }}
+        {{ form_start(headerImageForm) }}
 
-        {{ form_label(form.headerImage)}}
-        {% for picture in form.headerImage %}
+        {{ form_label(headerImageForm.headerImage)}}
+        {% for picture in headerImageForm.headerImage %}
         <div class="d-flex flex-row">
             {# todo : le choice_label ne fonctionne pas #}
             {{ form_widget(picture, {'value': picture.vars.label}) }}
@@ -42,7 +42,7 @@
             </button>
         </div>
 
-        {{ form_end(form) }}
+        {{ form_end(headerImageForm) }}
 
     </div>
 </div>

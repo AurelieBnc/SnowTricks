@@ -75,18 +75,18 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour écrire un nouveau Trick.');
         }
 
-        return $this->render('post/create_post.html.twig', [
-            'form' => $trickForm,
+        return $this->render('trick/create_trick.html.twig', [
+            'trickForm' => $trickForm,
         ]);
     }
 
-    #[Route('/{post_id}/edit/headerImage', name: 'trick_edit_header_image')]
-    public function editHeaderImage(int $post_id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{trick_id}/edit/headerImage', name: 'trick_edit_header_image')]
+    public function editHeaderImage(int $trick_id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
         $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id); 
+        $post = $postRepo->find($trick_id); 
 
         $headerImageForm = $this->createForm(HeaderImageType::class, $post);
 
@@ -110,20 +110,20 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
         }
         
-        return $this->render('post/edit/edit_header_image.html.twig', [
-            'form' => $headerImageForm->createView(),
+        return $this->render('trick/edit/edit_header_image.html.twig', [
+            'headerImageForm' => $headerImageForm->createView(),
             'headerImage' => $post->getHeaderImage(),
         ]);
     }
 
 
-    #[Route('/{post_id}/edit/picture/{id}', name: 'trick_edit_picture')]
-    public function editPicture(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
+    #[Route('/{trick_id}/edit/picture/{id}', name: 'trick_edit_picture')]
+    public function editPicture(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
     {
         $user = $this->getUser();
 
         $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id);
+        $post = $postRepo->find($trick_id);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($id);
@@ -160,20 +160,20 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
         }
 
-        return $this->render('post/edit/edit_picture.html.twig', [
+        return $this->render('trick/edit/edit_picture.html.twig', [
             'form' => $pictureForm,
             'picture' => $picture,
         ]);
     }
 
-    #[Route('/{post_id}/edit/media/{id}', name: 'trick_edit_media')]
-    public function editMedia(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{trick_id}/edit/media/{id}', name: 'trick_edit_media')]
+    public function editMedia(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         //todo flusher l'url media au début pour éviter de la modifier a chaque display
         $user = $this->getUser();
 
         $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id);
+        $post = $postRepo->find($trick_id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($id);
@@ -211,7 +211,7 @@ class PostController extends AbstractController
         $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $media->getVideoUrl());
         $media->setVideoUrl($modifyUrl);
 
-        return $this->render('post/edit/edit_media.html.twig', [
+        return $this->render('trick/edit/edit_media.html.twig', [
             'form' => $mediaForm,
             'media' => $media,
         ]);
@@ -291,7 +291,7 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour modifier un trick.');
         }
 
-        return $this->render('post/edit/edit_post.html.twig', [
+        return $this->render('trick/edit/edit_trick.html.twig', [
             'post' => $post,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
@@ -367,7 +367,7 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
         }
 
-        return $this->render('post/index.html.twig', [
+        return $this->render('trick/trick.html.twig', [
             'post' => $post,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
