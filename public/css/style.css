@@ -61,7 +61,7 @@ body, html {
     background-size: cover;
 }
 
-#bg-post1, #bg-post2 {  
+#bg-trick1, #bg-trick2 {  
     /* Full height */
     height: 100% !important; 
   
@@ -141,7 +141,7 @@ body, html {
 }
 
 /******************************/
-/* Post*/
+/* Trick*/
 
 .bg-edit-button {
     background-color: var(--lightcolor) !important;
@@ -177,7 +177,7 @@ a:hover {
 }
 
 /******************************/
-/* PostEdit */
+/* TrickEdit */
 
 .image-mini {
     height: 100px;
