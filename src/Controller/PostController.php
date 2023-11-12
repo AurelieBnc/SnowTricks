@@ -117,7 +117,7 @@ class PostController extends AbstractController
     }
 
 
-    #[Route('/post/{post_id}/edit/picture/{id}', name: 'post_edit_picture')]
+    #[Route('/{post_id}/edit/picture/{id}', name: 'trick_edit_picture')]
     public function editPicture(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
     {
         $user = $this->getUser();
