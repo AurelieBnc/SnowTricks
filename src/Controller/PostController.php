@@ -14,6 +14,7 @@ use App\Form\CommentType;
 use App\Form\CreatePostFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
+use App\Form\HeaderImageType;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,10 +28,11 @@ class PostController extends AbstractController
         $post = new Post;
 
         $postForm = $this->createForm(CreatePostFormType::class, $post);
-        $postForm->handleRequest($request);
+        if ($user) {
+            $postForm->handleRequest($request);
 
-        if ($postForm->isSubmitted() && $postForm->isValid()) {
-            if ($user) {
+            if ($postForm->isSubmitted() && $postForm->isValid()) {
+
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
                 //     $this->redirectToRoute('login');
@@ -40,7 +42,6 @@ class PostController extends AbstractController
                     $this->redirectToRoute('app_home', [
                     ]);
                 }
-            //todo ajouter erreur non connecté + authorisation
 
                 $post->setCreatedAt(new \DateTimeImmutable()); 
                 
@@ -68,15 +69,52 @@ class PostController extends AbstractController
                 $this->addFlash('success', 'Ton article a bien été ajouté !');
 
                 return $this->redirectToRoute('app_home');
-            } else {
-                $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
-            }
+            } 
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
         }
 
         return $this->render('post/create_post.html.twig', [
             'form' => $postForm,
         ]);
     }
+
+    #[Route('/post/{post_id}/edit/headerImage', name: 'post_edit_header_image')]
+    public function editHeaderImage(int $post_id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        $postRepo = $entityManager->getRepository(Post::class);
+        $post = $postRepo->find($post_id); 
+
+        $headerImageForm = $this->createForm(HeaderImageType::class, $post);
+
+        if ($user) {
+            $headerImageForm->handleRequest($request);
+
+            if ($headerImageForm->isSubmitted() && $headerImageForm->isValid()) {
+                if ($user->isVerified() === false) {
+                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                    $this->redirectToRoute('app_home');
+                }
+                // permet de récupérer le nom de l'image
+                $post->setHeaderImage($headerImageForm->get('headerImage')->getData());
+                $entityManager->flush();
+
+                return $this->redirectToRoute('post_edit', [
+                    'id' => $post->getId(),
+                ]);
+            }
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
+        }
+        
+        return $this->render('post/edit/edit_header_image.html.twig', [
+            'form' => $headerImageForm->createView(),
+            'headerImage' => $post->getHeaderImage(),
+        ]);
+    }
+
 
     #[Route('/post/{post_id}/edit/picture/{id}', name: 'post_edit_picture')]
     public function editPicture(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
@@ -92,10 +130,9 @@ class PostController extends AbstractController
         $editPicture = new Picture;
 
         $pictureForm = $this->createForm(PictureType::class, $editPicture);
-        $pictureForm->handleRequest($request);
-        
-        if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
-            if ($user) {
+        if ($user) {     
+            $pictureForm->handleRequest($request);
+            if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('app_home', [
@@ -117,16 +154,15 @@ class PostController extends AbstractController
                 return $this->redirectToRoute('post_edit', [
                     'id' => $post->getId(),
                 ]);
-            } else {
-                $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
-            }
+            } 
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
         }
 
         return $this->render('post/edit/edit_picture.html.twig', [
             'form' => $pictureForm,
             'picture' => $picture,
         ]);
-
     }
 
     #[Route('/post/{post_id}/edit/media/{id}', name: 'post_edit_media')]
@@ -144,10 +180,10 @@ class PostController extends AbstractController
         $editMedia = new Media;
 
         $mediaForm = $this->createForm(MediaType::class, $editMedia);
-        $mediaForm->handleRequest($request);
+        if ($user) {
+            $mediaForm->handleRequest($request);
+            if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
 
-        if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
-            if ($user) {
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('app_home', [
@@ -169,9 +205,9 @@ class PostController extends AbstractController
                 return $this->redirectToRoute('post_edit', [
                     'id' => $post->getId(),
                 ]);
-            } else {
-                $this->addFlash('login', 'Vous devez être connecté pour modifier un lien.');
-            }
+            } 
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour modifier un lien.');
         }
 
         $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $media->getVideoUrl());
@@ -187,6 +223,8 @@ class PostController extends AbstractController
     #[Route('/post/{id}/edit', name: 'post_edit')]
     public function editPost(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
+        $user = $this->getUser();
+
         $pictureList = null;
         $videoUrlList = null;
         $commentList = null;
@@ -209,14 +247,18 @@ class PostController extends AbstractController
         }
 
         $postForm = $this->createForm(CreatePostFormType::class, $post);
-        $postForm->handleRequest($request);
-
-        if ($postForm->isSubmitted() && $postForm->isValid()) {
-            if ($this->getUser()) {
+        if ($user) {
+            $postForm->handleRequest($request);
+            if ($postForm->isSubmitted() && $postForm->isValid()) {
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
                 //     $this->redirectToRoute('login');
                 // }
+                if ($user->isVerified() === false) {
+                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                    $this->redirectToRoute('app_home', [
+                    ]);
+                }
 
                 $post->setCreatedAt(new \DateTimeImmutable()); 
                 
@@ -241,12 +283,14 @@ class PostController extends AbstractController
                 $entityManager->persist($post);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton article a bien été ajouté !');
+                $this->addFlash('success', 'Ton article a bien été modifié !');
 
-                return $this->redirectToRoute('app_home');
-            } else {
-                $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
-            }
+                return $this->redirectToRoute('post_edit', [
+                    'id' => $post->getId(),
+                ]);
+            } 
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour modifier un article.');
         }
 
         return $this->render('post/edit/edit_post.html.twig', [
@@ -297,10 +341,10 @@ class PostController extends AbstractController
         // Create a commentForm
         $comment = new Comment;
         $commentForm = $this->createForm(CommentType::class, $comment);
-        $commentForm->handleRequest($request);
+        if ($user) {
+            $commentForm->handleRequest($request);
+            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
 
-        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-            if ($user) {
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('post', [
@@ -317,10 +361,10 @@ class PostController extends AbstractController
                 return $this->redirectToRoute('post', [
                     'id' => $post->getId(),
                     'loader' => $loader
-            ]);
-            } else {
-                $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
-            }
+                ]);
+            } 
+        } else {
+            $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
         }
 
         return $this->render('post/index.html.twig', [
