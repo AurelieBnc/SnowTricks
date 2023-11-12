@@ -166,7 +166,7 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/post/{post_id}/edit/media/{id}', name: 'post_edit_media')]
+    #[Route('/{post_id}/edit/media/{id}', name: 'trick_edit_media')]
     public function editMedia(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         //todo flusher l'url media au début pour éviter de la modifier a chaque display
