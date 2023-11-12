@@ -43,8 +43,8 @@ class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/postList', name: 'complete_post_list')]
-    public function postList(EntityManagerInterface $entityManager): Response
+    #[Route('/trick-list', name: 'complete_trick_list')]
+    public function tricktList(EntityManagerInterface $entityManager): Response
     {
         $repo = $entityManager->getRepository(Post::class);
         $postList = $repo->findAll();
