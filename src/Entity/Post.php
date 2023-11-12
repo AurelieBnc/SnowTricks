@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
+use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PostRepository::class)]
+#[ORM\Entity(repositoryClass: TrickRepository::class)]
 class Post
 {
     #[ORM\Id]

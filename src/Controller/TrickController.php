@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[Route('/trick')]
-class PostController extends AbstractController
+class TrickController extends AbstractController
 {
     #[Route('/create', name: 'trick_create')]
     public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
