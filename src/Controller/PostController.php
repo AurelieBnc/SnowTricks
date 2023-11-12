@@ -102,7 +102,7 @@ class PostController extends AbstractController
                 $post->setHeaderImage($headerImageForm->get('headerImage')->getData());
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
+                return $this->redirectToRoute('trick_edit', [
                     'id' => $post->getId(),
                 ]);
             }
@@ -152,7 +152,7 @@ class PostController extends AbstractController
                 $entityManager->persist($picture);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
+                return $this->redirectToRoute('trick_edit', [
                     'id' => $post->getId(),
                 ]);
             } 
@@ -203,7 +203,7 @@ class PostController extends AbstractController
                 $entityManager->persist($media);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
+                return $this->redirectToRoute('trick_edit', [
                     'id' => $post->getId(),
                 ]);
             } 
@@ -221,7 +221,7 @@ class PostController extends AbstractController
 
     }
 
-    #[Route('/post/{id}/edit', name: 'post_edit')]
+    #[Route('/{id}/edit', name: 'trick_edit')]
     public function editPost(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
@@ -286,7 +286,7 @@ class PostController extends AbstractController
 
                 $this->addFlash('success', 'Ton article a bien été modifié !');
 
-                return $this->redirectToRoute('post_edit', [
+                return $this->redirectToRoute('trick_edit', [
                     'id' => $post->getId(),
                 ]);
             } 
