@@ -6,16 +6,16 @@
 
 {% if pictureList is empty %}
     <div id="bg-post1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
-{% elseif post.headerImage is not null %} 
-<div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ post.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% elseif trick.headerImage is not null %} 
+<div id="bg-post2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% else %}
-    <div id="bg-post2" style="background-image: url('{{ asset('images/uploads/postImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
+    <div id="bg-post2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% endif %}
         <div class="p-3">
             <div class="d-sm-none d-lg-block">
                 <div class="d-flex justify-content-end align-items-end p-0">   
                     <p class="px-2 m-0 bg-edit-button button-deco" >
-                        <a href="{{ path('trick_edit_header_image', {'trick_id': post.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                        <a href="{{ path('trick_edit_header_image', {'trick_id': trick.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                     </p>
                     <p class="px-2 m-0 bg-edit-button button-deco">
                         <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
@@ -24,7 +24,7 @@
             </div>
             <div class="d-flex justify-content-end align-items-end p-0">
                 <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
-                    <a href="{{ path('trick_edit_header_image', {'trick_id': post.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
+                    <a href="{{ path('trick_edit_header_image', {'trick_id': trick.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
                     <a href=""><i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i></a>
@@ -32,9 +32,9 @@
             </div>
         </div>    
         <div class="d-sm-none d-lg-block">
-            <h1 class="col-4 m-auto d-flex align-items-end justify-content-center text-center bg-edit-button">{{ post.title }}</h1>
+            <h1 class="col-4 m-auto d-flex align-items-end justify-content-center text-center bg-edit-button">{{ trick.title }}</h1>
         </div>
-        <h1 class="m-auto d-lg-none d-flex align-items-center justify-content-center text-center bg-edit-button" style="font-size: 5rem;">{{ post.title }}</h1>
+        <h1 class="m-auto d-lg-none d-flex align-items-center justify-content-center text-center bg-edit-button" style="font-size: 5rem;">{{ trick.title }}</h1>
     </div>
 {% endblock %}
 
@@ -43,12 +43,12 @@
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
         {% for picture in pictureList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
-            <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
+            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
             <div class="p-3">
                 <div class="d-sm-none d-lg-block">
                     <div class="d-flex justify-content-end align-items-end p-0">   
                         <p class="px-2 m-0 bg-edit-button button-deco" >
-                            <a href="{{ path('trick_edit_picture', {'trick_id': picture.post.id, 'id': picture.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                            <a href="{{ path('trick_edit_picture', {'trick_id': picture.trick.id, 'id': picture.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                         </p>
                         <p class="px-2 m-0 bg-edit-button button-deco">
                             <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="d-flex justify-content-end align-items-end p-0">
                     <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
-                        <a href="{{ path('trick_edit_picture', {'trick_id': picture.post.id, 'id': picture.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
+                        <a href="{{ path('trick_edit_picture', {'trick_id': picture.trick.id, 'id': picture.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
                     </p>
                     <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
                         <a href=""><i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i></a>
@@ -74,7 +74,7 @@
                 <div class="d-sm-none d-lg-block">
                     <div class="d-flex justify-content-end align-items-end p-0">   
                         <p class="px-2 m-0 bg-edit-button button-deco" >
-                            <a href="{{ path('trick_edit_media', {'trick_id': media.post.id, 'id': media.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                            <a href="{{ path('trick_edit_media', {'trick_id': media.trick.id, 'id': media.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                         </p>
                         <p class="px-2 m-0 bg-edit-button button-deco">
                             <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="d-flex justify-content-end align-items-end p-0">
                     <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
-                        <a href="{{ path('trick_edit_media', {'trick_id': media.post.id, 'id': media.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
+                        <a href="{{ path('trick_edit_media', {'trick_id': media.trick.id, 'id': media.id}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
                     </p>
                     <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
                         <a href=""><i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i></a>
@@ -114,14 +114,14 @@
     <div class="row my-5 pb-5 ">
         <div style="height: 3rem;" class="d-flex mx-auto justify-content-center text-center list-group list-group-horizontal">
             <h3 class="m-0 list-group-item fs-4">
-                Catégorie : <span class="span-text fs-5">{{ post.category.title }}</span>
+                Catégorie : <span class="span-text fs-5">{{ trick.category.title }}</span>
             </h3>
             <h3 class="m-0 list-group-item fs-4">
-                Créé le <span class="span-text fs-5"> {{ post.createdAt | date("d/m/Y à h:i", "Europe/Paris") }}</span>
+                Créé le <span class="span-text fs-5"> {{ trick.createdAt | date("d/m/Y à h:i", "Europe/Paris") }}</span>
             </h3>
-            {% if post.updateDate is not null %}
+            {% if trick.updateDate is not null %}
             <h3 class="m-0 list-group-item fs-4">
-                Mise à jour le <span class="span-text fs-5"> {{ post.updateDate | date("d/m/Y à h:i", "Europe/Paris") }}</span>
+                Mise à jour le <span class="span-text fs-5"> {{ trick.updateDate | date("d/m/Y à h:i", "Europe/Paris") }}</span>
             </h3>
             {% endif %}
         </div>
