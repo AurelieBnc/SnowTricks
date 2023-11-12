@@ -47,14 +47,14 @@ class PictureRepository extends ServiceEntityRepository
 //    }
 
     /**
-     * function to get only pictures of a post
+     * function to get only pictures of a trick
      * @return array<string>
      */
-    public function pictureList(int $idPost) : array
+    public function pictureList(int $idTrick) : array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.post = :post')
-            ->setParameter('post', $idPost)
+            ->andWhere('p.trick = :trick')
+            ->setParameter('trick', $idTrick)
             ->getQuery()
             ->getResult()
        ;
