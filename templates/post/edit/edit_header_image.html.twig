@@ -18,6 +18,7 @@
 <div class="my-5 col-12 col-lg-8 m-auto">
     {% include('partial/flash_edit.html.twig') %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
+        {# todo : faire une condition pour prévenir qu'il n'ya pas de header #}
         <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">

@@ -11,7 +11,7 @@ use App\Entity\Media;
 use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\CommentType;
-use App\Form\CreatePostFormType;
+use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
@@ -23,16 +23,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class PostController extends AbstractController
 {
     #[Route('/create', name: 'trick_create')]
-    public function createPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
         $post = new Post;
 
-        $postForm = $this->createForm(CreatePostFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $post);
         if ($user) {
-            $postForm->handleRequest($request);
+            $trickForm->handleRequest($request);
 
-            if ($postForm->isSubmitted() && $postForm->isValid()) {
+            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
@@ -46,7 +46,7 @@ class PostController extends AbstractController
 
                 $post->setCreatedAt(new \DateTimeImmutable()); 
                 
-                $pictureList = $postForm->get('pictureList')->getData();
+                $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
                     $folder = 'postImages';
@@ -57,9 +57,9 @@ class PostController extends AbstractController
                     $post->addPicture($picture);
                 }
 
-                if (null !== $postForm->get('media')->getData()) {
+                if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
-                    $url = $postForm->get('media')->getData();
+                    $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
                     $post->addMedia($media);
                 }
@@ -67,16 +67,16 @@ class PostController extends AbstractController
                 $entityManager->persist($post);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton article a bien été ajouté !');
+                $this->addFlash('success', 'Ton trick a bien été ajouté !');
 
                 return $this->redirectToRoute('app_home');
             } 
         } else {
-            $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
+            $this->addFlash('login', 'Vous devez être connecté pour écrire un nouveau Trick.');
         }
 
         return $this->render('post/create_post.html.twig', [
-            'form' => $postForm,
+            'form' => $trickForm,
         ]);
     }
 
@@ -194,9 +194,6 @@ class PostController extends AbstractController
                 $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
                 $media->setVideoUrl($modifyUrl); 
 
-                // $mediaData = $mediaForm->get('videoUrl')->getData();
-
-                // $media->setvideoUrl($mediaData);
                 $media->setPost($post);
                 $post->addMedia($media);
 
@@ -222,7 +219,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'trick_edit')]
-    public function editPost(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    public function editTrick(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
 
@@ -247,10 +244,10 @@ class PostController extends AbstractController
             $url->setVideoUrl($modifyUrl);
         }
 
-        $postForm = $this->createForm(CreatePostFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $post);
         if ($user) {
-            $postForm->handleRequest($request);
-            if ($postForm->isSubmitted() && $postForm->isValid()) {
+            $trickForm->handleRequest($request);
+            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
                 //     $this->redirectToRoute('login');
@@ -263,7 +260,7 @@ class PostController extends AbstractController
 
                 $post->setCreatedAt(new \DateTimeImmutable()); 
                 
-                $pictureList = $postForm->get('pictureList')->getData();
+                $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
                     $folder = 'postImages';
@@ -274,9 +271,9 @@ class PostController extends AbstractController
                     $post->addPicture($picture);
                 }
 
-                if (null !== $postForm->get('media')->getData()) {
+                if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
-                    $url = $postForm->get('media')->getData();
+                    $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
                     $post->addMedia($media);
                 }
@@ -284,14 +281,14 @@ class PostController extends AbstractController
                 $entityManager->persist($post);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton article a bien été modifié !');
+                $this->addFlash('success', 'Ton trick a bien été modifié !');
 
                 return $this->redirectToRoute('trick_edit', [
                     'id' => $post->getId(),
                 ]);
             } 
         } else {
-            $this->addFlash('login', 'Vous devez être connecté pour modifier un article.');
+            $this->addFlash('login', 'Vous devez être connecté pour modifier un trick.');
         }
 
         return $this->render('post/edit/edit_post.html.twig', [
@@ -300,7 +297,7 @@ class PostController extends AbstractController
             'videoUrlList' => $urlModifiedList,
             'mediaList' => $videoUrlList,
             'commentList' => $commentList,
-            'form' => $postForm,
+            'form' => $trickForm,
         ]);
     }
 
@@ -358,6 +355,8 @@ class PostController extends AbstractController
                     ->setUser($user);
                 $entityManager->persist($comment);
                 $entityManager->flush();
+
+                $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
 
                 return $this->redirectToRoute('trick', [
                     'id' => $post->getId(),
