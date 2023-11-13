@@ -80,6 +80,15 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[Route('/commentList/{trick}/{loader}', name: 'complete_comment_list')]
+    public function commentListRedirect(int $trick, int $loader): Response
+    {
+        return $this->redirectToRoute('trick', [
+            'id' => $trick,
+            'loader' => 0
+        ]);
+    }
+
     #[Route('/{trick_id}/edit/headerImage', name: 'trick_edit_header_image')]
     public function editHeaderImage(int $trick_id, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -218,8 +227,8 @@ class TrickController extends AbstractController
 
     }
 
-    #[Route('/{id}/edit', name: 'trick_edit')]
-    public function editTrick(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    #[Route('/{trick_id}/edit', name: 'trick_edit')]
+    public function editTrick(int $trick_id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
 
@@ -228,7 +237,7 @@ class TrickController extends AbstractController
         $commentList = null;
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($id);
+        $trick = $trickRepo->find($trick_id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -301,15 +310,15 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/{loader}', name: 'trick')]
-    public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
+    #[Route('/{trick_id}/{loader}', name: 'trick')]
+    public function index(int $trick_id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
         $videoUrlList = null;
         $commentList = null;
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($id);
+        $trick = $trickRepo->find($trick_id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -374,15 +383,6 @@ class TrickController extends AbstractController
             'commentList' => $commentList,
             'loader' => $loader,
             'commentForm' => $commentForm->createView()
-        ]);
-    }
-
-    #[Route('/commentList/{trick}/{loader}', name: 'complete_comment_list')]
-    public function commentListRedirect(int $trick, int $loader): Response
-    {
-        return $this->redirectToRoute('trick', [
-            'id' => $trick,
-            'loader' => 0
         ]);
     }
 }
