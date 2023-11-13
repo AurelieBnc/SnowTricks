@@ -22,7 +22,7 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'commentList')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Post $post = null;
+    private ?Trick $trick = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentList')]
     #[ORM\JoinColumn(nullable: false)]
@@ -57,14 +57,14 @@ class Comment
         return $this;
     }
 
-    public function getPost(): ?Post
+    public function getTrick(): ?Trick
     {
-        return $this->post;
+        return $this->trick;
     }
 
-    public function setPost(?Post $post): static
+    public function setTrick(?Trick $trick): static
     {
-        $this->post = $post;
+        $this->trick = $trick;
 
         return $this;
     }

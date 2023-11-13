@@ -47,14 +47,14 @@ class MediaRepository extends ServiceEntityRepository
 //    }
 
     /**
-     * function to get only urls video of a post
+     * function to get only urls video of a trick
      * @return array<string>
      */
-    public function videoUrlList(int $idPost) : array
+    public function videoUrlList(int $idTrick) : array
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.post = :post')
-            ->setParameter('post', $idPost)
+            ->andWhere('m.trick = :trick')
+            ->setParameter('trick', $idTrick)
             ->getQuery()
             ->getResult()
        ;

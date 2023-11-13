@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Post;
+use App\Entity\Trick;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,9 +25,9 @@ class HeaderImageType extends AbstractType
             ]);
     }
 
-    private function getPictureChoices(Post $post): array
+    private function getPictureChoices(Trick $trick): array
     {
-        $pictureList = $post->getPictureList();
+        $pictureList = $trick->getPictureList();
         $choices = [];
 
         foreach ($pictureList as $picture) {
@@ -41,7 +41,7 @@ class HeaderImageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Post::class,
+            'data_class' => Trick::class,
         ]);
     }
 }

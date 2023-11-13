@@ -20,9 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
+#[Route('/security')]
 class SecurityController extends AbstractController
 {
-    #[Route('/inscription', name: 'security_registration')]
+    #[Route('/registration', name: 'security_registration')]
     public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SendEmailService $email, JWTService $jwt, PictureService $pictureService): Response
     {
         $user = new User;
@@ -41,14 +42,15 @@ class SecurityController extends AbstractController
             $user->setRoles(['ROLE_USER']);
             $user->setIsVerified(false);
 
-            // upload avatar
-            $avatar = $form->get('avatar')->getData();
-            $folder = 'avatars';
+            if (null !== $form->get('avatar')->getData()) {
+                // upload avatar
+                $avatar = $form->get('avatar')->getData();
+                $folder = 'avatars';
 
-            $field = $pictureService->add($avatar, $folder, 300, 300);
+                $field = $pictureService->add($avatar, $folder, 300, 300);
 
-            $user->setAvatar($field);
-
+                $user->setAvatar($field); 
+            }
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -98,7 +100,7 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/renvoiVerification', name: 'app_retry_verif_email')]
+    #[Route('/verification-returns', name: 'app_retry_verif_email')]
     public function sendBackVerifyUserEmail(SendEmailService $email, JWTService $jwt, UserRepository $userRepository): Response
     {
         $user = $this->getUser();
@@ -185,7 +187,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/reset/{token}', name: 'app_reset_password')]
+    #[Route('/reset-password/{token}', name: 'app_reset_password')]
     public function reset(string $token, Request $request, UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = $userRepository->findOneByResetToken($token);

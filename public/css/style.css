@@ -20,24 +20,13 @@
     src: url('../fonts/RetroJump.ttf');
 }
 
-/*Police p*/
+/*Police h & button */
 @font-face {
     font-family: Retroking;
     src: url('../fonts/Retroking.ttf');
 }
 
-/*Police h1 */
-@font-face {
-    font-family: RetroTeam;
-    src: url('../fonts/RetroTeam.otf');
-}
-
-h1,h2 {
-    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
-    size: 5rem;
-}
-/*todo âsser toutes les polices H en h3*/
-h3 {
+h1,h2,h3 {
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
@@ -45,9 +34,9 @@ body, html {
     background-color: var(--background);
     height: 100%;
 }
-/* supprimer la police retroteam */
+
 .span-text {
-    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' !important;
+    font-family:'Roboto','Arial','Helvetica','sans-serif' !important;
 }
 
 #bg-head {  
@@ -61,7 +50,7 @@ body, html {
     background-size: cover;
 }
 
-#bg-post1, #bg-post2 {  
+#bg-trick1, #bg-trick2 {  
     /* Full height */
     height: 100% !important; 
   
@@ -141,7 +130,7 @@ body, html {
 }
 
 /******************************/
-/* Post*/
+/* Trick*/
 
 .bg-edit-button {
     background-color: var(--lightcolor) !important;
@@ -157,7 +146,7 @@ body, html {
 .button-deco {
     border: solid var(--darkcolor) !important;
     font-weight: bold;
-    font-family: 'RetroTeam','Roboto','Arial','Helvetica','sans-serif' ;
+    font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
 #avatar-user {
@@ -177,7 +166,7 @@ a:hover {
 }
 
 /******************************/
-/* PostEdit */
+/* TrickEdit */
 
 .image-mini {
     height: 100px;

@@ -18,30 +18,31 @@
 <div class="my-5 col-12 col-lg-8 m-auto">
     {% include('partial/flash_edit.html.twig') %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
-        <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+        {# todo : faire une condition pour prévenir qu'il n'ya pas de header #}
+        <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">
         </div>
-        {{ form_errors(form) }}
+        {{ form_errors(headerImageForm) }}
 
-        {{ form_start(form) }}
+        {{ form_start(headerImageForm) }}
 
-        {{ form_label(form.headerImage)}}
-        {% for picture in form.headerImage %}
+        {{ form_label(headerImageForm.headerImage)}}
+        {% for picture in headerImageForm.headerImage %}
         <div class="d-flex flex-row">
             {# todo : le choice_label ne fonctionne pas #}
             {{ form_widget(picture, {'value': picture.vars.label}) }}
-            <img src="{{ asset('images/uploads/postImages/mini/250x250-'~ picture.vars.label) }}" class="card-img-top m-auto img-fluid img-thumbnail image-mini"  alt="{{ picture.vars.label }}">
+            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ picture.vars.label) }}" class="card-img-top m-auto img-fluid img-thumbnail image-mini"  alt="{{ picture.vars.label }}">
         </div>
         {% endfor %}
             
         <div class="d-flex justify-content-center">
             <button type="submit" class="my-3 fs-3 button-deco">            
-                Envoyer !
+                Envoyer
             </button>
         </div>
 
-        {{ form_end(form) }}
+        {{ form_end(headerImageForm) }}
 
     </div>
 </div>

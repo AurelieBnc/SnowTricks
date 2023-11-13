@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer un article{% endblock %}
+{% block title %}Créer un trick{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -14,37 +14,37 @@
 
 <div class="d-sm-none d-lg-block">
     <h1 class="m-auto my-5 d-flex align-items-end justify-content-center text-center">
-            Créer un article
+        Créer un trick
     </h1>
 </div>
 <h1 class="m-auto my-5 d-lg-none d-flex align-items-center justify-content-center text-center" style="font-size: 5rem;">
-    Créer un article
+    Créer un trick
 </h1>
 
 <div class="my-5 col-12 col-lg-8 m-auto">
     {% include('partial/flash_edit.html.twig') %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
-{# 
-        {{ form_errors(form) }} #}
 
-        {{ form_start(form) }}
+        {{ form_errors(trickForm) }}
 
-        {{ form_row(form.title) }} 
-        {{ form_row(form.content) }}
+        {{ form_start(trickForm) }}
 
-        {{ form_row(form.category) }}
-        {{ form_row(form.pictureList) }}
-        {{ form_label(form.media) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
-        {{ form_widget(form.media) }} 
+        {{ form_row(trickForm.title) }} 
+        {{ form_row(trickForm.content) }}
+
+        {{ form_row(trickForm.category) }}
+        {{ form_row(trickForm.pictureList) }}
+        {{ form_label(trickForm.media) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
+        {{ form_widget(trickForm.media) }} 
 
             
         <div class="d-flex justify-content-center">
             <button type="submit" class="my-3 fs-3 button-deco">            
-                Ajouter un nouveau strick !
+                Ajouter un nouveau trick
             </button>
         </div>
 
-        {{ form_end(form) }}
+        {{ form_end(trickForm) }}
 
     </div>
 </div>

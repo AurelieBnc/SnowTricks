@@ -47,14 +47,14 @@ class CommentRepository extends ServiceEntityRepository
 //    }
 
     /**
-     * function to get all comments of a post
+     * function to get all comments of a trick
      * @return array<Comment>
      */
-    public function commentList(int $idPost) : array
+    public function commentList(int $idTrick) : array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.post = :val')
-            ->setParameter('val', $idPost)
+            ->andWhere('c.trick = :val')
+            ->setParameter('val', $idTrick)
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
@@ -62,14 +62,14 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * return the list of the first ten comments of a post
+     * return the list of the first ten comments of a trick
      * @return array<Comment>
      */
-    public function commentListMaxTen(int $idPost) : array
+    public function commentListMaxTen(int $idTrick) : array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.post = :val')
-            ->setParameter('val', $idPost)
+            ->andWhere('c.trick = :val')
+            ->setParameter('val', $idTrick)
             ->orderBy('c.createdAt', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
@@ -80,11 +80,11 @@ class CommentRepository extends ServiceEntityRepository
     /**
      * returns the total number of items
      */
-    public function countCommentList(int $idPost): int
+    public function countCommentList(int $idTrick): int
     {
        $result = $this->createQueryBuilder('c')
-            ->andWhere('c.post = :val')
-            ->setParameter('val', $idPost)
+            ->andWhere('c.trick = :val')
+            ->setParameter('val', $idTrick)
             ->getQuery()
             ->getResult()
             ;

@@ -6,12 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Post;
+use App\Entity\Trick;
 use App\Entity\Media;
 use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Form\CommentType;
-use App\Form\CreatePostFormType;
+use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
@@ -19,19 +19,20 @@ use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class PostController extends AbstractController
+#[Route('/trick')]
+class TrickController extends AbstractController
 {
-    #[Route('/post/create', name: 'post_create')]
-    public function createPost(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    #[Route('/create', name: 'trick_create')]
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
-        $post = new Post;
+        $trick = new Trick;
 
-        $postForm = $this->createForm(CreatePostFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $trick);
         if ($user) {
-            $postForm->handleRequest($request);
+            $trickForm->handleRequest($request);
 
-            if ($postForm->isSubmitted() && $postForm->isValid()) {
+            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
@@ -43,51 +44,51 @@ class PostController extends AbstractController
                     ]);
                 }
 
-                $post->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable()); 
                 
-                $pictureList = $postForm->get('pictureList')->getData();
+                $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
-                    $folder = 'postImages';
+                    $folder = 'trickImages';
                     $field = $pictureService->add($picture, $folder);
 
                     $picture = new Picture;
                     $picture->setName($field);
-                    $post->addPicture($picture);
+                    $trick->addPicture($picture);
                 }
 
-                if (null !== $postForm->get('media')->getData()) {
+                if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
-                    $url = $postForm->get('media')->getData();
+                    $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
-                    $post->addMedia($media);
+                    $trick->addMedia($media);
                 }
 
-                $entityManager->persist($post);
+                $entityManager->persist($trick);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton article a bien été ajouté !');
+                $this->addFlash('success', 'Ton trick a bien été ajouté !');
 
                 return $this->redirectToRoute('app_home');
             } 
         } else {
-            $this->addFlash('login', 'Vous devez être connecté pour écrire un article.');
+            $this->addFlash('login', 'Vous devez être connecté pour écrire un nouveau Trick.');
         }
 
-        return $this->render('post/create_post.html.twig', [
-            'form' => $postForm,
+        return $this->render('trick/create_trick.html.twig', [
+            'trickForm' => $trickForm,
         ]);
     }
 
-    #[Route('/post/{post_id}/edit/headerImage', name: 'post_edit_header_image')]
-    public function editHeaderImage(int $post_id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{trick_id}/edit/headerImage', name: 'trick_edit_header_image')]
+    public function editHeaderImage(int $trick_id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id); 
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id); 
 
-        $headerImageForm = $this->createForm(HeaderImageType::class, $post);
+        $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
 
         if ($user) {
             $headerImageForm->handleRequest($request);
@@ -98,31 +99,31 @@ class PostController extends AbstractController
                     $this->redirectToRoute('app_home');
                 }
                 // permet de récupérer le nom de l'image
-                $post->setHeaderImage($headerImageForm->get('headerImage')->getData());
+                $trick->setHeaderImage($headerImageForm->get('headerImage')->getData());
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
-                    'id' => $post->getId(),
+                return $this->redirectToRoute('trick_edit', [
+                    'id' => $trick->getId(),
                 ]);
             }
         } else {
             $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
         }
         
-        return $this->render('post/edit/edit_header_image.html.twig', [
-            'form' => $headerImageForm->createView(),
-            'headerImage' => $post->getHeaderImage(),
+        return $this->render('trick/edit/edit_header_image.html.twig', [
+            'headerImageForm' => $headerImageForm->createView(),
+            'headerImage' => $trick->getHeaderImage(),
         ]);
     }
 
 
-    #[Route('/post/{post_id}/edit/picture/{id}', name: 'post_edit_picture')]
-    public function editPicture(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
+    #[Route('/{trick_id}/edit/picture/{id}', name: 'trick_edit_picture')]
+    public function editPicture(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
     {
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($id);
@@ -140,39 +141,39 @@ class PostController extends AbstractController
                 }
 
                 $picturedata = $pictureForm->get('name')->getData();
-                $folder = 'postImages';
+                $folder = 'trickImages';
                 $field = $pictureService->add($picturedata, $folder);
                 $pictureService->delete($picture->getName(), $folder);
 
                 $picture->setName($field);
-                $picture->setPost($post);
-                $post->addPicture($picture);
+                $picture->setTrick($trick);
+                $trick->addPicture($picture);
 
                 $entityManager->persist($picture);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
-                    'id' => $post->getId(),
+                return $this->redirectToRoute('trick_edit', [
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
             $this->addFlash('login', 'Vous devez être connecté pour modifier le trick.');
         }
 
-        return $this->render('post/edit/edit_picture.html.twig', [
+        return $this->render('trick/edit/edit_picture.html.twig', [
             'form' => $pictureForm,
             'picture' => $picture,
         ]);
     }
 
-    #[Route('/post/{post_id}/edit/media/{id}', name: 'post_edit_media')]
-    public function editMedia(int $post_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{trick_id}/edit/media/{id}', name: 'trick_edit_media')]
+    public function editMedia(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         //todo flusher l'url media au début pour éviter de la modifier a chaque display
         $user = $this->getUser();
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($post_id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($trick_id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($id);
@@ -193,17 +194,14 @@ class PostController extends AbstractController
                 $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
                 $media->setVideoUrl($modifyUrl); 
 
-                // $mediaData = $mediaForm->get('videoUrl')->getData();
-
-                // $media->setvideoUrl($mediaData);
-                $media->setPost($post);
-                $post->addMedia($media);
+                $media->setTrick($trick);
+                $trick->addMedia($media);
 
                 $entityManager->persist($media);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post_edit', [
-                    'id' => $post->getId(),
+                return $this->redirectToRoute('trick_edit', [
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -213,15 +211,15 @@ class PostController extends AbstractController
         $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $media->getVideoUrl());
         $media->setVideoUrl($modifyUrl);
 
-        return $this->render('post/edit/edit_media.html.twig', [
+        return $this->render('trick/edit/edit_media.html.twig', [
             'form' => $mediaForm,
             'media' => $media,
         ]);
 
     }
 
-    #[Route('/post/{id}/edit', name: 'post_edit')]
-    public function editPost(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    #[Route('/{id}/edit', name: 'trick_edit')]
+    public function editTrick(int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
     {
         $user = $this->getUser();
 
@@ -229,14 +227,14 @@ class PostController extends AbstractController
         $videoUrlList = null;
         $commentList = null;
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($post->getId()); 
+        $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         // Video url display processing
         $urlModifiedList = [];
@@ -246,10 +244,10 @@ class PostController extends AbstractController
             $url->setVideoUrl($modifyUrl);
         }
 
-        $postForm = $this->createForm(CreatePostFormType::class, $post);
+        $trickForm = $this->createForm(TrickFormType::class, $trick);
         if ($user) {
-            $postForm->handleRequest($request);
-            if ($postForm->isSubmitted() && $postForm->isValid()) {
+            $trickForm->handleRequest($request);
+            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
                 // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
                 //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
                 //     $this->redirectToRoute('login');
@@ -260,76 +258,76 @@ class PostController extends AbstractController
                     ]);
                 }
 
-                $post->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable()); 
                 
-                $pictureList = $postForm->get('pictureList')->getData();
+                $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
-                    $folder = 'postImages';
+                    $folder = 'trickImages';
                     $field = $pictureService->add($picture, $folder);
 
                     $picture = new Picture;
                     $picture->setName($field);
-                    $post->addPicture($picture);
+                    $trick->addPicture($picture);
                 }
 
-                if (null !== $postForm->get('media')->getData()) {
+                if (null !== $trickForm->get('media')->getData()) {
                     $media = new Media;
-                    $url = $postForm->get('media')->getData();
+                    $url = $trickForm->get('media')->getData();
                     $media->setVideoUrl($url);
-                    $post->addMedia($media);
+                    $trick->addMedia($media);
                 }
 
-                $entityManager->persist($post);
+                $entityManager->persist($trick);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton article a bien été modifié !');
+                $this->addFlash('success', 'Ton trick a bien été modifié !');
 
-                return $this->redirectToRoute('post_edit', [
-                    'id' => $post->getId(),
+                return $this->redirectToRoute('trick_edit', [
+                    'id' => $trick->getId(),
                 ]);
             } 
         } else {
-            $this->addFlash('login', 'Vous devez être connecté pour modifier un article.');
+            $this->addFlash('login', 'Vous devez être connecté pour modifier un trick.');
         }
 
-        return $this->render('post/edit/edit_post.html.twig', [
-            'post' => $post,
+        return $this->render('trick/edit/edit_trick.html.twig', [
+            'trick' => $trick,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
             'mediaList' => $videoUrlList,
             'commentList' => $commentList,
-            'form' => $postForm,
+            'form' => $trickForm,
         ]);
     }
 
-    #[Route('/post/{id}/{loader}', name: 'post')]
+    #[Route('/{id}/{loader}', name: 'trick')]
     public function index(int $id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
         $videoUrlList = null;
         $commentList = null;
 
-        $postRepo = $entityManager->getRepository(Post::class);
-        $post = $postRepo->find($id);
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->find($id);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($post->getId());
+        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($post->getId()); 
+        $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
-        $countCommentList = $commentRepo->countCommentList($post->getId());
+        $countCommentList = $commentRepo->countCommentList($trick->getId());
 
         if ($loader === 1) {
             $loader = ($countCommentList > 10) ? 1 : 0;
         }
 
         if ($loader === 0) {
-            $commentList = $commentRepo->commentList($post->getId());
+            $commentList = $commentRepo->commentList($trick->getId());
         } else {   
-            $commentList = $commentRepo->commentListMaxTen($post->getId());
+            $commentList = $commentRepo->commentListMaxTen($trick->getId());
         }
 
         // Video url display processing
@@ -347,19 +345,21 @@ class PostController extends AbstractController
 
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
-                    $this->redirectToRoute('post', [
-                        'id' => $post->getId(),
+                    $this->redirectToRoute('trick', [
+                        'id' => $trick->getId(),
                         'loader' => $loader
                     ]);
                 }
                 $comment->setCreatedAt(new \DateTimeImmutable())
-                    ->setPost($post)
+                    ->setTrick($trick)
                     ->setUser($user);
                 $entityManager->persist($comment);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('post', [
-                    'id' => $post->getId(),
+                $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
+
+                return $this->redirectToRoute('trick', [
+                    'id' => $trick->getId(),
                     'loader' => $loader
                 ]);
             } 
@@ -367,8 +367,8 @@ class PostController extends AbstractController
             $this->addFlash('login', 'Vous devez être connecté pour envoyer un commentaire.');
         }
 
-        return $this->render('post/index.html.twig', [
-            'post' => $post,
+        return $this->render('trick/trick.html.twig', [
+            'trick' => $trick,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
             'commentList' => $commentList,
@@ -377,15 +377,12 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/commentList/{post}/{loader}', name: 'complete_comment_list')]
-    public function commentListRedirect(int $post, int $loader): Response
+    #[Route('/commentList/{trick}/{loader}', name: 'complete_comment_list')]
+    public function commentListRedirect(int $trick, int $loader): Response
     {
-        return $this->redirectToRoute('post', [
-            'id' => $post,
+        return $this->redirectToRoute('trick', [
+            'id' => $trick,
             'loader' => 0
         ]);
     }
-
-
-
 }

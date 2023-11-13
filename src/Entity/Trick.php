@@ -2,14 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
+use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post
+#[ORM\Entity(repositoryClass: TrickRepository::class)]
+class Trick
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,17 +28,17 @@ class Post
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updateDate = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\ManyToOne(inversedBy: 'tricks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Media::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade:['persist'])]
     private Collection $mediaList;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $commentList;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Picture::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade:['persist'])]
     private Collection $pictureList;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -128,7 +128,7 @@ class Post
     {
         if (!$this->mediaList->contains($media)) {
             $this->mediaList->add($media);
-            $media->setPost($this);
+            $media->setTrick($this);
         }
 
         return $this;
@@ -138,8 +138,8 @@ class Post
     {
         if ($this->mediaList->removeElement($media)) {
             // set the owning side to null (unless already changed)
-            if ($media->getPost() === $this) {
-                $media->setPost(null);
+            if ($media->getTrick() === $this) {
+                $media->setTrick(null);
             }
         }
 
@@ -158,7 +158,7 @@ class Post
     {
         if (!$this->commentList->contains($comment)) {
             $this->commentList->add($comment);
-            $comment->setPost($this);
+            $comment->setTrick($this);
         }
 
         return $this;
@@ -168,8 +168,8 @@ class Post
     {
         if ($this->commentList->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
             }
         }
 
@@ -188,7 +188,7 @@ class Post
     {
         if (!$this->pictureList->contains($pictureList)) {
             $this->pictureList->add($pictureList);
-            $pictureList->setPost($this);
+            $pictureList->setTrick($this);
         }
 
         return $this;
@@ -198,8 +198,8 @@ class Post
     {
         if ($this->pictureList->removeElement($pictureList)) {
             // set the owning side to null (unless already changed)
-            if ($pictureList->getPost() === $this) {
-                $pictureList->setPost(null);
+            if ($pictureList->getTrick() === $this) {
+                $pictureList->setTrick(null);
             }
         }
 
