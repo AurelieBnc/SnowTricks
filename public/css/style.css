@@ -149,6 +149,12 @@ body, html {
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
 
+.comment-deco {
+    border: solid var(--darkcolor) !important;
+    font-weight: bold !important;
+    font-family: 'Roboto','Arial','Helvetica','sans-serif' !important ;
+}
+
 #avatar-user {
     height: 100px;
 }

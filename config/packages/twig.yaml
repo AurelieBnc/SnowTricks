@@ -6,3 +6,8 @@ when@test:
     twig:
         strict_variables: true
         cache: false
+        
+when@dev:
+    twig:
+        strict_variables: true
+        cache: false
