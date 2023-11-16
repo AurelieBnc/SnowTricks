@@ -25,7 +25,7 @@ class HomeController extends AbstractController
                 $this->redirectToRoute('app_home');
             }
         }
-
+        /** @var App\Repository\TrickRepository $repo */
         $repo = $entityManager->getRepository(Trick::class);
         $trickList = $repo->trickListMaxFifteen();
         $countTrickList = $repo->countTrickList();

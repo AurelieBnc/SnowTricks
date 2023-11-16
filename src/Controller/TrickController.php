@@ -210,7 +210,7 @@ class TrickController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $trick->getId(),
+                    'trick_id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -293,7 +293,7 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Ton trick a bien été modifié !');
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $trick->getId(),
+                    'trick_id' => $trick->getId(),
                 ]);
             } 
         } else {
@@ -355,7 +355,7 @@ class TrickController extends AbstractController
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('trick', [
-                        'id' => $trick->getId(),
+                        'trick_id' => $trick->getId(),
                         'loader' => $loader
                     ]);
                 }
@@ -368,7 +368,7 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
 
                 return $this->redirectToRoute('trick', [
-                    'id' => $trick->getId(),
+                    'trick_id' => $trick->getId(),
                     'loader' => $loader
                 ]);
             } 
