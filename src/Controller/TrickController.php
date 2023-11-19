@@ -18,12 +18,13 @@ use App\Form\HeaderImageType;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
     #[Route('/create', name: 'trick_create')]
-    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
         $trick = new Trick;
@@ -44,7 +45,8 @@ class TrickController extends AbstractController
                     ]);
                 }
 
-                $trick->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable());
+                $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
                 
                 $pictureList = $trickForm->get('pictureList')->getData();
                 
@@ -80,24 +82,27 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/commentList/{trick}/{loader}', name: 'complete_comment_list')]
-    public function commentListRedirect(int $trick, int $loader): Response
+    #[Route('/commentList/{slug}/{loader}', name: 'complete_comment_list')]
+    public function commentListRedirect(string $slug, int $loader): Response
     {
         return $this->redirectToRoute('trick', [
-            'id' => $trick,
+            'slug' => $slug,
             'loader' => 0
         ]);
     }
 
-    #[Route('/{trick_id}/edit/headerImage', name: 'trick_edit_header_image')]
-    public function editHeaderImage(int $trick_id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{slug}/edit/headerImage', name: 'trick_edit_header_image')]
+    public function editHeaderImage(string $slug, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($trick_id); 
-
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
+
+        if ($trick->getHeaderImage() === null) {
+            $this->addFlash('info', 'Vous n\'avez pas d\'image d\'en-tête actuellement');
+        }
 
         if ($user) {
             $headerImageForm->handleRequest($request);
@@ -112,7 +117,7 @@ class TrickController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $trick->getId(),
+                    'slug' => $slug,
                 ]);
             }
         } else {
@@ -126,14 +131,13 @@ class TrickController extends AbstractController
     }
 
 
-    #[Route('/{trick_id}/edit/picture/{id}', name: 'trick_edit_picture')]
-    public function editPicture(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
+    #[Route('/{slug}/edit/picture/{id}', name: 'trick_edit_picture')]
+    public function editPicture(string $slug, int $id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
     {
         $user = $this->getUser();
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($trick_id);
-
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($id);
 
@@ -162,7 +166,7 @@ class TrickController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'id' => $trick->getId(),
+                    'slug' => $slug,
                 ]);
             } 
         } else {
@@ -175,16 +179,14 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{trick_id}/edit/media/{id}', name: 'trick_edit_media')]
-    public function editMedia(int $trick_id, int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/{slug}/edit/media/{id}', name: 'trick_edit_media')]
+    public function editMedia(string $slug, int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         //todo flusher l'url media au début pour éviter de la modifier a chaque display
         $user = $this->getUser();
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($trick_id);
-
-        $mediaRepo = $entityManager->getRepository(Media::class);
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);        $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($id);
 
         $editMedia = new Media;
@@ -210,7 +212,7 @@ class TrickController extends AbstractController
                 $entityManager->flush();
 
                 return $this->redirectToRoute('trick_edit', [
-                    'trick_id' => $trick->getId(),
+                    'slug' => $slug,
                 ]);
             } 
         } else {
@@ -227,8 +229,8 @@ class TrickController extends AbstractController
 
     }
 
-    #[Route('/{trick_id}/edit', name: 'trick_edit')]
-    public function editTrick(int $trick_id, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService): Response
+    #[Route('/{slug}/edit', name: 'trick_edit')]
+    public function editTrick(string $slug, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
 
@@ -237,7 +239,7 @@ class TrickController extends AbstractController
         $commentList = null;
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($trick_id);
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -255,20 +257,21 @@ class TrickController extends AbstractController
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
         if ($user) {
+            if ($user->isVerified() === false) {
+                $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                $this->redirectToRoute('app_home', [
+                ]);
+            }
+            // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
+            //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
+            //     $this->redirectToRoute('login');
+            // }
+
             $trickForm->handleRequest($request);
             if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-                // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
-                //     $this->addFlash('verification', 'Vous devez être administrateur pour créer un article.');
-                //     $this->redirectToRoute('login');
-                // }
-                if ($user->isVerified() === false) {
-                    $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
-                    $this->redirectToRoute('app_home', [
-                    ]);
-                }
-
-                $trick->setCreatedAt(new \DateTimeImmutable()); 
+                $trick->setCreatedAt(new \DateTimeImmutable());
                 
+                $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
                 $pictureList = $trickForm->get('pictureList')->getData();
                 
                 foreach ($pictureList as $picture) {
@@ -293,7 +296,7 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Ton trick a bien été modifié !');
 
                 return $this->redirectToRoute('trick_edit', [
-                    'trick_id' => $trick->getId(),
+                    'slug' => $trick->getSlug(),
                 ]);
             } 
         } else {
@@ -310,15 +313,15 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/{trick_id}/{loader}', name: 'trick')]
-    public function index(int $trick_id, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
+    #[Route('/{slug}/{loader}', name: 'trick')]
+    public function index(string $slug, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
         $videoUrlList = null;
         $commentList = null;
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->find($trick_id);
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -355,7 +358,7 @@ class TrickController extends AbstractController
                 if ($user->isVerified() === false) {
                     $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
                     $this->redirectToRoute('trick', [
-                        'trick_id' => $trick->getId(),
+                        'slug' => $slug,
                         'loader' => $loader
                     ]);
                 }
@@ -368,7 +371,7 @@ class TrickController extends AbstractController
                 $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
 
                 return $this->redirectToRoute('trick', [
-                    'trick_id' => $trick->getId(),
+                    'slug' => $slug,
                     'loader' => $loader
                 ]);
             } 
