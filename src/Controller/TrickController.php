@@ -133,7 +133,7 @@ class TrickController extends AbstractController
         $user = $this->getUser();
 
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->findOneBy(['slug' => $slug]);dump($trick);
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($id);
 
@@ -236,7 +236,6 @@ class TrickController extends AbstractController
 
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
-        dump($trick);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -319,7 +318,6 @@ class TrickController extends AbstractController
 
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
-        dump($trick);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
