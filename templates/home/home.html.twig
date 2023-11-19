@@ -33,7 +33,7 @@
     {% for trick in trickList %}
     
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
-        <a href= "{{ path('trick', {'trick_id': trick.id, 'loader': 1}) }}">
+        <a href= "{{ path('trick', {'slug': trick.slug, 'loader': 1}) }}">
         {% if trick.headerImage is not null %} 
             <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ trick.headerImage) }}" class="card-img-top m-auto" alt="...">
         {% elseif trick.pictureList is not empty %}
@@ -52,10 +52,10 @@
         <div class="d-sm-none d-lg-block">
             <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">   
                 <p class="px-3 m-0" >
-                    <a href="{{ path('trick_edit', {'trick_id': trick.id}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="px-2 m-0">
-                    <a href="{{ path('trick_edit', {'trick_id': trick.id}) }}"><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
                 </p>
             </div>            
         </div>
