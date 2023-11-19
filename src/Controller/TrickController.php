@@ -100,6 +100,10 @@ class TrickController extends AbstractController
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
 
+        if ($trick->getHeaderImage() === null) {
+            $this->addFlash('info', 'Vous n\'avez pas d\'image d\'en-tête actuellement');
+        }
+
         if ($user) {
             $headerImageForm->handleRequest($request);
 

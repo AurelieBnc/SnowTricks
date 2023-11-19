@@ -19,7 +19,15 @@
     {% include('partial/flash_edit.html.twig') %}
     <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
         {# todo : faire une condition pour prévenir qu'il n'ya pas de header #}
-        <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+        {% if headerImage is null %}
+            {% for message in app.flashes('info') %}
+            <div class="alert alert-info alert-dismissible fade show text-center">
+                <p>{{ message }} </p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+        {% endif %}
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">
         </div>
