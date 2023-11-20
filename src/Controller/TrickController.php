@@ -503,12 +503,13 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('app_home');
     }
 
-    #[Route('/{slug}/{loader}', name: 'trick')]
-    public function index(string $slug, int $loader, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
+    #[Route('/{slug}', name: 'trick')]
+    public function index(string $slug, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
         $videoUrlList = null;
-        $commentList = null;
+        $commentlistPaginated = null;
+        $page = $request->query->getInt('page', 1);
 
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
@@ -520,17 +521,7 @@ class TrickController extends AbstractController
         $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
-        $countCommentList = $commentRepo->countCommentList($trick->getId());
-
-        if ($loader === 1) {
-            $loader = ($countCommentList > 10) ? 1 : 0;
-        }
-
-        if ($loader === 0) {
-            $commentList = $commentRepo->commentList($trick->getId());
-        } else {   
-            $commentList = $commentRepo->commentListMaxTen($trick->getId());
-        }
+        $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
 
         // Video url display processing
         $urlModifiedList = [];
@@ -549,7 +540,6 @@ class TrickController extends AbstractController
                     $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
                     $this->redirectToRoute('trick', [
                         'slug' => $slug,
-                        'loader' => $loader
                     ]);
                 }
                 $comment->setCreatedAt(new \DateTimeImmutable())
@@ -562,7 +552,6 @@ class TrickController extends AbstractController
 
                 return $this->redirectToRoute('trick', [
                     'slug' => $slug,
-                    'loader' => $loader
                 ]);
             } 
         } else {
@@ -573,8 +562,7 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'pictureList' => $pictureList,
             'videoUrlList' => $urlModifiedList,
-            'commentList' => $commentList,
-            'loader' => $loader,
+            'commentList' => $commentlistPaginated,
             'commentForm' => $commentForm->createView()
         ]);
     }
