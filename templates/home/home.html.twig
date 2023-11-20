@@ -55,17 +55,25 @@
                     <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="px-2 m-0">
-                    <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                    <a onclick="return confirm('Es-tu sûr de vouloir supprimer ce trick ?')"
+                        href="{{ path('delete_trick', {'slug': trick.slug}) }}" 
+                        title="Suppression du trick">
+                        <i class="fa-solid fa-trash" style="color: #B04C46;"></i>
+                    </a>
                 </p>
             </div>            
         </div>
 
         <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">
             <p class="d-lg-none px-5 m-0">
-                <a href=""><i id="pencil-icon" class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
+                <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i id="pencil-icon" class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
             </p>
             <p class="d-lg-none px-2 m-0">
-                <a href=""><i id="trash-icon" class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                <a onclick="return confirm('Es-tu sûr de vouloir supprimer ce trick ?')"
+                    href="{{ path('delete_trick', {'slug': trick.slug}) }}" 
+                    title="Suppression du trick">
+                    <i id="trash-icon" class="fa-solid fa-trash" style="color: #B04C46;"></i>
+                </a>
             </p>
         </div>
     </div>

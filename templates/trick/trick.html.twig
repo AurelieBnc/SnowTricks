@@ -17,7 +17,11 @@
                         <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i class="fa-solid fa-pencil" style="color: #D9C7A6;"></i></a>
                     </p>
                     <p class="px-2 m-0 bg-edit-button button-deco">
-                        <a href=""><i class="fa-solid fa-trash" style="color: #B04C46;"></i></a>
+                        <a onclick="return confirm('Es-tu sûr de vouloir supprimer ce trick ?')"
+                            href="{{ path('delete_trick', {'slug': trick.slug}) }}" 
+                            title="Suppression du trick">
+                            <i class="fa-solid fa-trash" style="color: #B04C46;"></i>
+                        </a>                    
                     </p>
                 </div>            
             </div>
@@ -26,7 +30,11 @@
                     <a href="{{ path('trick_edit', {'slug': trick.slug}) }}"><i id="pencil-icon" class="fa-solid fa-pencil p-2" style="color: #D9C7A6;"></i></a>
                 </p>
                 <p class="d-lg-none px-2 m-0 bg-edit-button button-deco">
-                    <a href=""><i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i></a>
+                    <a onclick="return confirm('Es-tu sûr de vouloir supprimer ce trick ?')" 
+                        href="{{ path('delete_trick', {'slug': trick.slug}) }}"
+                        title="Suppression du trick">
+                        <i id="trash-icon" class="fa-solid fa-trash p-2" style="color: #B04C46;"></i>
+                    </a>
                 </p>
             </div>
         </div>    
