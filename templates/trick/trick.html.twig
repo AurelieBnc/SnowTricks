@@ -120,33 +120,46 @@
     <hr class="border-black border-2 my-5">
 </div>
 
-<div class="col-12 col-lg-8 m-auto">
+{% if commentList|length > 0 %}
 
-    <div class="pt-5 px-5 justify-content-around shadow bg-edit-button pb-3">
-        <h2>Commentaires <span class="span-text">({{ trick.commentList|length }})</span></h2>
-        {% for comment in commentList %}
-        <div class="d-flex justify-content-between mb-3">
-            <div class="pe-3 col-2">
-                <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
-                    {% if comment.user.avatar is not null %}
-                        src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
-                    {% else %}
-                        src="{{ asset('images/default/default-avatar.png') }}"
-                    {% endif %}
-                    alt="..." />
-                <h3 class="fs-5 text-center">{{ comment.user.username }}</h3>
+    <div class="col-12 col-lg-8 m-auto">
+        <div class="pt-5 px-5 justify-content-around shadow bg-edit-button pb-3">
+            <h2>Commentaires <span class="span-text">({{commentList.limit}}/{{ trick.commentList|length }})</span></h2>
+            {% for comment in commentList.data %}
+            <div class="d-flex justify-content-between mb-3">
+                <div class="pe-3 col-2">
+                    <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
+                        {% if comment.user.avatar is not null %}
+                            src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
+                        {% else %}
+                            src="{{ asset('images/default/default-avatar.png') }}"
+                        {% endif %}
+                        alt="..." />
+                    <h3 class="fs-5 text-center">{{ comment.user.username }}</h3>
+                </div>
+                <div class="p-3 col-10 pt-5 comment-deco bg-white flex-fill">
+                    <p class="small text-break">{{ comment.content }}</p>
+                    <p class="blockquote-footer d-flex justify-content-end mt-2">Le {{ comment.createdAt | date("d/m/Y à h:i",
+                        "Europe/Paris") }}</p>
+                </div>
             </div>
-            <div class="p-3 col-10 pt-5 comment-deco bg-white flex-fill">
-                <p class="small text-break">{{ comment.content }}</p>
-                <p class="blockquote-footer d-flex justify-content-end mt-2">Le {{ comment.createdAt | date("d/m/Y",
-                    "Europe/Paris") }}</p>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
 
-{% if loader is same as 1 %}
+    {% set path = 'trick' %}
+    {% set slug = trick.slug %}
+    {% set pages = commentList.pages %}
+    {% set currentPage = commentList.page %}
+    {% include 'partial/pagination.html.twig' %}
+
+{% else %}
+    <div class=" d-flex align-items-end justify-content-center text-center">
+        <p class="col-8 span-text text-black-50 fs-3 text-center bg-body-secondary  ">Soit le premier à laisser un commentaire !</p>
+    </div>
+{% endif %}
+
+{# {% if loader is same as 1 %}
 <div class="mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
     <div class=" d-flex align-items-end justify-content-center text-center">
         <a href="{{ path('complete_comment_list', {'slug': trick.slug, 'loader': 0 }) }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
@@ -155,7 +168,7 @@
         </a>
     </div>
 {% endif %}
-</div>
+</div> #}
 
 
 <div style="height:150px"></div>

@@ -33,7 +33,7 @@
     {% for trick in trickList %}
     
     <div class="card ms-auto col-12 col-lg-2 m-3 p-0">
-        <a href= "{{ path('trick', {'slug': trick.slug, 'loader': 1}) }}">
+        <a href= "{{ path('trick', {'slug': trick.slug}) }}">
         {% if trick.headerImage is not null %} 
             <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ trick.headerImage) }}" class="card-img-top m-auto" alt="...">
         {% elseif trick.pictureList is not empty %}
