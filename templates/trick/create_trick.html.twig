@@ -6,11 +6,6 @@
 {% endblock %}
 
 {% block body %}
-{# {% if error %}
-<div class="col-8 d-flex flex-column justify-content-center alert alert-danger text-center fw-bold m-auto my-3">
-    Une erreur est survenue.
-</div>
-{% endif %} #}
 
 <div class="d-sm-none d-lg-block">
     <h1 class="m-auto my-5 d-flex align-items-end justify-content-center text-center">
@@ -36,13 +31,12 @@
         {{ form_row(trickForm.pictureList) }}
         {{ form_label(trickForm.media) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
         {{ form_widget(trickForm.media) }} 
-
-            
+       
         <div class="d-flex justify-content-center">
-            <button type="submit" class="my-3 fs-3 button-deco">            
-                Ajouter un nouveau trick
-            </button>
+            {{ form_row(trickForm.save)}}
         </div>
+
+        {{ form_row(trickForm.delete, {'attr': {'style': 'display: none;'}}) }}
 
         {{ form_end(trickForm) }}
 
