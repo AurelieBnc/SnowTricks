@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +21,7 @@ class TrickFormType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => 'Titre de l\'article', 
+                'label' => 'Titre de l\'article',
                 'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
                 'attr' => [
                     'placeholder' => 'De quel trick vas tu parlé?',
@@ -28,7 +29,7 @@ class TrickFormType extends AbstractType
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'Merci de renseigner un titre pour l\'article.',]) 
+                        'message' => 'Merci de renseigner un titre pour l\'article.',])
                 ],
             ])
             ->add('content', TextareaType::class, [
@@ -39,7 +40,7 @@ class TrickFormType extends AbstractType
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'Merci de renseigner un contenu.',]) 
+                        'message' => 'Merci de renseigner un contenu.',])
                 ],
             ])
             ->add('pictureList', FileType::class, [
@@ -62,6 +63,21 @@ class TrickFormType extends AbstractType
                 'choice_label' => 'title',
                 'attr' => [
                     'class' => 'text-center col-sm-10 col-lg-4'
+                ],
+            ])
+            ->add('delete', SubmitType::class, [
+                'label' => 'Supprimer',
+                'attr'=> [
+                    'title' => 'Supprimer l\'article',
+                    'class' => 'my-3 fs-3 me-4 button-deco text-danger',
+                    'onclick' => 'return confirm("Êtes-vous sûr de vouloir supprimer cet article, ainsi que ses commentaires et médias ?")'
+                ],
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'Enregistrer',
+                'attr'=> [
+                    'title' => 'Enregistrer les modifications',
+                    'class' => 'my-3 fs-3 button-deco',
                 ],
             ])
         ;
