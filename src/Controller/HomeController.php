@@ -21,7 +21,7 @@ class HomeController extends AbstractController
                 $this->redirectToRoute('app_home');
             }
             if (!$user->isVerified() === false) {
-                $this->addFlash('success', 'Une bonne journée à toi '.$user->getUsername().' coeur coeur !');
+                $this->addFlash('hello', 'Une bonne journée à toi '.$user->getUsername().' coeur coeur !');
                 $this->redirectToRoute('app_home');
             }
         }
