@@ -1,0 +1,34 @@
+{% if pages > 1 %}
+<div class="mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
+    <div class=" d-flex align-items-end justify-content-center text-center">
+        <nav class="d-flex align-items-center ">
+            <ul class="pagination">
+                {% if currentPage > 1 %}
+                    <li class="page-item">
+                        <a href="{{ path(path, {slug:slug, page:currentPage -1}) }}" class="page-link">&lt;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">    
+                        <a href="#" class="page-link">&lt;</a>
+                    </li>
+                {% endif %}
+                {% for page in 1..pages %}
+                    <li class="page-item {{ page == currentPage ? 'active' : '' }}">
+                        <a href="{{ path(path, {slug:slug, page:page}) }}" class="page-link">{{ page }}</a>
+                    </li>
+                {% endfor %}
+                {% if currentPage < 1 %}
+                    <li class="page-item">
+                        <a href="{{ path(path, {slug:slug, page:currentPage +1}) }}" class="page-link">&gt;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&gt;</a>
+                    </li>
+                {% endif %}
+            
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endif %}
