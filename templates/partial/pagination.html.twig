@@ -4,23 +4,41 @@
         <nav class="d-flex align-items-center ">
             <ul class="pagination">
                 {% if currentPage > 1 %}
+                    {% if slug is defined %}
                     <li class="page-item">
                         <a href="{{ path(path, {slug:slug, page:currentPage -1}) }}" class="page-link">&lt;</a>
                     </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a href="{{ path(path, {page:currentPage -1}) }}" class="page-link">&lt;</a>
+                        </li>
+                    {% endif %}
                 {% else %}
                     <li class="page-item disabled">    
                         <a href="#" class="page-link">&lt;</a>
                     </li>
                 {% endif %}
                 {% for page in 1..pages %}
-                    <li class="page-item {{ page == currentPage ? 'active' : '' }}">
-                        <a href="{{ path(path, {slug:slug, page:page}) }}" class="page-link">{{ page }}</a>
-                    </li>
+                    {% if slug is defined %}
+                        <li class="page-item {{ page == currentPage ? 'active' : '' }}">
+                            <a href="{{ path(path, {slug:slug, page:page}) }}" class="page-link">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item {{ page == currentPage ? 'active' : '' }}">
+                            <a href="{{ path(path, {page:page}) }}" class="page-link">{{ page }}</a>
+                        </li>
+                    {% endif %}
                 {% endfor %}
                 {% if currentPage < 1 %}
-                    <li class="page-item">
-                        <a href="{{ path(path, {slug:slug, page:currentPage +1}) }}" class="page-link">&gt;</a>
-                    </li>
+                    {% if slug is defined %}
+                        <li class="page-item">
+                            <a href="{{ path(path, {slug:slug, page:currentPage +1}) }}" class="page-link">&gt;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a href="{{ path(path, {page:currentPage +1}) }}" class="page-link">&gt;</a>
+                        </li>
+                    {% endif %}
                 {% else %}
                     <li class="page-item disabled">
                         <a href="#" class="page-link">&gt;</a>

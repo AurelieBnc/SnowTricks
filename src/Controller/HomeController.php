@@ -8,12 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function home(EntityManagerInterface $entityManager, ?UserInterface $user): Response
+    public function home(Request $request, EntityManagerInterface $entityManager, ?UserInterface $user): Response
     {
         if ($user) {
             if ($user->isVerified() === false) {
@@ -25,19 +26,17 @@ class HomeController extends AbstractController
                 $this->redirectToRoute('app_home');
             }
         }
+        $page = $request->query->getInt('page', 1);
+
         /** @var App\Repository\TrickRepository $repo */
-        $repo = $entityManager->getRepository(Trick::class);
-        $trickList = $repo->trickListMaxFifteen();
-        $countTrickList = $repo->countTrickList();
-        $loader = true;
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $tricklistPaginated = $trickRepo->findTrickListPaginated($page, 5);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();
 
         return $this->render('home/home.html.twig', [
-            'trickList' => $trickList,
-            'countTrickList' => $countTrickList,
-            'loader' => $loader,
+            'trickList' => $tricklistPaginated,
             'pictureList' => $pictureList,
         ]);
     }

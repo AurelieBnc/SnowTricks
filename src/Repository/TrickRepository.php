@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -47,27 +48,32 @@ class TrickRepository extends ServiceEntityRepository
 //    }
 
     /**
-	 * returns the list of the first fifteen tricks
-	 */
-	public function trickListMaxFifteen(): array
-    {
-       return $this->createQueryBuilder('t')
-           ->orderBy('t.id', 'DESC')
-           ->setMaxResults(15)
-           ->getQuery()
-           ->getResult()
-        ;
-	}
-
-    /**
-     * returns the total number of items
+     * returns tricks paginated
      */
-    public function countTrickList(): int
+    public function findTrickListPaginated(int $page, int $limit = 15): array
     {
-       $result = $this->createQueryBuilder('p')
-            ->getQuery()
-            ->getResult()
-            ;
-        return count($result);
+        $limit = abs($limit);
+
+        $result = [];
+
+        $query = $this->createQueryBuilder('c')
+        ->orderBy('c.createdAt', 'DESC')
+        ->setMaxResults($limit)
+        ->setFirstResult($page * $limit - $limit);
+
+        $paginator = new Paginator($query);
+        $data = $paginator->getQuery()->getResult();
+
+        if (empty($data)) {
+            return $result;
+        }
+        $pages = ceil($paginator->count() / $limit);
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['page'] = $page;
+        $result['limit'] = $limit;
+
+        return $result;
     }
+
 }
