@@ -20,59 +20,50 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'trick_create')]
     public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
     {
-        $user = $this->getUser();
         $trick = new Trick;
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
-        if ($user) {
-            $trickForm->handleRequest($request);
 
-            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+        $trickForm->handleRequest($request);
 
-                if ($user->isVerified() === false) {
-                    $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                    $this->redirectToRoute('app_home', [
-                    ]);
-                }
+        if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+            $trick->setCreatedAt(new \DateTimeImmutable());
+            $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
+            
+            $pictureList = $trickForm->get('pictureList')->getData();
+            
+            foreach ($pictureList as $picture) {
+                $folder = 'trickImages';
+                $field = $pictureService->add($picture, $folder);
 
-                $trick->setCreatedAt(new \DateTimeImmutable());
-                $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
-                
-                $pictureList = $trickForm->get('pictureList')->getData();
-                
-                foreach ($pictureList as $picture) {
-                    $folder = 'trickImages';
-                    $field = $pictureService->add($picture, $folder);
+                $picture = new Picture;
+                $picture->setName($field);
+                $trick->addPicture($picture);
+            }
 
-                    $picture = new Picture;
-                    $picture->setName($field);
-                    $trick->addPicture($picture);
-                }
+            if (null !== $trickForm->get('media')->getData()) {
+                $media = new Media;
+                $url = $trickForm->get('media')->getData();
+                $media->setVideoUrl($url);
+                $trick->addMedia($media);
+            }
 
-                if (null !== $trickForm->get('media')->getData()) {
-                    $media = new Media;
-                    $url = $trickForm->get('media')->getData();
-                    $media->setVideoUrl($url);
-                    $trick->addMedia($media);
-                }
+            $entityManager->persist($trick);
+            $entityManager->flush();
 
-                $entityManager->persist($trick);
-                $entityManager->flush();
+            $this->addFlash('success', 'Ton trick a bien été ajouté !');
 
-                $this->addFlash('success', 'Ton trick a bien été ajouté !');
-
-                return $this->redirectToRoute('app_home');
-            } 
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour écrire un nouveau Trick.');
-        }
+            return $this->redirectToRoute('app_home');
+        } 
 
         return $this->render('trick/create_trick.html.twig', [
             'trickForm' => $trickForm,
@@ -217,11 +208,10 @@ class TrickController extends AbstractController
 
     }
 
+    #[IsGranted('TRICK_EDIT', 'trick')]
     #[Route('/{slug}/edit', name: 'trick_edit')]
     public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
     {
-        $user = $this->getUser();
-
         $pictureList = null;
         $videoUrlList = null;
 
@@ -234,89 +224,75 @@ class TrickController extends AbstractController
         // Video url display processing
         $urlModifiedList = [];
         foreach ($videoUrlList as $url) {
-            
             $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $url->getVideoUrl());
             $url->setVideoUrl($modifyUrl);
         }
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home', [
-                ]);
-            }
-            // if ($this->getUser()->is_granted('ROLE_ADMIN') === false) {
-            //     $this->addFlash('verification', 'Tu dois être administrateur pour créer un article.');
-            //     $this->redirectToRoute('login');
-            // }
 
-            $trickForm->handleRequest($request);
-            if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-                if ($trickForm->get('delete')->isClicked()) {
-                    //clean Trick before delete
-                    $commentList = null;
-            
-                    $commentRepo = $entityManager->getRepository(Comment::class);
-                    $commentList = $commentRepo->commentList($trick->getId());
+        $trickForm->handleRequest($request);
+        if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+            if ($trickForm->get('delete')->isClicked()) {
+                //clean Trick before delete
+                $commentList = null;
+        
+                $commentRepo = $entityManager->getRepository(Comment::class);
+                $commentList = $commentRepo->commentList($trick->getId());
 
-                    if (!empty($videoUrlList)) {
-                        foreach ($videoUrlList as $url) {
-                            $entityManager->remove($url);
-                        }
+                if (!empty($videoUrlList)) {
+                    foreach ($videoUrlList as $url) {
+                        $entityManager->remove($url);
                     }
-                    if (!empty($pictureList)) {
-                        foreach ($pictureList as $picture) {
-                            $entityManager->remove($picture);
-                        }
+                }
+                if (!empty($pictureList)) {
+                    foreach ($pictureList as $picture) {
+                        $entityManager->remove($picture);
                     }
-                    if (!empty($commentList)) {
-                        foreach ($commentList as $comment) {
-                            $entityManager->remove($comment);
-                        }
+                }
+                if (!empty($commentList)) {
+                    foreach ($commentList as $comment) {
+                        $entityManager->remove($comment);
                     }
-
-                    $entityManager->remove($trick);
-                    $entityManager->flush();
-    
-                    $this->addFlash('success', 'Le trick a bien été supprimé, ainsi que tous ses médias et commentaires.');
-
-                    return $this->redirectToRoute('app_home');
                 }
 
-                $trick->setUpdateDate(new \DateTimeImmutable());
-                
-                $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
-                $pictureList = $trickForm->get('pictureList')->getData();
-                
-                foreach ($pictureList as $picture) {
-                    $folder = 'trickImages';
-                    $field = $pictureService->add($picture, $folder);
-
-                    $picture = new Picture;
-                    $picture->setName($field);
-                    $trick->addPicture($picture);
-                }
-
-                if (null !== $trickForm->get('media')->getData()) {
-                    $media = new Media;
-                    $url = $trickForm->get('media')->getData();
-                    $media->setVideoUrl($url);
-                    $trick->addMedia($media);
-                }
-
-                $entityManager->persist($trick);
+                $entityManager->remove($trick);
                 $entityManager->flush();
 
-                $this->addFlash('success', 'Ton trick a bien été modifié !');
+                $this->addFlash('success', 'Le trick a bien été supprimé, ainsi que tous ses médias et commentaires.');
 
-                return $this->redirectToRoute('trick_edit', [
-                    'slug' => $trick->getSlug(),
-                ]);
-            } 
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier un trick.');
-        }
+                return $this->redirectToRoute('app_home');
+            }
+
+            $trick->setUpdateDate(new \DateTimeImmutable());
+            
+            $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
+            $pictureList = $trickForm->get('pictureList')->getData();
+            
+            foreach ($pictureList as $picture) {
+                $folder = 'trickImages';
+                $field = $pictureService->add($picture, $folder);
+
+                $picture = new Picture;
+                $picture->setName($field);
+                $trick->addPicture($picture);
+            }
+
+            if (null !== $trickForm->get('media')->getData()) {
+                $media = new Media;
+                $url = $trickForm->get('media')->getData();
+                $media->setVideoUrl($url);
+                $trick->addMedia($media);
+            }
+
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Ton trick a bien été modifié !');
+
+            return $this->redirectToRoute('trick_edit', [
+                'slug' => $trick->getSlug(),
+            ]);
+        } 
 
         return $this->render('trick/edit/edit_trick.html.twig', [
             'trick' => $trick,
@@ -430,55 +406,45 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[IsGranted('TRICK_DELETE', 'trick')]
     #[Route('/{slug}/delete', name: 'delete_trick')]
     public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $user = $this->getUser();
 
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home', [
-                ]);
-            }
+        //clean Trick before delete
+        $pictureList = null;
+        $videoUrlList = null;
+        $commentList = null;
 
-            //clean Trick before delete
-            $pictureList = null;
-            $videoUrlList = null;
-            $commentList = null;
-    
-            $mediaRepo = $entityManager->getRepository(Media::class);
-            $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
-    
-            $pictureRepo = $entityManager->getRepository(Picture::class);
-            $pictureList = $pictureRepo->pictureList($trick->getId()); 
-    
-            $commentRepo = $entityManager->getRepository(Comment::class);
-            $commentList = $commentRepo->commentList($trick->getId());
+        $mediaRepo = $entityManager->getRepository(Media::class);
+        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
-            if (!empty($videoUrlList)) {
-                foreach ($videoUrlList as $url) {
-                    $entityManager->remove($url);
-                }
-            }
-            if (!empty($pictureList)) {
-                foreach ($pictureList as $picture) {
-                    $entityManager->remove($picture);
-                }
-            }
-            if (!empty($commentList)) {
-                foreach ($commentList as $comment) {
-                    $entityManager->remove($comment);
-                }
-            }
-            
-            $entityManager->remove($trick);
-            $entityManager->flush();
+        $pictureRepo = $entityManager->getRepository(Picture::class);
+        $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
-            $this->addFlash('success', 'Le trick a bien été supprimé, ainsi que tous ses médias et commentaires.');
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour supprimer un trick.');
+        $commentRepo = $entityManager->getRepository(Comment::class);
+        $commentList = $commentRepo->commentList($trick->getId());
+
+        if (!empty($videoUrlList)) {
+            foreach ($videoUrlList as $url) {
+                $entityManager->remove($url);
+            }
         }
+        if (!empty($pictureList)) {
+            foreach ($pictureList as $picture) {
+                $entityManager->remove($picture);
+            }
+        }
+        if (!empty($commentList)) {
+            foreach ($commentList as $comment) {
+                $entityManager->remove($comment);
+            }
+        }
+        
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le trick a bien été supprimé, ainsi que tous ses médias et commentaires.');
 
         return $this->redirectToRoute('app_home');
     }
