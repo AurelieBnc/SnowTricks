@@ -25,3 +25,11 @@ DATABASE_URL="mysql://root:root@127.0.0.1:3306/demo?serverVersion=8"
 ```
 cd snowtricks
 ```
+
+### Installation des fixtures
+```
+Dans le dossier doc à la racine du projet :
+- récupérer et dézippr le dossier uploads, puis copiez le dans public\images
+
+- récupérer le fichier snowtricks.sql puis importer le dans votre application de gestion de base de données
+```
