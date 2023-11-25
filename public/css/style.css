@@ -1,5 +1,5 @@
 /******************************/
-/* General*/
+/* Variable */
 
 :root{
     --brown: #633737;
@@ -12,7 +12,8 @@
     --background: snow;
 }
 
-/*//// Importation des polices ////*/
+/******************************/
+/* Importing fonts */
 
 /*Police navbar*/
 @font-face {
@@ -20,15 +21,30 @@
     src: url('../fonts/RetroJump.ttf');
 }
 
-/*Police h & button */
+/*Font h1 & button */
 @font-face {
     font-family: Retroking;
     src: url('../fonts/Retroking.ttf');
 }
 
-h1,h2,h3 {
+/*Font h2, h3 */
+@font-face {
+    font-family: RetroBoldy;
+    src: url('../fonts/RetroBoldy-Regular.ttf');
+}
+
+/******************************/
+/* General */
+
+h1 {
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
 }
+
+h2,h3 {
+    font-family: 'RetroBoldy','Roboto','Arial','Helvetica','sans-serif' ;
+    text-transform: capitalize;  
+}
+
 
 body, html {
     background-color: var(--background);
@@ -64,6 +80,9 @@ body, html {
     background-color: var(--lightcolor) !important;
 }
 
+/******************************/
+/* Navigation*/
+
 #main-nav-bar>div>ul>li>a {
     font-family: 'RetroJump','Roboto','Arial','Helvetica','sans-serif' !important;
     color: var(--mid-color) !important;
@@ -78,11 +97,6 @@ body, html {
 #footer-desk>div>span {
     color: var(--mid-color)!important;
 }
-
-/* #footer-phone>ul>li>a>i {
-    color: var(--darkcolor);
-    font-size: 50px;
-} */
 
 #main-logo {
     height: 3rem;
@@ -162,6 +176,10 @@ body, html {
 #youtube-logo {
     height: 25px;
     width: auto;
+}
+
+#content-trick {
+    text-justify: inter-word !important;
 }
 
 /******************************/

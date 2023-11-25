@@ -39,9 +39,9 @@
             </div>
         </div>    
         <div class="d-sm-none d-lg-block">
-            <h1 class="col-4 m-auto d-flex align-items-end justify-content-center text-center bg-edit-button">{{ trick.title }}</h1>
+            <h2 class="fs-1 col-4 m-auto d-flex align-items-end justify-content-center text-center bg-edit-button">{{ trick.title }}</h2>
         </div>
-        <h1 class="m-auto d-lg-none d-flex align-items-center justify-content-center text-center bg-edit-button" style="font-size: 5rem;">{{ trick.title }}</h1>
+        <h2 class="fs-1 m-auto d-lg-none d-flex align-items-center justify-content-center text-center bg-edit-button" style="font-size: 5rem;">{{ trick.title }}</h2>
     </div>
 {% endblock %}
 
@@ -53,9 +53,9 @@
             <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
         </div>
         {% endfor %}
-        {% for videoUrl in videoUrlList %}
+        {% for link in videoUrlList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
-            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ link.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         {% endfor %}
     </div>
@@ -73,7 +73,7 @@
 {% endif %}
 
 <div class="col-12 col-lg-8 m-auto">
-    <p class="p-3 shadow bg-light-form text-break lh-lg"><span>{{ trick.content|nl2br }}</span></p>
+    <p class="p-3 shadow bg-light-form text-break lh-lg"><span id="content-trick">{{ trick.content|nl2br }}</span></p>
 </div>
 <div class="col-12 col-lg-10 m-auto">
     <div class="row my-5 pb-5 ">
@@ -121,23 +121,30 @@
 </div>
 
 {% if commentList|length > 0 %}
+{% set path = 'trick' %}
+{% set slug = trick.slug %}
+{% set pages = commentList.pages %}
+{% set currentPage = commentList.page %}
+{% include 'partial/pagination.html.twig' %}
 
     <div class="col-12 col-lg-8 m-auto">
-        <div class="pt-5 px-5 justify-content-around shadow bg-edit-button pb-3">
-            <h2>Commentaires <span class="span-text">({{commentList.limit}}/{{ trick.commentList|length }})</span></h2>
+        <div class="pt-5 px-4 justify-content-around shadow bg-edit-button pb-3">
+            <h2>Commentaires <span class="span-text">({{ trick.commentList|length }})</span></h2>
             {% for comment in commentList.data %}
             <div class="d-flex justify-content-between mb-3">
-                <div class="pe-3 col-2">
-                    <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
-                        {% if comment.user.avatar is not null %}
-                            src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
-                        {% else %}
-                            src="{{ asset('images/default/default-avatar.png') }}"
-                        {% endif %}
-                        alt="..." />
+                <div class="pe-3 col-3">
+                    <div class="d-flex justify-content-center">
+                        <img id="avatar-user" class="img-fluid rounded-circle mb-4 avatar"
+                            {% if comment.user.avatar is not null %}
+                                src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
+                            {% else %}
+                                src="{{ asset('images/default/default-avatar.png') }}"
+                            {% endif %}
+                            alt="..." />
+                    </div>
                     <h3 class="fs-5 text-center">{{ comment.user.username }}</h3>
                 </div>
-                <div class="p-3 col-10 pt-5 comment-deco bg-white flex-fill">
+                <div class="p-3 col pt-5 comment-deco bg-white flex-fill">
                     <p class="small text-break">{{ comment.content }}</p>
                     <p class="blockquote-footer d-flex justify-content-end mt-2">Le {{ comment.createdAt | date("d/m/Y à h:i",
                         "Europe/Paris") }}</p>
@@ -147,29 +154,13 @@
         </div>
     </div>
 
-    {% set path = 'trick' %}
-    {% set slug = trick.slug %}
-    {% set pages = commentList.pages %}
-    {% set currentPage = commentList.page %}
-    {% include 'partial/pagination.html.twig' %}
+{% include 'partial/pagination.html.twig' %}
 
 {% else %}
     <div class=" d-flex align-items-end justify-content-center text-center">
         <p class="col-8 span-text text-black-50 fs-3 text-center bg-body-secondary  ">Soit le premier à laisser un commentaire !</p>
     </div>
 {% endif %}
-
-{# {% if loader is same as 1 %}
-<div class="mt-5 pb-sm-5 pb-lg-0 pt-sm-0 pt-lg-5">
-    <div class=" d-flex align-items-end justify-content-center text-center">
-        <a href="{{ path('complete_comment_list', {'slug': trick.slug, 'loader': 0 }) }}" id="load-button" class="d-flex flex-colomn rounded text-decoration-none">
-            <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
-            <h3 id="load-text" class="fs-5 m-0 p-3"> Load more </h3>
-        </a>
-    </div>
-{% endif %}
-</div> #}
-
 
 <div style="height:150px"></div>
 

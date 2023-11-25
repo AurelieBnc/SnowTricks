@@ -490,6 +490,9 @@ class TrickController extends AbstractController
         $videoUrlList = null;
         $commentlistPaginated = null;
         $page = $request->query->getInt('page', 1);
+        if ($page < 1) {
+            throw $this->createNotFoundException('Numéro de page invalide');
+        }
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
