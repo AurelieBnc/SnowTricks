@@ -111,44 +111,35 @@ class TrickController extends AbstractController
     #[Route('/{slug}/edit/picture/{pictureId}', name: 'trick_edit_picture')]
     public function editPicture(string $slug, int $pictureId, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
     {
-        $user = $this->getUser();
-
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $picture = $pictureRepo->find($pictureId);
 
+        $this->denyAccessUnlessGranted('PICTURE_EDIT',$picture);
+
         $editPicture = new Picture;
 
         $pictureForm = $this->createForm(PictureType::class, $editPicture);
-        if ($user) {     
-            $pictureForm->handleRequest($request);
-            if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
-                if ($user->isVerified() === false) {
-                    $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                    $this->redirectToRoute('app_home', [
-                    ]);
-                }
+  
+        $pictureForm->handleRequest($request);
+        if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
+            $picturedata = $pictureForm->get('name')->getData();
+            $folder = 'trickImages';
+            $field = $pictureService->add($picturedata, $folder);
+            $pictureService->delete($picture->getName(), $folder);
 
-                $picturedata = $pictureForm->get('name')->getData();
-                $folder = 'trickImages';
-                $field = $pictureService->add($picturedata, $folder);
-                $pictureService->delete($picture->getName(), $folder);
+            $picture->setName($field);
+            $picture->setTrick($trick);
+            $trick->addPicture($picture);
 
-                $picture->setName($field);
-                $picture->setTrick($trick);
-                $trick->addPicture($picture);
+            $entityManager->persist($picture);
+            $entityManager->flush();
 
-                $entityManager->persist($picture);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('trick_edit', [
-                    'slug' => $slug,
-                ]);
-            } 
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier le trick.');
-        }
+            return $this->redirectToRoute('trick_edit', [
+                'slug' => $slug,
+            ]);
+        } 
 
         return $this->render('trick/edit/edit_picture.html.twig', [
             'form' => $pictureForm,
@@ -164,6 +155,7 @@ class TrickController extends AbstractController
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($mediaId);
+
         $this->denyAccessUnlessGranted('MEDIA_EDIT',$media);
 
         $editMedia = new Media;
@@ -327,36 +319,27 @@ class TrickController extends AbstractController
     #[Route('/{slug}/delete/picture/{pictureId}', name: 'delete_picture')]
     public function deletePicture(string $slug, int $pictureId, EntityManagerInterface $entityManager, PictureService $pictureService): RedirectResponse
     {
-        $user = $this->getUser();
-
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $deletePicture = $pictureRepo->find($pictureId);
 
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home', [
-                ]);
-            }
-            if (isset($deletePicture)) {
-                if ($deletePicture->getName() === $trick->getHeaderImage()) {
-                    $trick->setHeaderImage(null);
-                }
-                $entityManager->remove($deletePicture);
-                $entityManager->flush();
+        $this->denyAccessUnlessGranted('PICTURE_DELETE',$deletePicture);
 
-                $folder = 'trickImages';
-                $pictureService->delete($deletePicture->getName(), $folder);
-
-                 $this->addFlash('success', 'Ton image a bien été supprimée.'); 
-            } else {
-                $this->addFlash('error', 'Cette image n\'a pas été retrouvée.');
+        if (isset($deletePicture)) {
+            if ($deletePicture->getName() === $trick->getHeaderImage()) {
+                $trick->setHeaderImage(null);
             }
+            $entityManager->remove($deletePicture);
+            $entityManager->flush();
+
+            $folder = 'trickImages';
+            $pictureService->delete($deletePicture->getName(), $folder);
+
+            $this->addFlash('success', 'Ton image a bien été supprimée.'); 
         } else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier un trick.');
+            $this->addFlash('error', 'Cette image n\'a pas été retrouvée.');
         }
 
         return $this->redirectToRoute('trick_edit', [
@@ -369,6 +352,7 @@ class TrickController extends AbstractController
     {
         $mediaRepo = $entityManager->getRepository(Media::class);        
         $media = $mediaRepo->find($mediaId);
+
         $this->denyAccessUnlessGranted('MEDIA_DELETE',$media);
 
         if ($media) {
@@ -389,7 +373,6 @@ class TrickController extends AbstractController
     #[Route('/{slug}/delete', name: 'delete_trick')]
     public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-
         //clean Trick before delete
         $pictureList = null;
         $videoUrlList = null;
