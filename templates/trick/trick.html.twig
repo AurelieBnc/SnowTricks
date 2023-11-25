@@ -50,7 +50,7 @@
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
         {% for picture in pictureList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
-            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
+            <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
         </div>
         {% endfor %}
         {% for videoUrl in videoUrlList %}
@@ -72,8 +72,8 @@
 </div>
 {% endif %}
 
-<div class="col-12 col-lg-10 m-auto">
-    <p class=" p-3 shadow bg-light-form text-break"><span>{{ trick.content }}</span></p>
+<div class="col-12 col-lg-8 m-auto">
+    <p class="p-3 shadow bg-light-form text-break lh-lg"><span>{{ trick.content|nl2br }}</span></p>
 </div>
 <div class="col-12 col-lg-10 m-auto">
     <div class="row my-5 pb-5 ">
