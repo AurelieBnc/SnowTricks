@@ -16,7 +16,7 @@
 
     <div class="my-5 col-12 col-lg-8 m-auto">
         <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
-            <form action="{{ path('app_login') }}" method="post" class="d-flex flex-column">
+            <form action="{{ path('app_login') }}" method="post" class="my-3 d-flex flex-column">
                 
                 <div class="mb-3">
                     <label for="username" class="form-label fw-bold fs-1 d-flex justify-content-center">Email</label>
@@ -29,15 +29,19 @@
                 </div>
 
                 <input type="hidden" name="_target_path" value="{{ path('app_home') }}">
-
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-                
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="my-3 fs-3 button-deco">Je me connecte</button>
+                    <button type="submit" class="my-3 p-3 fs-2 button-deco">Connexion</button>
                 </div>
+
             </form>
-            <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai oublié mon mot de passe</a>
+
+            <div class="mt-5 mb-3 d-flex justify-content-between">
+                <a href="{{ path('security_registration') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">Je n'ai pas encore de compte!</a>
+                <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai oublié mon mot de passe ...</a>
+            </div>
+
         </div>
     </div>
     {% endblock %}

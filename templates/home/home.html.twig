@@ -48,6 +48,7 @@
                 <h3 class="card-text  p-2 pb-0">{{ trick.title }}</h3>
             <h3 class="d-lg-none card-text pt-3 ps-3" style="font-size: 5rem;">{{ trick.title }}</h3>
         </div>
+        {% if is_granted('ROLE_ADMIN') %}
         <div class="d-sm-none d-lg-block">
             <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">   
                 <p class="px-3 m-0" >
@@ -62,6 +63,7 @@
                 </p>
             </div>            
         </div>
+        {% endif %}
 
         <div class="card-footer d-flex justify-content-end align-items-end p-0 border-top">
             <p class="d-lg-none px-5 m-0">
