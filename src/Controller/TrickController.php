@@ -70,36 +70,26 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[IsGranted('HEADER_IMAGE_EDIT', 'trick')]
     #[Route('/{slug}/edit/headerImage', name: 'trick_edit_header_image')]
     public function editHeaderImage(Trick $trick, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $user = $this->getUser();
-
         $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
 
-        if ($user) {
-            $headerImageForm->handleRequest($request);
+        $headerImageForm->handleRequest($request);
 
-            if ($trick->getHeaderImage() === null) {
-                $this->addFlash('info', 'Vous n\'avez pas d\'image d\'en-tête actuellement');
-            }
-            if ($headerImageForm->isSubmitted() && $headerImageForm->isValid()) {
-                if ($user->isVerified() === false) {
-                    $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                    $this->redirectToRoute('app_home');
-                }
-                // permet de récupérer le nom de l'image
-                $trick->setHeaderImage($headerImageForm->get('headerImage')->getData());
-                $entityManager->flush();
+        if ($trick->getHeaderImage() === null) {
+            $this->addFlash('info', 'Vous n\'avez pas d\'image d\'en-tête actuellement');
+        }
+        if ($headerImageForm->isSubmitted() && $headerImageForm->isValid()) {
+            $trick->setHeaderImage($headerImageForm->get('headerImage')->getData());
+            $entityManager->flush();
 
-                $this->addFlash('success', 'Ton image d\'en-tête a bien été modifiée.');
+            $this->addFlash('success', 'Ton image d\'en-tête a bien été modifiée.');
 
-                return $this->redirectToRoute('trick_edit', [
-                    'slug' => $trick->getSlug(),
-                ]);
-            }
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour effectuer une modification.');
+            return $this->redirectToRoute('trick_edit', [
+                'slug' => $trick->getSlug(),
+            ]);
         }
         
         return $this->render('trick/edit/edit_header_image.html.twig', [
@@ -285,30 +275,19 @@ class TrickController extends AbstractController
         ]);
     }
 
+    #[IsGranted('HEADER_IMAGE_DELETE', 'trick')]
     #[Route('/{slug}/delete/headerImage', name: 'delete_header_image')]
     public function deleteHeaderImage(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $user = $this->getUser();
+         if ($trick->getHeaderImage()) {
+            $trick->setHeaderImage(null);
 
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home', [
-                ]);
-            }
-            if ($trick->getHeaderImage()) {
-                $trick->setHeaderImage(null);
+            $entityManager->persist($trick);
+            $entityManager->flush();
 
-                $entityManager->persist($trick);
-                $entityManager->flush();
-
-                 $this->addFlash('success', 'Ton image d\'en-tête a bien été supprimée.'); 
-            } else {
-                $this->addFlash('error', 'Vous n\'avez pas d\'image d\'en-tête actuellement.');
-            }
-
-        }  else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier un trick.');
+                $this->addFlash('success', 'Ton image d\'en-tête a bien été supprimée.'); 
+        } else {
+            $this->addFlash('error', 'Vous n\'avez pas d\'image d\'en-tête actuellement.');
         }
 
         return $this->redirectToRoute('trick_edit', [
