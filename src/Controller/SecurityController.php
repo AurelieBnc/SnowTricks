@@ -176,7 +176,7 @@ class SecurityController extends AbstractController
                 ]);
 
             } else {
-                //gérer le fait qu'il n'y a pas d'utilisateur de façon sécuriser (redirect sur le template de réussite de l'envoi du mail)
+                //todo: gérer le fait qu'il n'y a pas d'utilisateur de façon sécuriser (redirect sur le template de réussite de l'envoi du mail)
                 // générer un faux token
             }
 

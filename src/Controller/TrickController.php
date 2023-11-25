@@ -15,6 +15,7 @@ use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
+use App\Service\LinkYoutubeService;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,12 +28,11 @@ class TrickController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'trick_create')]
-    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService,LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
         $trick = new Trick;
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
-
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
@@ -53,7 +53,9 @@ class TrickController extends AbstractController
             if (null !== $trickForm->get('media')->getData()) {
                 $media = new Media;
                 $url = $trickForm->get('media')->getData();
-                $media->setVideoUrl($url);
+                $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
+
+                $media->setVideoUrl($urlModified);
                 $trick->addMedia($media);
             }
 
@@ -138,7 +140,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit/media/{mediaId}', name: 'trick_edit_media')]
-    public function editMedia(string $slug, int $mediaId, Request $request, EntityManagerInterface $entityManager): Response
+    public function editMedia(string $slug, int $mediaId, Request $request, EntityManagerInterface $entityManager, LinkYoutubeService $linkYoutubeService): Response
     {
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);  
@@ -154,8 +156,8 @@ class TrickController extends AbstractController
         $mediaForm->handleRequest($request);
 
         if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
-            $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
-            $media->setVideoUrl($modifyUrl); 
+            $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($editMedia->getVideoUrl());
+            $media->setVideoUrl($urlModified); 
 
             $media->setTrick($trick);
             $trick->addMedia($media);
@@ -170,9 +172,6 @@ class TrickController extends AbstractController
             ]);
         } 
 
-        $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $media->getVideoUrl());
-        $media->setVideoUrl($modifyUrl);
-
         return $this->render('trick/edit/edit_media.html.twig', [
             'form' => $mediaForm,
             'media' => $media,
@@ -182,7 +181,7 @@ class TrickController extends AbstractController
 
     #[IsGranted('TRICK_EDIT', 'trick')]
     #[Route('/{slug}/edit', name: 'trick_edit')]
-    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
         $pictureList = null;
         $videoUrlList = null;
@@ -193,16 +192,9 @@ class TrickController extends AbstractController
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
-        // Video url display processing
-        $urlModifiedList = [];
-        foreach ($videoUrlList as $url) {
-            $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $url->getVideoUrl());
-            $url->setVideoUrl($modifyUrl);
-        }
-
         $trickForm = $this->createForm(TrickFormType::class, $trick);
-
         $trickForm->handleRequest($request);
+
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
             if ($trickForm->get('delete')->isClicked()) {
                 //clean Trick before delete
@@ -252,7 +244,9 @@ class TrickController extends AbstractController
             if (null !== $trickForm->get('media')->getData()) {
                 $media = new Media;
                 $url = $trickForm->get('media')->getData();
-                $media->setVideoUrl($url);
+                $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
+
+                $media->setVideoUrl($urlModified);
                 $trick->addMedia($media);
             }
 
@@ -269,7 +263,6 @@ class TrickController extends AbstractController
         return $this->render('trick/edit/edit_trick.html.twig', [
             'trick' => $trick,
             'pictureList' => $pictureList,
-            'videoUrlList' => $urlModifiedList,
             'mediaList' => $videoUrlList,
             'form' => $trickForm,
         ]);
@@ -394,27 +387,22 @@ class TrickController extends AbstractController
     public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
         $pictureList = null;
-        $videoUrlList = null;
+        $mediaList = null;
         $commentlistPaginated = null;
+
         $page = $request->query->getInt('page', 1);
         if ($page < 1) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
 
         $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
+        $mediaList = $mediaRepo->videoUrlList($trick->getId());
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->pictureList($trick->getId()); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
-
-        // Video url display processing
-        $urlModifiedList = [];
-        foreach ($videoUrlList as $url) {
-            $urlModifiedList [] = str_replace('youtu.be', 'youtube.com/embed', $url->getVideoUrl());
-        }
 
         // Create a commentForm
         $comment = new Comment;
@@ -441,7 +429,7 @@ class TrickController extends AbstractController
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
             'pictureList' => $pictureList,
-            'videoUrlList' => $urlModifiedList,
+            'mediaList' => $mediaList,
             'commentList' => $commentlistPaginated,
             'commentForm' => $commentForm->createView()
         ]);
