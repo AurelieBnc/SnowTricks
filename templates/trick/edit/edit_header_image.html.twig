@@ -25,7 +25,7 @@
             </div>
             {% endfor %}
         {% else %}
-            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+            <img src="{{ asset('images/uploads/trickImages/'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
         {% endif %}
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">
@@ -39,7 +39,7 @@
         <div class="d-flex flex-row">
             {# todo : le choice_label ne fonctionne pas #}
             {{ form_widget(picture, {'value': picture.vars.label}) }}
-            <img src="{{ asset('images/uploads/trickImages/mini/250x250-'~ picture.vars.label) }}" class="card-img-top m-auto img-fluid img-thumbnail image-mini"  alt="{{ picture.vars.label }}">
+            <img src="{{ asset('images/uploads/trickImages/'~ picture.vars.label) }}" class="card-img-top m-auto img-fluid img-thumbnail image-mini"  alt="{{ picture.vars.label }}">
         </div>
         {% endfor %}
             

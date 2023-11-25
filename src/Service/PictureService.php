@@ -38,7 +38,7 @@ Class PictureService
                 $pictureSource = imagecreatefromwebp($picture);
                 break;
             default:
-                throw new Exception('Format d\image non valide. Format pris en charge: jpeg, png, webp.');
+                throw new Exception('Format d\'image non valide. Format pris en charge: jpeg, png, webp.');
         }
 
         $imageWidth = $pictureDatas[0];
