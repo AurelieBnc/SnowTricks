@@ -159,44 +159,34 @@ class TrickController extends AbstractController
     #[Route('/{slug}/edit/media/{mediaId}', name: 'trick_edit_media')]
     public function editMedia(string $slug, int $mediaId, Request $request, EntityManagerInterface $entityManager): Response
     {
-        //todo flusher l'url media au début pour éviter de la modifier a chaque display
-        $user = $this->getUser();
-
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);  
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($mediaId);
+        $this->denyAccessUnlessGranted('MEDIA_EDIT',$media);
 
         $editMedia = new Media;
 
         $mediaForm = $this->createForm(MediaType::class, $editMedia);
-        if ($user) {
-            $mediaForm->handleRequest($request);
-            if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
+        $mediaForm->handleRequest($request);
 
-                if ($user->isVerified() === false) {
-                    $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                    $this->redirectToRoute('app_home', [
-                    ]);
-                }
+        if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
+            $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
+            $media->setVideoUrl($modifyUrl); 
 
-                $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $editMedia->getVideoUrl());
-                $media->setVideoUrl($modifyUrl); 
+            $media->setTrick($trick);
+            $trick->addMedia($media);
 
-                $media->setTrick($trick);
-                $trick->addMedia($media);
+            $entityManager->persist($media);
+            $entityManager->flush();
 
-                $entityManager->persist($media);
-                $entityManager->flush();
+            $this->addFlash('success', 'Le lien a bien été modifié.');
 
-                return $this->redirectToRoute('trick_edit', [
-                    'slug' => $slug,
-                ]);
-            } 
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier un lien.');
-        }
+            return $this->redirectToRoute('trick_edit', [
+                'slug' => $slug,
+            ]);
+        } 
 
         $modifyUrl = str_replace('youtu.be', 'youtube.com/embed', $media->getVideoUrl());
         $media->setVideoUrl($modifyUrl);
@@ -377,28 +367,17 @@ class TrickController extends AbstractController
     #[Route('/{slug}/delete/media/{mediaId}', name: 'delete_media')]
     public function deleteMedia(string $slug, int $mediaId, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $user = $this->getUser();
-
         $mediaRepo = $entityManager->getRepository(Media::class);        
         $media = $mediaRepo->find($mediaId);
+        $this->denyAccessUnlessGranted('MEDIA_DELETE',$media);
 
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home', [
-                ]);
-            }
-            if ($media) {
-                $entityManager->remove($media);
-                $entityManager->flush();
+        if ($media) {
+            $entityManager->remove($media);
+            $entityManager->flush();
 
-                 $this->addFlash('success', 'Ton lien Youtube a bien été supprimé.'); 
-            } else {
-                $this->addFlash('error', 'Le lien n\'a pas été trouvé.');
-            }
-
-        }  else {
-            $this->addFlash('login', 'Tu dois être connecté pour modifier un trick.');
+            $this->addFlash('success', 'Ton lien Youtube a bien été supprimé.'); 
+        } else {
+            $this->addFlash('error', 'Le lien n\'a pas été trouvé.');
         }
 
         return $this->redirectToRoute('trick_edit', [
