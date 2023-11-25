@@ -36,7 +36,8 @@ class TrickFormType extends AbstractType
                 'label' => false,
                 'required' => true,
                 'attr'=> [
-                    'placeholder' => 'Mon nouveau contenu ... ','row'=> 50,
+                    'placeholder' => 'Mon nouveau contenu ... ',
+                    'rows'=> 25,
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
