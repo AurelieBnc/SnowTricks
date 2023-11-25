@@ -30,7 +30,7 @@ class HomeController extends AbstractController
 
         /** @var App\Repository\TrickRepository $repo */
         $trickRepo = $entityManager->getRepository(Trick::class);
-        $tricklistPaginated = $trickRepo->findTrickListPaginated($page, 5);
+        $tricklistPaginated = $trickRepo->findTrickListPaginated($page, 10);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $pictureList = $pictureRepo->findAll();

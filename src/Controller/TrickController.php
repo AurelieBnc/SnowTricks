@@ -83,15 +83,6 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[Route('/commentList/{slug}/{loader}', name: 'complete_comment_list')]
-    public function commentListRedirect(string $slug, int $loader): Response
-    {
-        return $this->redirectToRoute('trick', [
-            'slug' => $slug,
-            'loader' => 0
-        ]);
-    }
-
     #[Route('/{slug}/edit/headerImage', name: 'trick_edit_header_image')]
     public function editHeaderImage(string $slug, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -100,8 +91,6 @@ class TrickController extends AbstractController
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
         $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
-
-
 
         if ($user) {
             $headerImageForm->handleRequest($request);
@@ -235,15 +224,12 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'trick_edit')]
-    public function editTrick(string $slug, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, SluggerInterface $slugger): Response
     {
         $user = $this->getUser();
 
         $pictureList = null;
         $videoUrlList = null;
-
-        $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
@@ -304,7 +290,7 @@ class TrickController extends AbstractController
                     return $this->redirectToRoute('app_home');
                 }
 
-                $trick->setCreatedAt(new \DateTimeImmutable());
+                $trick->setUpdateDate(new \DateTimeImmutable());
                 
                 $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
                 $pictureList = $trickForm->get('pictureList')->getData();
@@ -348,12 +334,9 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/delete/headerImage', name: 'delete_header_image')]
-    public function deleteHeaderImage(string $slug, EntityManagerInterface $entityManager): RedirectResponse
+    public function deleteHeaderImage(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
         $user = $this->getUser();
-
-        $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         if ($user) {
             if ($user->isVerified() === false) {
@@ -377,7 +360,7 @@ class TrickController extends AbstractController
         }
 
         return $this->redirectToRoute('trick_edit', [
-            'slug' => $slug,
+            'slug' => $trick->getSlug(),
         ]);
     }
     
@@ -385,6 +368,9 @@ class TrickController extends AbstractController
     public function deletePicture(string $slug, int $id, EntityManagerInterface $entityManager, PictureService $pictureService): RedirectResponse
     {
         $user = $this->getUser();
+
+        $trickRepo = $entityManager->getRepository(Trick::class);
+        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $deletePicture = $pictureRepo->find($id);
@@ -396,6 +382,9 @@ class TrickController extends AbstractController
                 ]);
             }
             if (isset($deletePicture)) {
+                if ($deletePicture->getName() === $trick->getHeaderImage()) {
+                    $trick->setHeaderImage(null);
+                }
                 $entityManager->remove($deletePicture);
                 $entityManager->flush();
 
@@ -448,12 +437,9 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/delete', name: 'delete_trick')]
-    public function deleteTrick(string $slug, EntityManagerInterface $entityManager): RedirectResponse
+    public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
         $user = $this->getUser();
-
-        $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->findOneBy(['slug' => $slug]);
 
         if ($user) {
             if ($user->isVerified() === false) {
