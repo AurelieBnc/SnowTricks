@@ -408,6 +408,10 @@ class TrickController extends AbstractController
         $comment = new Comment;
         $commentForm = $this->createForm(CommentType::class, $comment);
         if ($user) {
+            if ($user->isVerified() === false) {
+                $this->addFlash('verification', 'Tu dois confirmer ton adresse email pour envoyer un commentaire.');
+                $this->redirectToRoute('trick', ['slug' => $trick->getSlug()]);
+            }
             $commentForm->handleRequest($request);
             if ($commentForm->isSubmitted() && $commentForm->isValid()) {
                 $comment->setCreatedAt(new \DateTimeImmutable())

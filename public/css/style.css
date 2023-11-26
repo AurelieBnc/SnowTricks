@@ -45,6 +45,9 @@ h2,h3 {
     text-transform: capitalize;  
 }
 
+#title-h2-trick {
+    margin-top: 200px;
+}
 
 body, html {
     background-color: var(--background);
@@ -80,6 +83,14 @@ body, html {
     background-color: var(--lightcolor) !important;
 }
 
+#pencil-icon {
+    color: #D9C7A6; 
+}
+
+#trash-icon {
+    color: #B04C46;
+}
+
 /******************************/
 /* Navigation*/
 
@@ -102,7 +113,7 @@ body, html {
     height: 3rem;
 }
 
-#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon, #logout-icon {
+#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #logout-icon {
     color: var(--darkcolor);
     font-size: 50px;
 }
@@ -127,20 +138,9 @@ body, html {
     margin-bottom: 220px;
 }
 
-#first-arrow-sm-icon {
-    height: 300px;
-    width: 300px;
-    margin-bottom: 150px;
-}
-
 #second-arrow-icon {
     height: 100px;
     width: 100px;
-}
-
-#second-arrow-sm-icon {
-    height: 300px;
-    width: 300px;
 }
 
 /******************************/
@@ -154,9 +154,6 @@ body, html {
     background-color: var(--darkcolor) !important;
 }
 
-#category-button {
-    background-color: red !important;
-}
 .button-deco {
     border: solid var(--darkcolor) !important;
     font-weight: bold;
@@ -196,3 +193,204 @@ a:hover {
     height: 100px;
     width: auto;
 }
+
+
+/******************************/
+/*Mobile*/
+@media screen and (max-width: 576px) { 
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    h2 {
+        font-size: 2rem !important;
+    }
+
+    h3 {
+        font-size: 1.5rem !important;
+    }
+
+    #title-site {
+        margin-top: 350px !important;
+        font-size: 2rem !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 20px;
+        padding: 0.5rem;
+    }
+
+    /******************************/
+    /* LoginForm */
+    #password {
+        background-color: red;
+        font-size: 30px;
+    }
+
+    #username {
+        background-color: red;
+        font-size: 30px;
+    }
+
+    #username-label-login {
+        background-color: red;
+        display: none !important;
+    }
+
+    #password-label-login {
+        background-color: red;
+        display: none !important;
+    }
+
+ }
+
+/******************************/
+/*Autre que téléphone */
+@media screen and (min-width: 577px) and (max-width: 993px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 4rem !important;
+        color:red !important;
+    }
+
+    #title-site {
+        margin-top: 450px !important;
+        font-size: 3rem !important;
+        margin-bottom: 100px !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 40px !important;
+        padding: 0.5rem !important;
+    }
+}
+
+/******************************/
+/*Tablette */
+@media screen and (min-width: 577px) and (max-width: 768px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 4rem !important;
+        color:green!important;
+    }
+
+    /******************************/
+    /* LoginForm */
+    #password {
+        background-color:green;
+    }
+
+    #username {
+        background-color:green;
+    }
+
+    #username-label-login {
+        background-color:green;
+    }
+
+    #password-label-login {
+        background-color:green;
+    }
+}
+
+/******************************/
+/*Pc Portable */
+@media screen and (min-width: 769px) and (max-width: 992px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 4rem !important;
+        color:blue!important;
+    }
+
+    /******************************/
+    /* LoginForm */
+    #password {
+        background-color: blue;
+    }
+
+    #username {
+        background-color: blue;
+    }
+
+    #username-label-login {
+        background-color: blue;
+    }
+
+    #password-label-login {
+        background-color: blue;
+    }
+}
+
+/******************************/
+/* Tablette */
+@media screen and (min-width: 993px) and (max-width: 1250px) {
+
+    /******************************/
+    /* General*/
+    #title-site {
+        margin-top: 500px !important;
+        font-size: 3rem !important;
+        margin-bottom: 150px !important;
+        color: orange !important;
+    }
+    h1 {
+        font-size: 4rem !important;
+        color:orange !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 25px !important;
+        padding: 0.5rem !important;
+    }
+}
+
+/******************************/
+/* Desk */
+@media screen and (min-width: 1250px) {
+    
+    /******************************/
+    /* General*/
+    #title-site {
+        margin-top: 550px !important;
+        font-size: 3rem !important;
+        margin-bottom: 100px !important;
+        color:purple !important;
+    }
+    h1 {
+        font-size: 4rem !important;
+        color:purple !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 20px !important;
+        padding: 0.5rem !important;
+    }
+
+    /******************************/
+    /* LoginForm */
+    #password {
+        background-color: purple;
+    }
+
+    #username {
+        background-color: purple;
+    }
+
+    #username-label-login {
+        background-color: purple;
+    }
+
+    #password-label-login {
+        background-color: purple;
+    }
+}
+
