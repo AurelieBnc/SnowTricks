@@ -11,7 +11,7 @@
 
 <div class="my-5 col-12 col-lg-8 m-auto">
     {% include('partial/flash_edit.html.twig') %}
-    <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
+    <div class="form justify-content-around bg-light-form shadow pb-3">
         {% if headerImage is null %}
             {% for message in app.flashes('info') %}
             <div class="alert alert-info alert-dismissible fade show text-center">
@@ -31,9 +31,12 @@
         {{ form_label(headerImageForm.headerImage)}}
         {% for picture in headerImageForm.headerImage %}
         <div class="d-flex flex-row">
-            {# todo : le choice_label ne fonctionne pas #}
-            {{ form_widget(picture, {'value': picture.vars.label}) }}
-            <img src="{{ asset('images/uploads/trickImages/'~ picture.vars.label) }}" class="card-img-top m-auto img-fluid img-thumbnail image-mini"  alt="{{ picture.vars.label }}">
+            <div class="d-flex flex-column flex-lg-row">
+                {{ form_widget(picture, {'value': picture.vars.label}) }}
+                <img src="{{ asset('images/uploads/trickImages/'~ picture.vars.label) }}" 
+                class="card-img-top m-auto img-fluid img-thumbnail image-mini"  
+                alt="{{ picture.vars.label }}">
+            </div>
         </div>
         {% endfor %}
             

@@ -91,6 +91,10 @@ body, html {
     color: #B04C46;
 }
 
+.form {
+    background-color: red !important;
+}
+
 /******************************/
 /* Navigation*/
 
@@ -222,6 +226,15 @@ a:hover {
         padding: 0.5rem;
     }
 
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
+
     /******************************/
     /* Homepage */
     #first-arrow-icon {
@@ -259,7 +272,7 @@ a:hover {
     /******************************/
     /* General */
     h1 {
-        font-size: 4rem !important;
+        font-size: 3rem !important;
         color:red !important;
     }
 
@@ -273,6 +286,15 @@ a:hover {
         font-size: 40px !important;
         padding: 0.5rem !important;
     }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
 }
 
 /******************************/
@@ -282,8 +304,17 @@ a:hover {
     /******************************/
     /* General */
     h1 {
-        font-size: 4rem !important;
+        font-size: 3rem !important;
         color:green!important;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
     }
 
     /******************************/
@@ -312,8 +343,17 @@ a:hover {
     /******************************/
     /* General */
     h1 {
-        font-size: 4rem !important;
+        font-size: 3rem !important;
         color:blue!important;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
     }
 
     /******************************/
@@ -348,13 +388,22 @@ a:hover {
         color: orange !important;
     }
     h1 {
-        font-size: 4rem !important;
+        font-size: 3rem !important;
         color:orange !important;
     }
 
     #pencil-icon, #trash-icon {
         font-size: 25px !important;
         padding: 0.5rem !important;
+    }
+
+    .form {
+        padding: 3rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 100px;
     }
 }
 
@@ -373,13 +422,22 @@ a:hover {
         color:purple !important;
     }
     h1 {
-        font-size: 4rem !important;
+        font-size: 3rem !important;
         color:purple !important;
     }
 
     #pencil-icon, #trash-icon {
         font-size: 20px !important;
         padding: 0.5rem !important;
+    }
+
+    .form {
+        padding: 3rem;
+        margin-bottom: 200px;
+    }
+
+    #space {
+        height: 150px;
     }
 
     /******************************/
@@ -419,13 +477,17 @@ a:hover {
             color: cyan !important;
         }
         h1 {
-            font-size: 4rem !important;
+            font-size: 3rem !important;
             color:cyan !important;
         }
 
         #pencil-icon, #trash-icon {
             font-size: 25px !important;
             padding: 0.5rem !important;
+        }
+
+        #space {
+            height: 100px;
         }
 
         /******************************/

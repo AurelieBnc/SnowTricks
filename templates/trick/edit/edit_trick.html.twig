@@ -118,7 +118,7 @@
     {% include('partial/flash_edit.html.twig') %}
 
     <div class="my-5 col-12 col-lg-10 m-auto">
-        <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
+        <div class="form justify-content-around bg-light-form shadow pb-3">
     
             {{ form_errors(form) }}
     
@@ -131,9 +131,14 @@
             {{ form_widget(form.media) }} 
             {{ form_row(form.category) }}
 
-            <div class="d-flex justify-content-end my-5 p-3">
-                {{ form_row(form.delete) }}
-                {{ form_row(form.save) }}
+            <div class="d-flex justify-content-end m-auto">
+                <div class="p-1">
+                    {{ form_row(form.delete) }}
+                </div>
+                <div class="p-1">
+                    {{ form_row(form.save) }}
+                </div>
+                
             </div>
             {{ form_end(form) }}
     
