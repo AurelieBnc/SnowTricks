@@ -67,26 +67,26 @@
             <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path("app_home") }}" title="Accueil">
-                        <i id="house-icon" class="fa-solid fa-house p-2"></i>
+                        <i id="house-icon" class="fa-solid fa-house"></i>
                     </a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path("trick_create") }}" title="Ajout Stricks">
-                        <i id="bookmark-icon" class="fa-solid fa-bookmark p-2"></i>
+                        <i id="bookmark-icon" class="fa-solid fa-bookmark"></i>
                     </a>
                 </li>
                 {% endif %}
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path("security_registration") }}" title="Connexion">
-                        <i id="bracket-icon" class="fa-solid fa-right-to-bracket p-2"></i>
+                        <i id="bracket-icon" class="fa-solid fa-right-to-bracket"></i>
                     </a>
                 </li>
                 {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path("app_logout") }}" title="Deconnexion">
-                        <i id="logout-icon" class="fa-solid fa-right-from-bracket p-2"></i>
+                        <i id="logout-icon" class="fa-solid fa-right-from-bracket"></i>
                     </a>
                 </li>
                 {% endif %}

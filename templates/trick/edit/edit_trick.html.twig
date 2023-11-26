@@ -13,12 +13,12 @@
 {% endif %}
         <div class="p-3">
             <div class="d-flex justify-content-end align-items-end p-0">   
-                <p class="px-2 m-0 bg-edit-button button-deco" >
+                <p class="px-2 m-0 bg-edit-button edit-button" >
                     <a href="{{ path('trick_edit_header_image', {'slug': trick.slug}) }}">
                         <i id="pencil-icon" class="fa-solid fa-pencil"></i>
                     </a>
                 </p>
-                <p class="px-2 m-0 bg-edit-button button-deco">
+                <p class="px-2 m-0 bg-edit-button edit-button">
                     <a  onclick="return confirm('Es-tu sur de vouloir supprimer l\'image d\'en-tête?')" 
                         href="{{ path('delete_header_image', {'slug': trick.slug}) }}"
                         title="Supprimer l'image d'en-tête">
@@ -41,12 +41,12 @@
             <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
             <div class="p-3">
                 <div class="d-flex justify-content-end align-items-end p-0">   
-                    <p class="px-2 m-0 bg-edit-button button-deco" >
+                    <p class="px-2 m-0 bg-edit-button edit-button" >
                         <a href="{{ path('trick_edit_picture', {'slug': picture.trick.slug, 'pictureId': picture.id}) }}" title="Modifier l'image">
                             <i id="pencil-icon" class="fa-solid fa-pencil"></i>
                         </a>
                     </p>
-                    <p class="px-2 m-0 bg-edit-button button-deco">
+                    <p class="px-2 m-0 bg-edit-button edit-button">
                         <a onclick="return confirm('Es-tu sûr de vouloir supprimer cette image ?')" 
                             href="{{ path('delete_picture', {'slug': picture.trick.slug, 'pictureId': picture.id}) }}"
                             title="Supprimer l'image">
@@ -63,12 +63,12 @@
             <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             <div class="p-3">
                 <div class="d-flex justify-content-end align-items-end p-0">   
-                    <p class="px-2 m-0 bg-edit-button button-deco" >
+                    <p class="px-2 m-0 bg-edit-button edit-button" >
                         <a href="{{ path('trick_edit_media', {'slug': media.trick.slug, 'mediaId': media.id}) }}">
                             <i id="pencil-icon" class="fa-solid fa-pencil"></i>
                         </a>
                     </p>
-                    <p class="px-2 m-0 bg-edit-button button-deco">
+                    <p class="px-2 m-0 bg-edit-button edit-button">
                         <a onclick="return confirm('Es-tu sûr de vouloir supprimer ce lien Youtube ?')" href="{{ path('delete_media', {'slug': media.trick.slug, 'mediaId': media.id}) }} ">
                             <i id="trash-icon" class="fa-solid fa-trash"></i>
                         </a>
@@ -80,16 +80,8 @@
     </div>
 </div>
 
-{# todo: href #}
 {% if (pictureList is not empty) or (mediaList is not empty) %}
-<div class="row my-5 pb-5 pb-lg-0 pt-0 pt-lg-5 d-lg-none">
-    <div class="d-flex align-items-end justify-content-center text-center">
-        <button href="" id="togg1" class="d-flex flex-colomn rounded text-decoration-none">
-            <i id="spinner-icon" class="fa-solid fa-spinner p-2"></i>
-            <h3 id="load-text" class="fs-5 m-0 p-3"> Voir les medias </h3>
-        </button>
-    </div>
-</div>
+{% include('partial/button_loader.html.twig') %}
 {% endif %}
 
 <div class="col-12 col-lg-10 m-auto">
@@ -98,17 +90,17 @@
 
 <div class="col-12 col-lg-10 m-auto">
     <div class="row my-5 pb-5 ">
-        <div style="height: 3rem;" class="d-flex mx-auto justify-content-center text-center list-group list-group-horizontal">
-            <h3 class="m-0 list-group-item fs-4">
+        <div style="height: 3rem;" class="d-flex flex-sm-column flex-lg-row mx-auto justify-content-center text-center list-group">
+            <p class="m-0 list-group-item fs-4 fw-bolder">
                 Catégorie : <span class="span-text fs-5">{{ trick.category.title }}</span>
-            </h3>
-            <h3 class="m-0 list-group-item fs-4">
+            </p>
+            <p class="m-0 list-group-item fs-4 fw-bolder">
                 Créé le <span class="span-text fs-5"> {{ trick.createdAt | date("d/m/Y à h:i", "Europe/Paris") }}</span>
-            </h3>
+            </p>
             {% if trick.updateDate is not null %}
-            <h3 class="m-0 list-group-item fs-4">
+            <p class="m-0 list-group-item fs-4 fw-bolder">
                 Mise à jour le <span class="span-text fs-5"> {{ trick.updateDate | date("d/m/Y à h:i", "Europe/Paris") }}</span>
-            </h3>
+            </p>
             {% endif %}
         </div>
     </div>
