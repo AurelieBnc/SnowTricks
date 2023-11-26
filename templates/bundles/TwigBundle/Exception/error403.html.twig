@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur 403 : Accès interdit{% endblock %}
+
+{% block body %}
+
+    <h2 class="mt-5 mb-3 d-flex align-items-center justify-content-center text-center">Accès interdit</h2>
+
+    <div class="my-3 col-12 col-lg-8 m-auto">
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+            <p>Vous n'avez pas les permissions nécessaires pour accéder à cette ressource.</p>
+            <a href="{{ path('app_login') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai un compte, je me connecte !</a>
+        </div>
+    </div>
+    <div class="d-flex">
+        <img src="{{ asset('images/errors/403-affiche.jpg' ) }}" alt="page erreur 403" class="img-fluid rounded-start-pill ms-auto">
+    </div>
+
+{% endblock %}
