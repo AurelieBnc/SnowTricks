@@ -91,10 +91,6 @@ body, html {
     color: #B04C46;
 }
 
-.form {
-    background-color: red !important;
-}
-
 /******************************/
 /* Navigation*/
 
@@ -240,29 +236,6 @@ a:hover {
     #first-arrow-icon {
         margin-bottom: 100px;
     }
-
-    /******************************/
-    /* LoginForm */
-    #password {
-        background-color: red;
-        font-size: 30px;
-    }
-
-    #username {
-        background-color: red;
-        font-size: 30px;
-    }
-
-    #username-label-login {
-        background-color: red;
-        display: none !important;
-    }
-
-    #password-label-login {
-        background-color: red;
-        display: none !important;
-    }
-
  }
 
 /******************************/
@@ -273,7 +246,6 @@ a:hover {
     /* General */
     h1 {
         font-size: 3rem !important;
-        color:red !important;
     }
 
     #title-site {
@@ -305,7 +277,6 @@ a:hover {
     /* General */
     h1 {
         font-size: 3rem !important;
-        color:green!important;
     }
 
     .form {
@@ -315,24 +286,6 @@ a:hover {
 
     #space {
         height: 50px;
-    }
-
-    /******************************/
-    /* LoginForm */
-    #password {
-        background-color:green;
-    }
-
-    #username {
-        background-color:green;
-    }
-
-    #username-label-login {
-        background-color:green;
-    }
-
-    #password-label-login {
-        background-color:green;
     }
 }
 
@@ -344,7 +297,6 @@ a:hover {
     /* General */
     h1 {
         font-size: 3rem !important;
-        color:blue!important;
     }
 
     .form {
@@ -354,24 +306,6 @@ a:hover {
 
     #space {
         height: 50px;
-    }
-
-    /******************************/
-    /* LoginForm */
-    #password {
-        background-color: blue;
-    }
-
-    #username {
-        background-color: blue;
-    }
-
-    #username-label-login {
-        background-color: blue;
-    }
-
-    #password-label-login {
-        background-color: blue;
     }
 }
 
@@ -385,11 +319,9 @@ a:hover {
         margin-top: 500px !important;
         font-size: 3rem !important;
         margin-bottom: 150px !important;
-        color: orange !important;
     }
     h1 {
         font-size: 3rem !important;
-        color:orange !important;
     }
 
     #pencil-icon, #trash-icon {
@@ -407,8 +339,6 @@ a:hover {
     }
 }
 
-
-
 /******************************/
 /* Desk */
 @media screen and (min-width: 1250px) {
@@ -419,11 +349,9 @@ a:hover {
         margin-top: 550px !important;
         font-size: 3rem !important;
         margin-bottom: 100px !important;
-        color:purple !important;
     }
     h1 {
         font-size: 3rem !important;
-        color:purple !important;
     }
 
     #pencil-icon, #trash-icon {
@@ -447,24 +375,6 @@ a:hover {
     }
 
     /******************************/
-    /* LoginForm */
-    #password {
-        background-color: purple;
-    }
-
-    #username {
-        background-color: purple;
-    }
-
-    #username-label-login {
-        background-color: purple;
-    }
-
-    #password-label-login {
-        background-color: purple;
-    }
-
-    /******************************/
     /* Ipad Air */
     @media screen and (min-width: 1250px) and (max-height:950px) {
 
@@ -474,11 +384,9 @@ a:hover {
             margin-top: 500px !important;
             font-size: 3rem !important;
             margin-bottom: 50px !important;
-            color: cyan !important;
         }
         h1 {
             font-size: 3rem !important;
-            color:cyan !important;
         }
 
         #pencil-icon, #trash-icon {
