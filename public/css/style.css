@@ -115,7 +115,7 @@ body, html {
 
 #house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #logout-icon {
     color: var(--darkcolor);
-    font-size: 50px;
+    font-size: 30px;
 }
 
 
