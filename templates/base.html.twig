@@ -21,20 +21,20 @@
             </a>
             <ul class="navbar-nav d-flex flex-row justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link active pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
+                    <a class="nav-link active lh-1 p-0 pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("trick_create") }}">Ajouter un Trick</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("trick_create") }}">Ajouter un Trick</a>
                 </li>
                 {% endif %}
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("app_login") }}">Connexion</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("app_login") }}">Connexion</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
                 </li>
                 {% endif %}
             </ul>
