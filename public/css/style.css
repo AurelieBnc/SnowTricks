@@ -135,7 +135,6 @@ body, html {
 #first-arrow-icon {
     height: 100px;
     width: 100px;
-    margin-bottom: 220px;
 }
 
 #second-arrow-icon {
@@ -221,6 +220,12 @@ a:hover {
     #pencil-icon, #trash-icon {
         font-size: 20px;
         padding: 0.5rem;
+    }
+
+    /******************************/
+    /* Homepage */
+    #first-arrow-icon {
+        margin-bottom: 100px;
     }
 
     /******************************/
@@ -353,6 +358,8 @@ a:hover {
     }
 }
 
+
+
 /******************************/
 /* Desk */
 @media screen and (min-width: 1250px) {
@@ -376,6 +383,12 @@ a:hover {
     }
 
     /******************************/
+    /* Homepage */
+    #first-arrow-icon {
+        margin-bottom: 200px;
+    }
+
+    /******************************/
     /* LoginForm */
     #password {
         background-color: purple;
@@ -391,6 +404,35 @@ a:hover {
 
     #password-label-login {
         background-color: purple;
+    }
+
+    /******************************/
+    /* Ipad Air */
+    @media screen and (min-width: 1250px) and (max-height:950px) {
+
+        /******************************/
+        /* General*/
+        #title-site {
+            margin-top: 500px !important;
+            font-size: 3rem !important;
+            margin-bottom: 50px !important;
+            color: cyan !important;
+        }
+        h1 {
+            font-size: 4rem !important;
+            color:cyan !important;
+        }
+
+        #pencil-icon, #trash-icon {
+            font-size: 25px !important;
+            padding: 0.5rem !important;
+        }
+
+        /******************************/
+        /* Homepage */
+        #first-arrow-icon {
+            margin-bottom: 300px;
+        }
     }
 }
 
