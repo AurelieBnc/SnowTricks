@@ -17,11 +17,12 @@ class HeaderImageType extends AbstractType
                 // $builder->getData(): permet de récupérer l'objet associé au formulaire via les data_class
                 'choices' => $this->getPictureChoices($builder->getData()),
                 'choice_label' => null,
+                'choice_attr' => ['class' => 'd-none'],
                 'expanded' => true,
                 'multiple' => false,
                 'required' => true,
                 'label' => 'Choisis ton image d\'en-tête',
-                'label_attr' =>['class'=> 'fw-bold pb-2 mt-3 mb-5'],
+                'label_attr' => ['class'=> 'fw-bold pb-2 mt-3 mb-5'],
             ]);
     }
 

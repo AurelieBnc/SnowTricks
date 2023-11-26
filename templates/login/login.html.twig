@@ -4,27 +4,24 @@
 
 {% block body %}
     {% if error %}
-        <div class="col-8 d-flex flex-column justify-content-center alert alert-danger text-center fw-bold m-auto my-3">
-            Les données de connexion ne correspondent à aucun utilisateur, réessaie!
-        </div>
+    <div class="col-8 d-flex flex-column justify-content-center alert alert-danger text-center fw-bold m-auto my-3">
+        Les données de connexion ne correspondent à aucun utilisateur, réessaie!
+    </div>
     {% endif %}
 
-    <div class="d-sm-none d-lg-block">
-        <h1 class="m-auto my-5 d-flex align-items-end justify-content-center text-center">Se connecter</h1>
-    </div>
-    <h1 class="m-auto my-5 d-lg-none d-flex align-items-center justify-content-center text-center" style="font-size: 5rem;">Se connecter</h1>
+    <h1 class="mt-5 mb-3 d-flex align-items-center justify-content-center text-center">Se connecter</h1>
 
-    <div class="my-5 col-12 col-lg-8 m-auto">
-        <div class="pt-5 px-5 justify-content-around bg-light-form shadow pb-3">
-            <form action="{{ path('app_login') }}" method="post" class="my-3 d-flex flex-column">
+    <div class="my-3 col-12 col-lg-8 m-auto">
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+            <form action="{{ path('app_login') }}" method="post" class="my-3 d-flex flex-column ">
                 
-                <div class="mb-3">
-                    <label for="username" class="form-label fw-bold fs-1 d-flex justify-content-center">Email</label>
-                    <input type="text" class="form-control text-center" id="username" name="_username" placeholder="Indique ton email">
+                <div class="mb-5 col-12 col-lg-8 m-auto">
+                    <label for="username" id="username-label-login" class="form-label fw-bold fs-1 d-flex justify-content-center">Email</label>
+                    <input type="text" class="form-control text-center " id="username" name="_username" placeholder="Indique ton email">
                 </div>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label fw-bold fs-1 d-flex justify-content-center">Mot de passe</label>
+                <div class="mb-5 col-12 col-lg-8 m-auto">
+                    <label for="password" id="password-label-login" class="form-label fw-bold fs-1 d-flex justify-content-center">Mot de passe</label>
                     <input type="password" class="form-control text-center" id="password" name="_password" placeholder="Chuuuut ...">
                 </div>
 
@@ -32,16 +29,15 @@
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="my-3 p-3 fs-2 button-deco">Connexion</button>
+                    <button type="submit" class="my-3 px-5 py-2 fs-2 button-deco">Connexion</button>
                 </div>
-
             </form>
 
-            <div class="mt-5 mb-3 d-flex justify-content-between">
-                <a href="{{ path('security_registration') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">Je n'ai pas encore de compte!</a>
+            <div class="mt-5 mb-2 px-3 d-lg-flex justify-content-between">
+                <a href="{{ path('security_registration') }}" class="mb-2 text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">Je n'ai pas encore de compte!</a>
                 <a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai oublié mon mot de passe ...</a>
             </div>
 
         </div>
     </div>
-    {% endblock %}
+{% endblock %}

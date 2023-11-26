@@ -18,7 +18,7 @@ class HomeController extends AbstractController
     {
         if ($user) {
             if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Vous devez confirmer votre adresse email.');
+                $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
                 $this->redirectToRoute('app_home');
             }
             if (!$user->isVerified() === false) {

@@ -6,8 +6,8 @@
     <title>{% block title %}SnowTricks{% endblock %}</title>
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
     {% block stylesheets %}
     {# Inclusion CSS individuelle si besoin #}
     {% endblock %}
@@ -21,20 +21,20 @@
             </a>
             <ul class="navbar-nav d-flex flex-row justify-content-end">
                 <li class="nav-item">
-                    <a class="nav-link active pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
+                    <a class="nav-link active lh-1 p-0 pe-2" aria-current="page" href="{{ path("app_home") }}">Accueil</a>
                 </li>
                 {% if is_granted('ROLE_ADMIN') %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("trick_create") }}">Ajouter un Trick</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("trick_create") }}">Ajouter un Trick</a>
                 </li>
                 {% endif %}
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("app_login") }}">Connexion</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("app_login") }}">Connexion</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
+                    <a class="nav-link lh-1 p-0 pe-2" href="{{ path("app_logout") }}">Deconnexion</a>
                 </li>
                 {% endif %}
             </ul>
@@ -64,15 +64,31 @@
             </div>
         </nav>
         <nav id="footer-phone" class="navbar fixed-bottom bg-dark border-body d-block d-lg-none">
-            <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around py-3">
-                <li class="nav-item"><a class="nav-link" href="{{ path("app_home") }}" title="Accueil"><i id="house-icon"
-                            class="fa-solid fa-house p-2"></i></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path("trick_create") }}" title="Ajout Stricks"><i id="bookmark-icon"
-                            class="fa-solid fa-bookmark p-2"></i></a></li>
+            <ul class="container-fluid navbar-nav d-flex flex-row justify-content-around">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path("app_home") }}" title="Accueil">
+                        <i id="house-icon" class="fa-solid fa-house"></i>
+                    </a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path("trick_create") }}" title="Ajout Stricks">
+                        <i id="bookmark-icon" class="fa-solid fa-bookmark"></i>
+                    </a>
+                </li>
+                {% endif %}
                 {% if not is_granted('IS_AUTHENTICATED') %}
-                <li class="nav-item"><a class="nav-link" href="{{ path("security_registration") }}" title="Connexion"><i id="bracket-icon" class="fa-solid fa-right-to-bracket p-2"></i></a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path("security_registration") }}" title="Connexion">
+                        <i id="bracket-icon" class="fa-solid fa-right-to-bracket"></i>
+                    </a>
+                </li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="{{ path("app_logout") }}" title="Deconnexion"><i id="logout-icon" class="fa-solid fa-right-from-bracket p-2"></i></a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path("app_logout") }}" title="Deconnexion">
+                        <i id="logout-icon" class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+                </li>
                 {% endif %}
             </ul>
         </nav>

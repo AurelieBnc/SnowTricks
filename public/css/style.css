@@ -45,6 +45,9 @@ h2,h3 {
     text-transform: capitalize;  
 }
 
+#title-h2-trick {
+    margin-top: 200px;
+}
 
 body, html {
     background-color: var(--background);
@@ -53,6 +56,8 @@ body, html {
 
 .span-text {
     font-family:'Roboto','Arial','Helvetica','sans-serif' !important;
+    font-weight: lighter;
+    font-size: x-large;
 }
 
 #bg-head {  
@@ -80,6 +85,14 @@ body, html {
     background-color: var(--lightcolor) !important;
 }
 
+#pencil-icon {
+    color: #D9C7A6; 
+}
+
+#trash-icon {
+    color: #B04C46;
+}
+
 /******************************/
 /* Navigation*/
 
@@ -102,45 +115,30 @@ body, html {
     height: 3rem;
 }
 
-#house-icon, #bookmark-icon, #bracket-icon, #spinner-icon, #pencil-icon, #trash-icon, #logout-icon {
+#house-icon, #bookmark-icon, #bracket-icon, #logout-icon {
     color: var(--darkcolor);
-    font-size: 50px;
+    font-size: 30px;
 }
 
 
 /******************************/
 /* HomePage*/
 
-#load-button {
-    border: solid var(--darkcolor) !important;
-
-}
-
-#load-text, #spinner-icon {
-    color: var(--darkcolor);
+#toggleButton {
+    color: var(--brown);
     background-color: var(--light) !important;
+    border-color:#D9C7A6 !important;
+    border-radius: 0.375rem;
 }
 
 #first-arrow-icon {
     height: 100px;
     width: 100px;
-    margin-bottom: 220px;
-}
-
-#first-arrow-sm-icon {
-    height: 300px;
-    width: 300px;
-    margin-bottom: 150px;
 }
 
 #second-arrow-icon {
     height: 100px;
     width: 100px;
-}
-
-#second-arrow-sm-icon {
-    height: 300px;
-    width: 300px;
 }
 
 /******************************/
@@ -154,10 +152,15 @@ body, html {
     background-color: var(--darkcolor) !important;
 }
 
-#category-button {
-    background-color: red !important;
-}
 .button-deco {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background-color: var(--light) !important;
+    border-color:#D9C7A6 !important;
+    font-weight: bold;
+    font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
+}
+
+.edit-button {
     border: solid var(--darkcolor) !important;
     font-weight: bold;
     font-family: 'Retroking','Roboto','Arial','Helvetica','sans-serif' ;
@@ -169,10 +172,6 @@ body, html {
     font-family: 'Roboto','Arial','Helvetica','sans-serif' !important ;
 }
 
-#avatar-user {
-    height: 100px;
-}
-
 #youtube-logo {
     height: 25px;
     width: auto;
@@ -180,6 +179,11 @@ body, html {
 
 #content-trick {
     text-justify: inter-word !important;
+}
+
+
+#avatar-user {
+    height: 100px;
 }
 
 /******************************/
@@ -190,9 +194,239 @@ a:hover {
 }
 
 /******************************/
-/* TrickEdit */
+/* EditTrick */
 
 .image-mini {
     height: 100px;
     width: auto;
 }
+
+/******************************/
+/*Mobile*/
+@media screen and (max-width: 576px) { 
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    h2 {
+        font-size: 2rem !important;
+    }
+
+    h3 {
+        font-size: 1.5rem !important;
+    }
+
+    #title-site {
+        margin-top: 350px !important;
+        font-size: 2rem !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 20px;
+        padding: 0.5rem;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
+
+    /******************************/
+    /* Homepage */
+    #first-arrow-icon {
+        margin-bottom: 100px;
+    }
+
+    /******************************/
+    /* EditTrick */
+    #list-medias {
+        display: none;
+    }
+
+    /******************************/
+    /* Trick */
+    #avatar-user {
+        height: 50px;
+    }
+
+    #name-user {
+        margin-left: auto;
+        align-self: flex-end!important;
+    }
+ }
+
+/******************************/
+/*Autre que téléphone */
+@media screen and (min-width: 577px) and (max-width: 993px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    #title-site {
+        margin-top: 450px !important;
+        font-size: 3rem !important;
+        margin-bottom: 100px !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 40px !important;
+        padding: 0.5rem !important;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
+}
+
+/******************************/
+/*Tablette */
+@media screen and (min-width: 577px) and (max-width: 768px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
+}
+
+/******************************/
+/*Pc Portable */
+@media screen and (min-width: 769px) and (max-width: 992px) {
+
+    /******************************/
+    /* General */
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    .form {
+        padding: 1rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 50px;
+    }
+}
+
+/******************************/
+/* Tablette */
+@media screen and (min-width: 993px) and (max-width: 1250px) {
+
+    /******************************/
+    /* General*/
+    #title-site {
+        margin-top: 500px !important;
+        font-size: 3rem !important;
+        margin-bottom: 150px !important;
+    }
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 25px !important;
+        padding: 0.5rem !important;
+    }
+
+    .form {
+        padding: 3rem;
+        margin-bottom: 150px;
+    }
+
+    #space {
+        height: 100px;
+    }
+}
+
+/******************************/
+/* Desk */
+@media screen and (min-width: 1250px) {
+    
+    /******************************/
+    /* General*/
+    #title-site {
+        margin-top: 550px !important;
+        font-size: 3rem !important;
+        margin-bottom: 100px !important;
+    }
+    h1 {
+        font-size: 3rem !important;
+    }
+
+    #pencil-icon, #trash-icon {
+        font-size: 20px !important;
+        padding: 0.5rem !important;
+    }
+
+    .form {
+        padding: 3rem;
+        margin-bottom: 200px;
+    }
+
+    #space {
+        height: 150px;
+    }
+
+    /******************************/
+    /* Homepage */
+    #first-arrow-icon {
+        margin-bottom: 200px;
+    }
+
+    /******************************/
+    /* Ipad Air */
+    @media screen and (min-width: 1250px) and (max-height:950px) {
+
+        /******************************/
+        /* General*/
+        #title-site {
+            margin-top: 500px !important;
+            font-size: 3rem !important;
+            margin-bottom: 50px !important;
+        }
+        h1 {
+            font-size: 3rem !important;
+        }
+
+        #pencil-icon, #trash-icon {
+            font-size: 25px !important;
+            padding: 0.5rem !important;
+        }
+
+        #space {
+            height: 100px;
+        }
+
+        /******************************/
+        /* Homepage */
+        #first-arrow-icon {
+            margin-bottom: 300px;
+        }
+    }
+}
+

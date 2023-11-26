@@ -70,7 +70,7 @@ class TrickFormType extends AbstractType
                 'label' => 'Supprimer',
                 'attr'=> [
                     'title' => 'Supprimer l\'article',
-                    'class' => 'my-3 fs-3 me-4 button-deco text-danger',
+                    'class' => 'my-2 fs-3 button-deco text-danger',
                     'onclick' => 'return confirm("Êtes-vous sûr de vouloir supprimer cet article, ainsi que ses commentaires et médias ?")'
                 ],
             ])
@@ -78,7 +78,7 @@ class TrickFormType extends AbstractType
                 'label' => 'Enregistrer',
                 'attr'=> [
                     'title' => 'Enregistrer les modifications',
-                    'class' => 'my-3 fs-3 button-deco',
+                    'class' => 'my-2 fs-3 button-deco',
                 ],
             ])
         ;

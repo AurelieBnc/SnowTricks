@@ -1,17 +1,14 @@
 window.addEventListener("DOMContentLoaded", function() {
 
   console.log("DOM entièrement chargé");
+  /** Toggle Button in Edit Trick Template */
+  var button = document.getElementById('toggleButton');
+  var listMedias = document.getElementById('list-medias');
 
-  let listMedias = document.getElementById("list-medias");
-
-  document.getElementById("togg1").addEventListener("click", () => {
-    if(listMedias.classList.contains('d-sm-none')) {
-      console.log("coucou j'étais en d-sm-none, mais plus depuis le click !")
-      listMedias.classList.remove('d-sm-none');
-    } else {
-      console.log("cachés, les médias !")
-      listMedias.classList.add('d-sm-none');
-    }
-  })
+  button.addEventListener('click', function () {
+    listMedias.style.display = (listMedias.style.display === 'none') ? 'block' : 'none';
+    button.textContent = (listMedias.style.display === 'none') ? 'Afficher les médias' : 'Cacher les médias';
+  });
 
 });
+

@@ -14,8 +14,8 @@ class ResetPasswordRequestFormType extends AbstractType
     {
         $builder
         ->add('email', EmailType::class, [
-            'label' => "Saisi ton adresse e-mail et nous t'enverrons un lien pour réinitialiser ton mot de passe",
-            'label_attr' =>['class'=> 'fw-bold fs-4 d-flex text-center sjustify-content-center'],
+            'label' => "Saisi ton adresse e-mail, afin de recevoir un lien de réinitialisation.",
+            'label_attr' =>['class'=> 'fs-5 d-flex text-center sjustify-content-center'],
             'attr' => [
                 'autocomplete' => 'email',
                 'class' => 'font-weight-light text-center',
