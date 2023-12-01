@@ -26,6 +26,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
+    const NAME_FOLDER_PICTURE = 'trickImages';
+
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'trick_create')]
     public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService,LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
@@ -42,12 +44,11 @@ class TrickController extends AbstractController
             $pictureList = $trickForm->get('pictureList')->getData();
             
             foreach ($pictureList as $picture) {
-                $folder = 'trickImages';
-                $field = $pictureService->add($picture, $folder);
+                $newNamePicture = $pictureService->add($picture, SELF::NAME_FOLDER_PICTURE);
+                $newPicture = new Picture;
 
-                $picture = new Picture;
-                $picture->setName($field);
-                $trick->addPicture($picture);
+                $newPicture->setName($newNamePicture);
+                $trick->addPicture($newPicture);
             }
 
             if (null !== $trickForm->get('media')->getData()) {
@@ -117,13 +118,11 @@ class TrickController extends AbstractController
         $pictureForm->handleRequest($request);
         if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
             $picturedata = $pictureForm->get('name')->getData();
-            $folder = 'trickImages';
-            $field = $pictureService->add($picturedata, $folder);
-            $pictureService->delete($picture->getName(), $folder);
+            $newNamePicture = $pictureService->add($picturedata, SELF::NAME_FOLDER_PICTURE);
+            $pictureService->delete($picture->getName(), SELF::NAME_FOLDER_PICTURE);
 
-            $picture->setName($field);
+            $picture->setName($newNamePicture); 
             $picture->setTrick($trick);
-            $trick->addPicture($picture);
 
             $entityManager->persist($picture);
             $entityManager->flush();
@@ -150,15 +149,19 @@ class TrickController extends AbstractController
 
         $this->denyAccessUnlessGranted('MEDIA_EDIT',$media);
 
+        //todo supprimer new
         $editMedia = new Media;
 
         $mediaForm = $this->createForm(MediaType::class, $editMedia);
         $mediaForm->handleRequest($request);
 
         if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
+
+            //utiliser les data transformer de symfony
             $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($editMedia->getVideoUrl());
             $media->setVideoUrl($urlModified); 
 
+            //todo supprimer addmedia et set
             $media->setTrick($trick);
             $trick->addMedia($media);
 
@@ -196,6 +199,8 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
+
+            // $enititymanager $trick->remove() cascade
             if ($trickForm->get('delete')->isClicked()) {
                 //clean Trick before delete
                 $commentList = null;
@@ -232,12 +237,11 @@ class TrickController extends AbstractController
             $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
             $pictureList = $trickForm->get('pictureList')->getData();
             
-            foreach ($pictureList as $picture) {
-                $folder = 'trickImages';
-                $field = $pictureService->add($picture, $folder);
-
+            foreach ($pictureList as $picture) {               
+                $newNamePicture = $pictureService->add($picture, SELF::NAME_FOLDER_PICTURE);
+                //todo vérifier si c'est une nouvelle image ou une édition
                 $picture = new Picture;
-                $picture->setName($field);
+                $picture->setName($newNamePicture);
                 $trick->addPicture($picture);
             }
 
@@ -306,8 +310,7 @@ class TrickController extends AbstractController
             $entityManager->remove($deletePicture);
             $entityManager->flush();
 
-            $folder = 'trickImages';
-            $pictureService->delete($deletePicture->getName(), $folder);
+            $pictureService->delete($deletePicture->getName(), SELF::NAME_FOLDER_PICTURE);
 
             $this->addFlash('success', 'Ton image a bien été supprimée.'); 
         } else {
