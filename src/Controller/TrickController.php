@@ -142,9 +142,6 @@ class TrickController extends AbstractController
     #[Route('/{slug}/edit/media/{mediaId}', name: 'trick_edit_media')]
     public function editMedia(string $slug, int $mediaId, Request $request, EntityManagerInterface $entityManager, LinkYoutubeService $linkYoutubeService): Response
     {
-        $trickRepo = $entityManager->getRepository(Trick::class);
-        $trick = $trickRepo->findOneBy(['slug' => $slug]);  
-
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($mediaId);
 
@@ -168,7 +165,7 @@ class TrickController extends AbstractController
                 'slug' => $slug,
             ]);
         } 
-dump('media', $media);
+
         return $this->render('trick/edit/edit_media.html.twig', [
             'form' => $mediaForm->createView(),
             'media' => $media,
@@ -180,14 +177,10 @@ dump('media', $media);
     #[Route('/{slug}/edit', name: 'trick_edit')]
     public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
-        $pictureList = null;
-        $videoUrlList = null;
-//todo enlever repo
-        $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
-
-        $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($trick->getId()); 
+        // $pictureList = null;
+        // $mediaList = null;
+        $mediaList = $trick->getMediaList();
+        $pictureList = $trick->getPictureList();
 
         $trickForm = $this->createForm(TrickFormType::class, $trick);
         $trickForm->handleRequest($request);
@@ -202,8 +195,8 @@ dump('media', $media);
                 $commentRepo = $entityManager->getRepository(Comment::class);
                 $commentList = $commentRepo->commentList($trick->getId());
 
-                if (!empty($videoUrlList)) {
-                    foreach ($videoUrlList as $url) {
+                if (!empty($mediaList)) {
+                    foreach ($mediaList as $url) {
                         $entityManager->remove($url);
                     }
                 }
@@ -259,7 +252,7 @@ dump('media', $media);
         return $this->render('trick/edit/edit_trick.html.twig', [
             'trick' => $trick,
             'pictureList' => $pictureList,
-            'mediaList' => $videoUrlList,
+            'mediaList' => $mediaList,
             'form' => $trickForm->createView(),
         ]);
     }
@@ -340,22 +333,12 @@ dump('media', $media);
     #[Route('/{slug}/delete', name: 'delete_trick')]
     public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-        //clean Trick before delete
-        $pictureList = null;
-        $videoUrlList = null;
-        $commentList = null;
+        $mediaList = $trick->getMediaList();
+        $pictureList = $trick->getPictureList();
+        $commentList = $trick->getCommentList();
 
-        $mediaRepo = $entityManager->getRepository(Media::class);
-        $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
-
-        $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($trick->getId()); 
-
-        $commentRepo = $entityManager->getRepository(Comment::class);
-        $commentList = $commentRepo->commentList($trick->getId());
-
-        if (!empty($videoUrlList)) {
-            foreach ($videoUrlList as $url) {
+        if (!empty($mediaList)) {
+            foreach ($mediaList as $url) {
                 $entityManager->remove($url);
             }
         }
@@ -390,11 +373,8 @@ dump('media', $media);
             throw $this->createNotFoundException('Numéro de page invalide');
         }
 
-        $mediaRepo = $entityManager->getRepository(Media::class);
-        $mediaList = $mediaRepo->videoUrlList($trick->getId());
-
-        $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->pictureList($trick->getId()); 
+        $mediaList = $trick->getMediaList();
+        $pictureList = $trick->getPictureList(); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
@@ -408,6 +388,7 @@ dump('media', $media);
                 $this->redirectToRoute('trick', ['slug' => $trick->getSlug()]);
             }
             $commentForm->handleRequest($request);
+            
             if ($commentForm->isSubmitted() && $commentForm->isValid()) {
                 $comment->setCreatedAt(new \DateTimeImmutable())
                     ->setTrick($trick)
