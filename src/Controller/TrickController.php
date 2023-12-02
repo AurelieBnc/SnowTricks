@@ -113,7 +113,6 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('PICTURE_EDIT',$picture);
 
         $editPicture = new Picture;
-
         $pictureForm = $this->createForm(PictureType::class, $editPicture);
   
         $pictureForm->handleRequest($request);
@@ -177,40 +176,12 @@ class TrickController extends AbstractController
     #[Route('/{slug}/edit', name: 'trick_edit')]
     public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
-        // $pictureList = null;
-        // $mediaList = null;
-        $mediaList = $trick->getMediaList();
-        $pictureList = $trick->getPictureList();
-
         $trickForm = $this->createForm(TrickFormType::class, $trick);
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
 
-            // $enititymanager $trick->remove() cascade
             if ($trickForm->get('delete')->isClicked()) {
-                //clean Trick before delete
-                $commentList = null;
-        
-                $commentRepo = $entityManager->getRepository(Comment::class);
-                $commentList = $commentRepo->commentList($trick->getId());
-
-                if (!empty($mediaList)) {
-                    foreach ($mediaList as $url) {
-                        $entityManager->remove($url);
-                    }
-                }
-                if (!empty($pictureList)) {
-                    foreach ($pictureList as $picture) {
-                        $entityManager->remove($picture);
-                    }
-                }
-                if (!empty($commentList)) {
-                    foreach ($commentList as $comment) {
-                        $entityManager->remove($comment);
-                    }
-                }
-
                 $entityManager->remove($trick);
                 $entityManager->flush();
 
@@ -251,8 +222,6 @@ class TrickController extends AbstractController
 
         return $this->render('trick/edit/edit_trick.html.twig', [
             'trick' => $trick,
-            'pictureList' => $pictureList,
-            'mediaList' => $mediaList,
             'form' => $trickForm->createView(),
         ]);
     }
@@ -333,26 +302,6 @@ class TrickController extends AbstractController
     #[Route('/{slug}/delete', name: 'delete_trick')]
     public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-        $mediaList = $trick->getMediaList();
-        $pictureList = $trick->getPictureList();
-        $commentList = $trick->getCommentList();
-
-        if (!empty($mediaList)) {
-            foreach ($mediaList as $url) {
-                $entityManager->remove($url);
-            }
-        }
-        if (!empty($pictureList)) {
-            foreach ($pictureList as $picture) {
-                $entityManager->remove($picture);
-            }
-        }
-        if (!empty($commentList)) {
-            foreach ($commentList as $comment) {
-                $entityManager->remove($comment);
-            }
-        }
-        
         $entityManager->remove($trick);
         $entityManager->flush();
 
@@ -364,17 +313,12 @@ class TrickController extends AbstractController
     #[Route('/{slug}', name: 'trick')]
     public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
     {
-        $pictureList = null;
-        $mediaList = null;
         $commentlistPaginated = null;
 
         $page = $request->query->getInt('page', 1);
         if ($page < 1) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
-
-        $mediaList = $trick->getMediaList();
-        $pictureList = $trick->getPictureList(); 
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
@@ -388,7 +332,7 @@ class TrickController extends AbstractController
                 $this->redirectToRoute('trick', ['slug' => $trick->getSlug()]);
             }
             $commentForm->handleRequest($request);
-            
+
             if ($commentForm->isSubmitted() && $commentForm->isValid()) {
                 $comment->setCreatedAt(new \DateTimeImmutable())
                     ->setTrick($trick)
@@ -408,9 +352,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
-            'pictureList' => $pictureList,
-            'mediaList' => $mediaList,
-            'commentList' => $commentlistPaginated,
+            'commentlistPaginated' => $commentlistPaginated,
             'commentForm' => $commentForm->createView()
         ]);
     }

@@ -5,8 +5,8 @@
 {% block head %}
 {% if trick.headerImage is not null %} 
     <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
-{% elseif pictureList is not empty %}
-    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% elseif trick.pictureList is not empty %}
+    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% else %}
     <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% endif %}
@@ -40,12 +40,12 @@
 {% block body %}
 <div id="list-medias" class="d-sm-none d-lg-block">
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
-        {% for picture in pictureList %}
+        {% for picture in trick.pictureList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
         </div>
         {% endfor %}
-        {% for media in mediaList %}
+        {% for media in trick.mediaList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
@@ -53,7 +53,7 @@
     </div>
 </div>
 
-{% if (pictureList is not empty) or (mediaList is not empty) %}
+{% if (trick.pictureList is not empty) or (trick.mediaList is not empty) %}
     {% include('partial/button_loader.html.twig') %}
 {% endif %}
 
@@ -105,17 +105,17 @@
     <hr class="border-black border-2 my-5">
 </div>
 
-{% if commentList|length > 0 %}
+{% if commentlistPaginated|length > 0 %}
 {% set path = 'trick' %}
 {% set slug = trick.slug %}
-{% set pages = commentList.pages %}
-{% set currentPage = commentList.page %}
+{% set pages = commentlistPaginated.pages %}
+{% set currentPage = commentlistPaginated.page %}
 {% include 'partial/pagination.html.twig' %}
 
     <div class="col-12 col-lg-8 m-auto">
         <div class="pt-5 px-4 justify-content-around shadow bg-edit-button pb-3">
             <h2>Commentaires <span class="span-text">({{ trick.commentList|length }})</span></h2>
-            {% for comment in commentList.data %}
+            {% for comment in commentlistPaginated.data %}
             <div class="d-flex flex-column flex-lg-row justify-content-between mb-3 ">
                 <div class="d-flex flex-row flex-lg-column pe-3 col-lg-3 d-flex p-1">
                     <div class="d-flex justify-content-center">

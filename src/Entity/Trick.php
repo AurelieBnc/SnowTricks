@@ -34,13 +34,13 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade:['persist','remove'])]
     private Collection $mediaList;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true, cascade:['remove'])]
     private Collection $commentList;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade:['persist','remove'])]
     private Collection $pictureList;
 
     #[ORM\Column(length: 255, nullable: true)]
