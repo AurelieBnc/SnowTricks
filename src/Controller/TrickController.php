@@ -51,9 +51,10 @@ class TrickController extends AbstractController
                 $trick->addPicture($newPicture);
             }
 
-            if (null !== $trickForm->get('media')->getData()) {
+            $url = $trickForm->get('media')->getData();
+
+            if (null !== $url) {
                 $media = new Media;
-                $url = $trickForm->get('media')->getData();
                 $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
 
                 $media->setVideoUrl($urlModified);
@@ -69,7 +70,7 @@ class TrickController extends AbstractController
         } 
 
         return $this->render('trick/create_trick.html.twig', [
-            'trickForm' => $trickForm,
+            'trickForm' => $trickForm->createView(),
         ]);
     }
 
@@ -133,7 +134,7 @@ class TrickController extends AbstractController
         } 
 
         return $this->render('trick/edit/edit_picture.html.twig', [
-            'form' => $pictureForm,
+            'form' => $pictureForm->createView(),
             'picture' => $picture,
         ]);
     }
@@ -147,23 +148,16 @@ class TrickController extends AbstractController
         $mediaRepo = $entityManager->getRepository(Media::class);
         $media = $mediaRepo->find($mediaId);
 
-        $this->denyAccessUnlessGranted('MEDIA_EDIT',$media);
+        $this->denyAccessUnlessGranted('MEDIA_EDIT', $media);
 
-        //todo supprimer new
-        $editMedia = new Media;
-
-        $mediaForm = $this->createForm(MediaType::class, $editMedia);
+        $mediaForm = $this->createForm(MediaType::class, $media);
         $mediaForm->handleRequest($request);
 
         if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
 
             //utiliser les data transformer de symfony
-            $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($editMedia->getVideoUrl());
+            $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($media->getVideoUrl());
             $media->setVideoUrl($urlModified); 
-
-            //todo supprimer addmedia et set
-            $media->setTrick($trick);
-            $trick->addMedia($media);
 
             $entityManager->persist($media);
             $entityManager->flush();
@@ -174,9 +168,9 @@ class TrickController extends AbstractController
                 'slug' => $slug,
             ]);
         } 
-
+dump('media', $media);
         return $this->render('trick/edit/edit_media.html.twig', [
-            'form' => $mediaForm,
+            'form' => $mediaForm->createView(),
             'media' => $media,
         ]);
 
@@ -188,7 +182,7 @@ class TrickController extends AbstractController
     {
         $pictureList = null;
         $videoUrlList = null;
-
+//todo enlever repo
         $mediaRepo = $entityManager->getRepository(Media::class);
         $videoUrlList = $mediaRepo->videoUrlList($trick->getId());
 
@@ -239,15 +233,13 @@ class TrickController extends AbstractController
             
             foreach ($pictureList as $picture) {               
                 $newNamePicture = $pictureService->add($picture, SELF::NAME_FOLDER_PICTURE);
-                //todo vérifier si c'est une nouvelle image ou une édition
                 $picture = new Picture;
                 $picture->setName($newNamePicture);
                 $trick->addPicture($picture);
             }
-
-            if (null !== $trickForm->get('media')->getData()) {
+            $url = $trickForm->get('media')->getData();
+            if (null !== $url) {
                 $media = new Media;
-                $url = $trickForm->get('media')->getData();
                 $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
 
                 $media->setVideoUrl($urlModified);
@@ -268,7 +260,7 @@ class TrickController extends AbstractController
             'trick' => $trick,
             'pictureList' => $pictureList,
             'mediaList' => $videoUrlList,
-            'form' => $trickForm,
+            'form' => $trickForm->createView(),
         ]);
     }
 
