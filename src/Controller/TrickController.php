@@ -38,8 +38,6 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-            $trick->setCreatedAt(new \DateTimeImmutable());
-            $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
             
             $pictureList = $trickForm->get('pictureList')->getData();
             
@@ -193,10 +191,7 @@ class TrickController extends AbstractController
 
                 return $this->redirectToRoute('app_home');
             }
-
-            $trick->setUpdateDate(new \DateTimeImmutable());
             
-            $trick->setSlug(strtolower($slugger->slug($trick->getTitle())));
             $pictureList = $trickForm->get('pictureList')->getData();
             
             foreach ($pictureList as $picture) {               

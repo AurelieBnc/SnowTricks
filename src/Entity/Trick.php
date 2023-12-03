@@ -3,13 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use DateTimeImmutable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['title'], message: 'Un trick avec le même titre existe déjà.')]
 class Trick
 {
@@ -90,9 +93,10 @@ class Trick
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    #[ORM\PrePersist]
+    public function setCreatedAt(): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTimeImmutable();
 
         return $this;
     }
@@ -102,10 +106,11 @@ class Trick
         return $this->updateDate;
     }
 
-    public function setUpdateDate(?\DateTimeInterface $updateDate): static
+    #[ORM\PreUpdate]
+    public function setUpdateDate(): static
     {
-        $this->updateDate = $updateDate;
-
+        $this->updateDate = new DateTimeImmutable();
+        
         return $this;
     }
 
@@ -228,9 +233,9 @@ class Trick
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(SluggerInterface $slugger): static
     {
-        $this->slug = $slug;
+        $this->slug = strtolower($slugger->slug($this->title));
 
         return $this;
     }
