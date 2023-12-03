@@ -62,6 +62,10 @@ class TrickController extends AbstractController
             }
 
             $entityManager->persist($trick);
+            $trick->setHeaderImage(
+                $trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null
+            );
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Ton trick a bien été ajouté !');
@@ -201,6 +205,7 @@ class TrickController extends AbstractController
                 $picture->setName($newNamePicture);
                 $trick->addPicture($picture);
             }
+
             $url = $trickForm->get('media')->getData();
             if (null !== $url) {
                 $media = new Media;
@@ -211,6 +216,13 @@ class TrickController extends AbstractController
             }
 
             $entityManager->persist($trick);
+
+            if ($trick->getHeaderImage()=== null) {
+                $trick->setHeaderImage(
+                    $trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null
+                );
+            }
+
             $entityManager->flush();
 
             $this->addFlash('success', 'Ton trick a bien été modifié !');
