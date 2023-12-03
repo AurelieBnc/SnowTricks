@@ -10,11 +10,11 @@ use App\Entity\Trick;
 use App\Entity\Media;
 use App\Entity\Comment;
 use App\Entity\Picture;
-use App\Form\CommentType;
 use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
+use App\Service\CommentService;
 use App\Service\LinkYoutubeService;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -311,7 +311,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'trick')]
-    public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user): Response
+    public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user, CommentService $commentService): Response
     {
         $commentlistPaginated = null;
 
@@ -319,36 +319,10 @@ class TrickController extends AbstractController
         if ($page < 1) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
+        $commentForm = $commentService->getCommentForm($request, $user, $trick);
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
-
-        // Create a commentForm
-        $comment = new Comment;
-        $commentForm = $this->createForm(CommentType::class, $comment);
-        if ($user) {
-            if ($user->isVerified() === false) {
-                $this->addFlash('verification', 'Tu dois confirmer ton adresse email pour envoyer un commentaire.');
-                $this->redirectToRoute('trick', ['slug' => $trick->getSlug()]);
-            }
-            $commentForm->handleRequest($request);
-
-            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-                $comment->setCreatedAt(new \DateTimeImmutable())
-                    ->setTrick($trick)
-                    ->setUser($user);
-                $entityManager->persist($comment);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Ton commentaire a bien été envoyé !');
-
-                return $this->redirectToRoute('trick', [
-                    'slug' => $trick->getSlug(),
-                ]);
-            } 
-        } else {
-            $this->addFlash('login', 'Tu dois être connecté pour envoyer un commentaire.');
-        }
 
         return $this->render('trick/trick.html.twig', [
             'trick' => $trick,
