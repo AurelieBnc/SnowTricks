@@ -152,8 +152,6 @@ class TrickController extends AbstractController
         $mediaForm->handleRequest($request);
 
         if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
-
-            //utiliser les data transformer de symfony
             $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($media->getVideoUrl());
             $media->setVideoUrl($urlModified); 
 
