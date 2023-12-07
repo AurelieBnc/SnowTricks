@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Manager;
 
 use App\Entity\Trick;
 use App\Entity\User;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
-class CommentService 
+class CommentManager 
 {
     private $entityManager;
     private $formFactory;

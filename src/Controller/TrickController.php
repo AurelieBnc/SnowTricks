@@ -14,7 +14,7 @@ use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
-use App\Service\CommentService;
+use App\Manager\CommentManager;
 use App\Service\LinkYoutubeService;
 use App\Service\PictureService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,7 +53,7 @@ class TrickController extends AbstractController
 
             if (null !== $url) {
                 $media = new Media;
-                $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
+                $urlModified = $linkYoutubeService->intoEmbedLinkYoutube($url);
 
                 $media->setVideoUrl($urlModified);
                 $trick->addMedia($media);
@@ -152,7 +152,7 @@ class TrickController extends AbstractController
         $mediaForm->handleRequest($request);
 
         if ($mediaForm->isSubmitted() && $mediaForm->isValid()) {
-            $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($media->getVideoUrl());
+            $urlModified = $linkYoutubeService->intoEmbedLinkYoutube($media->getVideoUrl());
             $media->setVideoUrl($urlModified); 
 
             $entityManager->persist($media);
@@ -202,7 +202,7 @@ class TrickController extends AbstractController
             $url = $trickForm->get('media')->getData();
             if (null !== $url) {
                 $media = new Media;
-                $urlModified = $linkYoutubeService->intoEmbedLinkYoutbe($url);
+                $urlModified = $linkYoutubeService->intoEmbedLinkYoutube($url);
 
                 $media->setVideoUrl($urlModified);
                 $trick->addMedia($media);
@@ -316,7 +316,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'trick')]
-    public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user, CommentService $commentService): Response
+    public function index(Trick $trick, EntityManagerInterface $entityManager, Request $request, ?UserInterface $user, CommentManager $commentManager): Response
     {
         $commentlistPaginated = null;
 
@@ -324,7 +324,7 @@ class TrickController extends AbstractController
         if ($page < 1) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
-        $commentForm = $commentService->getCommentForm($request, $user, $trick);
+        $commentForm = $commentManager->getCommentForm($request, $user, $trick);
 
         $commentRepo = $entityManager->getRepository(Comment::class);
         $commentlistPaginated = $commentRepo->findCommentListPaginated($page, $trick->getId());
