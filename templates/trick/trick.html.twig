@@ -119,7 +119,7 @@
                     <div class="d-flex justify-content-center">
                         <img id="avatar-user" class="img-fluid rounded-circle"
                             {% if comment.user.avatar is not null %}
-                                src="{{ asset('images/uploads/avatars/'~ comment.user.avatar) }}"
+                                src="{{ asset('images/uploads/avatars/300x300-'~ comment.user.avatar) }}"
                             {% else %}
                                 src="{{ asset('images/default/default-avatar.png') }}"
                             {% endif %}

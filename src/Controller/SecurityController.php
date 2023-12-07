@@ -8,9 +8,8 @@ use App\Form\RegistrationType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UserRepository;
 use App\Service\JWTService;
-use App\Service\PictureService;
+use App\Service\AvatarService;
 use App\Service\SendEmailService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +23,13 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 class SecurityController extends AbstractController
 {
     #[Route('/registration', name: 'security_registration')]
-    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SendEmailService $email, JWTService $jwt, PictureService $pictureService): Response
+    public function registration(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SendEmailService $email, JWTService $jwt, AvatarService $avatarService): Response
     {
         $user = new User;
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -44,12 +42,10 @@ class SecurityController extends AbstractController
 
             if (null !== $form->get('avatar')->getData()) {
                 // upload avatar
-                $avatar = $form->get('avatar')->getData();
-                $folder = 'avatars';
+                $avatarUploadedFile = $form->get('avatar')->getData();
+                $avatarFileName = $avatarService->add($avatarUploadedFile);
 
-                $field = $pictureService->add($avatar, $folder, 300, 300);
-
-                $user->setAvatar($field); 
+                $user->setAvatar($avatarFileName); 
             }
 
             $entityManager->persist($user);
