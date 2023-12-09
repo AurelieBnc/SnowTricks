@@ -117,8 +117,11 @@ class TrickController extends AbstractController
         $pictureForm->handleRequest($request);
         if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
             $picturedata = $pictureForm->get('name')->getData();
-            $newNamePicture = $trickPictureService->add($picturedata);
-            $trickPictureService->delete($picture->getName());
+            $pictureName = $picture->getName();
+            $newNamePicture = $trickPictureService->replace($picturedata, $pictureName);
+
+            if ($pictureName === $trick->getHeaderImage())
+            $trick->setHeaderImage($newNamePicture);
 
             $picture->setName($newNamePicture); 
             $picture->setTrick($trick);
