@@ -263,10 +263,12 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('PICTURE_DELETE',$deletePicture);
 
         if (isset($deletePicture)) {
-            if ($deletePicture->getName() === $trick->getHeaderImage()) {
-                $trick->setHeaderImage($trick->getPictureList()[1]?->getName() ? $trick->getPictureList()[1]->getName() : null);
-            }
             $entityManager->remove($deletePicture);
+
+            if ($deletePicture->getName() === $trick->getHeaderImage()) {
+                $trick->setHeaderImage($trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null);
+            }
+            
             $entityManager->flush();
 
             $trickPictureService->delete($deletePicture->getName());
