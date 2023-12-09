@@ -8,15 +8,15 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 Class AvatarService 
 {
-    private $params;
+    private $folder;
+    private $imgDirectory;
     private $width = 300;
     private $heigth = 300;
-    private $folder;
 
 
     public function __construct(ParameterBagInterface $params) {
-        $this->params = $params;
         $this->folder = $params->get('avatar.picture.folder');
+        $this->imgDirectory = $params->get('images_directory');
     }
 
     /**
@@ -24,6 +24,11 @@ Class AvatarService
      */
     public function add(UploadedFile $picture):string 
     {
+        $path = $this->imgDirectory.$this->folder;
+        if (!file_exists($path.'/')) {
+            mkdir($path.'/', 0755, true);
+        }
+
         $field = md5(uniqId(rand(), true)).'.png';
         $pictureDatas = getImageSize($picture);
 
@@ -68,12 +73,6 @@ Class AvatarService
 
         $resizePicture = imagecreatetruecolor($this->width, $this->heigth);
         imagecopyresampled($resizePicture, $pictureSource, 0, 0, $src_x, $src_y, $this->width, $this->heigth, $squareSize, $squareSize);
-
-        $path = $this->params->get('images_directory').$this->folder;
-
-        if (!file_exists($path.'/')) {
-            mkdir($path.'/', 0755, true);
-        }
         imagepng($resizePicture, $path.'/'.$this->width.'x'.$this->heigth.'-'.$field);
 
         return $field;
@@ -87,7 +86,7 @@ Class AvatarService
         if ($field !== 'default-avatar.png') {
             $success = false;
 
-            $path = $this->params->get('images_directory').$folder;
+            $path = $this->imgDirectory.$folder;
             $file = $path.'/'.$field;
 
             if (file_exists($file)) {

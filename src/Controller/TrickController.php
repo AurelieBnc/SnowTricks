@@ -16,7 +16,7 @@ use App\Form\PictureType;
 use App\Form\HeaderImageType;
 use App\Manager\CommentManager;
 use App\Service\LinkYoutubeService;
-use App\Service\PictureService;
+use App\Service\TrickPictureService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,11 +26,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/trick')]
 class TrickController extends AbstractController
 {
-    const NAME_FOLDER_PICTURE = 'trickImages';
-
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'trick_create')]
-    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureService $pictureService,LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService,LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
         $trick = new Trick;
 
@@ -39,14 +37,13 @@ class TrickController extends AbstractController
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
             
-            $pictureList = $trickForm->get('pictureList')->getData();
-            
-            foreach ($pictureList as $picture) {
-                $newNamePicture = $pictureService->add($picture, SELF::NAME_FOLDER_PICTURE);
-                $newPicture = new Picture;
+            $pictureUploadedFileList = $trickForm->get('pictureList')->getData();
+            foreach ($pictureUploadedFileList as $pictureUploaded) {
+                $newNamePicture = $trickPictureService->add($pictureUploaded);
+                $Picture = new Picture;
 
-                $newPicture->setName($newNamePicture);
-                $trick->addPicture($newPicture);
+                $Picture->setName($newNamePicture);
+                $trick->addPicture($Picture);
             }
 
             $url = $trickForm->get('media')->getData();
@@ -105,7 +102,7 @@ class TrickController extends AbstractController
     }
 
     #[Route('/{slug}/edit/picture/{pictureId}', name: 'trick_edit_picture')]
-    public function editPicture(string $slug, int $pictureId, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService ): Response
+    public function editPicture(string $slug, int $pictureId, Request $request, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService ): Response
     {
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
@@ -120,8 +117,8 @@ class TrickController extends AbstractController
         $pictureForm->handleRequest($request);
         if ($pictureForm->isSubmitted() && $pictureForm->isValid()) {
             $picturedata = $pictureForm->get('name')->getData();
-            $newNamePicture = $pictureService->add($picturedata, SELF::NAME_FOLDER_PICTURE);
-            $pictureService->delete($picture->getName(), SELF::NAME_FOLDER_PICTURE);
+            $newNamePicture = $trickPictureService->add($picturedata);
+            $trickPictureService->delete($picture->getName());
 
             $picture->setName($newNamePicture); 
             $picture->setTrick($trick);
@@ -174,7 +171,7 @@ class TrickController extends AbstractController
 
     #[IsGranted('TRICK_EDIT', 'trick')]
     #[Route('/{slug}/edit', name: 'trick_edit')]
-    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureService $pictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
     {
         $trickForm = $this->createForm(TrickFormType::class, $trick);
         $trickForm->handleRequest($request);
@@ -193,7 +190,7 @@ class TrickController extends AbstractController
             $pictureList = $trickForm->get('pictureList')->getData();
             
             foreach ($pictureList as $picture) {               
-                $newNamePicture = $pictureService->add($picture, SELF::NAME_FOLDER_PICTURE);
+                $newNamePicture = $trickPictureService->add($picture);
                 $picture = new Picture;
                 $picture->setName($newNamePicture);
                 $trick->addPicture($picture);
@@ -236,12 +233,12 @@ class TrickController extends AbstractController
     public function deleteHeaderImage(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
          if ($trick->getHeaderImage()) {
-            $trick->setHeaderImage(null);
+            $trick->setHeaderImage($trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null);
 
             $entityManager->persist($trick);
             $entityManager->flush();
 
-                $this->addFlash('success', 'Ton image d\'en-tête a bien été supprimée.'); 
+            $this->addFlash('success', 'Ton image d\'en-tête a bien été supprimée.'); 
         } else {
             $this->addFlash('error', 'Vous n\'avez pas d\'image d\'en-tête actuellement.');
         }
@@ -252,7 +249,7 @@ class TrickController extends AbstractController
     }
     
     #[Route('/{slug}/delete/picture/{pictureId}', name: 'delete_picture')]
-    public function deletePicture(string $slug, int $pictureId, EntityManagerInterface $entityManager, PictureService $pictureService): RedirectResponse
+    public function deletePicture(string $slug, int $pictureId, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService): RedirectResponse
     {
         $trickRepo = $entityManager->getRepository(Trick::class);
         $trick = $trickRepo->findOneBy(['slug' => $slug]);
@@ -264,12 +261,12 @@ class TrickController extends AbstractController
 
         if (isset($deletePicture)) {
             if ($deletePicture->getName() === $trick->getHeaderImage()) {
-                $trick->setHeaderImage(null);
+                $trick->setHeaderImage($trick->getPictureList()[1]?->getName() ? $trick->getPictureList()[1]->getName() : null);
             }
             $entityManager->remove($deletePicture);
             $entityManager->flush();
 
-            $pictureService->delete($deletePicture->getName(), SELF::NAME_FOLDER_PICTURE);
+            $trickPictureService->delete($deletePicture->getName());
 
             $this->addFlash('success', 'Ton image a bien été supprimée.'); 
         } else {
@@ -305,8 +302,14 @@ class TrickController extends AbstractController
 
     #[IsGranted('TRICK_DELETE', 'trick')]
     #[Route('/{slug}/delete', name: 'delete_trick')]
-    public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
+    public function deleteTrick(Trick $trick, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService): RedirectResponse
     {
+        $pictureList = $trick->getPictureList();
+
+        foreach ($pictureList as $deletePicture) {
+            $trickPictureService->delete($deletePicture->getName());
+        }
+        
         $entityManager->remove($trick);
         $entityManager->flush();
 

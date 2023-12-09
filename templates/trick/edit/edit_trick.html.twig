@@ -4,10 +4,10 @@
 
 {% block head %}
 
-{% if trick.pictureList is empty %}
-    <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
+{% if trick.headerImage is not null %} 
+    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% else %}
-    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
+    <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% endif %}
         <div class="p-3">
             <div class="d-flex justify-content-end align-items-end p-0">   
