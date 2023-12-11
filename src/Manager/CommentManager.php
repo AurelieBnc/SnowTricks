@@ -26,7 +26,7 @@ class CommentManager
         $this->formFactory = $formFactory;
     }
 
-    public function getCommentForm(Request $request, ?User $user, Trick $trick): FormInterface|RedirectResponse 
+    public function getCommentForm(Request $request, ?User $user, Trick $trick): FormInterface
     {
         $comment = new Comment;
         $commentForm = $this->formFactory->create(CommentType::class, $comment);

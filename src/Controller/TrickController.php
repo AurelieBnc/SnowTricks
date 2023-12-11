@@ -15,6 +15,7 @@ use App\Form\MediaType;
 use App\Form\PictureType;
 use App\Form\HeaderImageType;
 use App\Manager\CommentManager;
+use App\Manager\PictureManager;
 use App\Service\LinkYoutubeService;
 use App\Service\TrickPictureService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,7 +29,7 @@ class TrickController extends AbstractController
 {
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/create', name: 'trick_create')]
-    public function createTrick(Request $request, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService,LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
+    public function createTrick(Request $request, EntityManagerInterface $entityManager, PictureManager $pictureManager, LinkYoutubeService $linkYoutubeService): Response
     {
         $trick = new Trick;
 
@@ -36,16 +37,9 @@ class TrickController extends AbstractController
         $trickForm->handleRequest($request);
 
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
-            
             $pictureUploadedFileList = $trickForm->get('pictureList')->getData();
-            
-            foreach ($pictureUploadedFileList as $pictureUploaded) {
-                $newNamePicture = $trickPictureService->storeWithSafeName($pictureUploaded);
-                $Picture = new Picture;
-
-                $Picture->setName($newNamePicture);
-                $trick->addPicture($Picture);
-            }
+            $pictureManager->addUploadedPicturesFile($pictureUploadedFileList, $trick);
+            $entityManager->flush();
 
             $url = $trickForm->get('media')->getData();
 
@@ -58,9 +52,6 @@ class TrickController extends AbstractController
             }
 
             $entityManager->persist($trick);
-            $trick->setHeaderImage(
-                $trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null
-            );
 
             $entityManager->flush();
 
@@ -175,7 +166,7 @@ class TrickController extends AbstractController
 
     #[IsGranted('TRICK_EDIT', 'trick')]
     #[Route('/{slug}/edit', name: 'trick_edit')]
-    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, TrickPictureService $trickPictureService, LinkYoutubeService $linkYoutubeService, SluggerInterface $slugger): Response
+    public function editTrick(Trick $trick, Request $request, EntityManagerInterface $entityManager, PictureManager $pictureManager, LinkYoutubeService $linkYoutubeService): Response
     {
         $trickForm = $this->createForm(TrickFormType::class, $trick);
         $trickForm->handleRequest($request);
@@ -190,15 +181,10 @@ class TrickController extends AbstractController
 
                 return $this->redirectToRoute('app_home');
             }
-            
-            $pictureList = $trickForm->get('pictureList')->getData();
-            
-            foreach ($pictureList as $picture) {               
-                $newNamePicture = $trickPictureService->storeWithSafeName($picture);
-                $picture = new Picture;
-                $picture->setName($newNamePicture);
-                $trick->addPicture($picture);
-            }
+
+            $pictureUploadedFileList = $trickForm->get('pictureList')->getData();
+            $pictureManager->addUploadedPicturesFile($pictureUploadedFileList, $trick);
+            $entityManager->flush();
 
             $url = $trickForm->get('media')->getData();
             if (null !== $url) {
@@ -210,12 +196,6 @@ class TrickController extends AbstractController
             }
 
             $entityManager->persist($trick);
-
-            if ($trick->getHeaderImage()=== null) {
-                $trick->setHeaderImage(
-                    $trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null
-                );
-            }
 
             $entityManager->flush();
 
@@ -261,7 +241,7 @@ class TrickController extends AbstractController
         $pictureRepo = $entityManager->getRepository(Picture::class);
         $deletePicture = $pictureRepo->find($pictureId);
 
-        $this->denyAccessUnlessGranted('PICTURE_DELETE',$deletePicture);
+        $this->denyAccessUnlessGranted('PICTURE_DELETE', $deletePicture);
 
         if (isset($deletePicture)) {
             $entityManager->remove($deletePicture);
