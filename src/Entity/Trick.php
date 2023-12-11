@@ -233,7 +233,7 @@ class Trick
         return $this->slug;
     }
 
-    public function setSlug(SluggerInterface $slugger): static
+    public function computeSlug(SluggerInterface $slugger): static
     {
         $this->slug = strtolower($slugger->slug($this->title));
 

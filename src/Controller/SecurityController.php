@@ -43,7 +43,7 @@ class SecurityController extends AbstractController
             if (null !== $form->get('avatar')->getData()) {
                 // upload avatar
                 $avatarUploadedFile = $form->get('avatar')->getData();
-                $avatarFileName = $avatarService->add($avatarUploadedFile);
+                $avatarFileName = $avatarService->storeWithSafeName($avatarUploadedFile);
 
                 $user->setAvatar($avatarFileName); 
             }

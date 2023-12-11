@@ -22,7 +22,7 @@ Class AvatarService
     /**
      * Function to add an avatar with a uniqid
      */
-    public function add(UploadedFile $picture):string 
+    public function storeWithSafeName(UploadedFile $picture):string 
     {
         $path = $this->imgDirectory.$this->folder;
         if (!file_exists($path.'/')) {
@@ -76,27 +76,5 @@ Class AvatarService
         imagepng($resizePicture, $path.'/'.$this->width.'x'.$this->heigth.'-'.$field);
 
         return $field;
-    }
-
-    /**
-     * Function to delete an avatar
-     */
-    public function delete(string $field, ?string $folder = ''):bool
-    {
-        if ($field !== 'default-avatar.png') {
-            $success = false;
-
-            $path = $this->imgDirectory.$folder;
-            $file = $path.'/'.$field;
-
-            if (file_exists($file)) {
-                unlink($file);
-                $success = true;
-            }
-
-            return $success;
-        }
-
-        return false;
     }
 }

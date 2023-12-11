@@ -38,8 +38,9 @@ class TrickController extends AbstractController
         if ($trickForm->isSubmitted() && $trickForm->isValid()) {
             
             $pictureUploadedFileList = $trickForm->get('pictureList')->getData();
+            
             foreach ($pictureUploadedFileList as $pictureUploaded) {
-                $newNamePicture = $trickPictureService->add($pictureUploaded);
+                $newNamePicture = $trickPictureService->storeWithSafeName($pictureUploaded);
                 $Picture = new Picture;
 
                 $Picture->setName($newNamePicture);
@@ -193,7 +194,7 @@ class TrickController extends AbstractController
             $pictureList = $trickForm->get('pictureList')->getData();
             
             foreach ($pictureList as $picture) {               
-                $newNamePicture = $trickPictureService->add($picture);
+                $newNamePicture = $trickPictureService->storeWithSafeName($picture);
                 $picture = new Picture;
                 $picture->setName($newNamePicture);
                 $trick->addPicture($picture);

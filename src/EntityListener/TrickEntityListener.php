@@ -19,13 +19,13 @@ class TrickEntityListener
         $this->slugger = $slugger;
     }
 
-    public function prePersist(Trick $conference, LifecycleEventArgs $event): void
+    public function prePersist(Trick $trick, LifecycleEventArgs $event): void
     {
-        $conference->setSlug($this->slugger);
+        $trick->computeSlug($this->slugger);
     }
 
-    public function preUpdate(Trick $conference, LifecycleEventArgs $event): void
+    public function preUpdate(Trick $trick, LifecycleEventArgs $event): void
     {
-        $conference->setSlug($this->slugger);
+        $trick->computeSlug($this->slugger);
     }
 }

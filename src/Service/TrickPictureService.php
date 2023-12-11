@@ -19,33 +19,36 @@ Class TrickPictureService
     }
 
     /**
-     * Function to add a trick picture with a uniqid
+     * Function to create a new trick picture name with a uniqid
      */
-    public function add(UploadedFile $picture):string 
+    public function storeWithSafeName(UploadedFile $picture):string 
     {
         $path = $this->imgDirectory.$this->folder;
         if (!file_exists($path.'/')) {
             mkdir($path.'/', 0755, true);
         }
 
-        $field = md5(uniqId(rand(), true)).'.png';
+        $imageName = md5(uniqId(rand(), true)).'.png';
         $pictureDatas = getImageSize($picture);
 
         if ($pictureDatas === false) {
             throw new Exception('Format d\'image incorrect');
         }
 
-        $picture->move($path.'/',$field);
+        $picture->move($path.'/',$imageName);
 
-        return $field;
+        return $imageName;
     }
 
-    public function replace(UploadedFile $picture,string $actualPictureName):string
+    /**
+     * Function to replace a trick picture
+     */
+    public function replace(UploadedFile $picture, string $actualPictureName):string
     {
-        $field = $this->add($picture);
+        $imageName = $this->storeWithSafeName($picture);
         $this->delete($actualPictureName);
 
-        return $field;
+        return $imageName;
     }
 
     /**
@@ -53,20 +56,16 @@ Class TrickPictureService
      */
     public function delete(string $field):bool
     {
-        if ($field !== 'default-avatar.png') {
-            $success = false;
+        $success = false;        
 
-            $path = $this->imgDirectory.$this->folder;
-            $original = $path.'/'.$field;
+        $path = $this->imgDirectory.$this->folder;
+        $original = $path.'/'.$field;
 
-            if (file_exists($original)) {
-                unlink($original);
-                $success = true;
-            }
-
-            return $success;
+        if (file_exists($original)) {
+            unlink($original);
+            $success = true;
         }
 
-        return false;
+        return $success;
     }
 }

@@ -31,18 +31,14 @@ class CommentManager
         $comment = new Comment;
         $commentForm = $this->formFactory->create(CommentType::class, $comment);
 
-        if ($user) {
-            $commentForm->handleRequest($request);
+        $commentForm->handleRequest($request);
 
-            if ($commentForm->isSubmitted() && $commentForm->isValid()) {
-                if ($user->isVerified() === false) {
-                    $request->getSession()->getFlashBag()->add('verification', 'Tu dois confirmer ton adresse email.');
-                } else {
-                    $this->processCommentSubmission($comment, $trick, $user, $request);
-                }
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            if ($user->isVerified() === false) {
+                $request->getSession()->getFlashBag()->add('verification', 'Tu dois confirmer ton adresse email.');
+            } else {
+                $this->processCommentSubmission($comment, $trick, $user, $request);
             }
-        } else {
-            $request->getSession()->getFlashBag()->add('login', 'Tu dois être connecté pour envoyer un commentaire.');
         }
 
         return $commentForm;

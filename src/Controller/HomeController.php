@@ -19,11 +19,10 @@ class HomeController extends AbstractController
         if ($user) {
             if ($user->isVerified() === false) {
                 $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home');
             } else {
                 $this->addFlash('hello', 'Une bonne journée à toi '.$user->getUsername().', Ride On !');
-                $this->redirectToRoute('app_home');
             }
+            $this->redirectToRoute('app_home');
         }
         $page = $request->query->getInt('page', 1);
 
