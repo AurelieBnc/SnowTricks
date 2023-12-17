@@ -3,21 +3,21 @@
 namespace App\Service;
 
 use Exception;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 Class AvatarService 
 {
-    private $folder;
-    private $imgDirectory;
     private $width = 300;
     private $heigth = 300;
 
 
-    public function __construct(ParameterBagInterface $params) {
-        $this->folder = $params->get('avatar.picture.folder');
-        $this->imgDirectory = $params->get('images_directory');
-    }
+    public function __construct(        
+    #[Autowire('%trick.picture.folder%')]
+    private string $folder,
+    #[Autowire('%images_directory%')]
+    private string $imgDirectory,
+    ) {}
 
     /**
      * Function to add an avatar with a uniqid

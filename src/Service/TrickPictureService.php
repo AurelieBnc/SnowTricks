@@ -2,21 +2,18 @@
 
 namespace App\Service;
 
-use App\Entity\Picture;
 use Exception;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-Class TrickPictureService 
+Class TrickPictureFileService 
 {
-    private $folder;
-    private $imgDirectory;
-    
-
-    public function __construct(ParameterBagInterface $params) {
-        $this->folder = $params->get('trick.picture.folder');
-        $this->imgDirectory = $params->get('images_directory');
-    }
+    public function __construct(
+        #[Autowire('%trick.picture.folder%')]
+        private string $folder,
+        #[Autowire('%images_directory%')]
+        private string $imgDirectory,
+    ) {}
 
     /**
      * Function to create a new trick picture name with a uniqid
