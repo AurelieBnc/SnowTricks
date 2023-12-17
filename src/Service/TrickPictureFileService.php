@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Picture;
 use Exception;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -40,10 +41,10 @@ Class TrickPictureFileService
     /**
      * Function to replace a trick picture
      */
-    public function replace(UploadedFile $picture, string $actualPictureName):string
+    public function replace(UploadedFile $pictureUploadedFile, Picture $picture):string
     {
-        $imageName = $this->storeWithSafeName($picture);
-        $this->delete($actualPictureName);
+        $imageName = $this->storeWithSafeName($pictureUploadedFile);
+        $this->delete($picture);
 
         return $imageName;
     }
@@ -51,8 +52,9 @@ Class TrickPictureFileService
     /**
      * Function to delete a trick picture
      */
-    public function delete(string $pictureName):bool
+    public function delete(Picture $picture):bool
     {
+        $pictureName = $picture->getName();
         $picturePath = $this->imgDirectory . $this->folder . DIRECTORY_SEPARATOR . $pictureName;
         
         return  file_exists( $picturePath) && unlink($picturePath);

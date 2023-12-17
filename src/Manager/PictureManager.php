@@ -46,7 +46,7 @@ class PictureManager
     public function editUploadedPictureFile(Picture $picture, UploadedFile $uploadedPictureFile, Trick $trick): void
     {
         $pictureName = $picture->getName();
-        $newPictureName = $this->trickPictureFileService->replace($uploadedPictureFile, $pictureName);
+        $newPictureName = $this->trickPictureFileService->replace($uploadedPictureFile, $picture);
 
         if ($pictureName === $trick->getHeaderPictureName()) {
             $trick->setHeaderPictureName($newPictureName);
@@ -64,7 +64,7 @@ class PictureManager
         $this->entityManager->remove($deletePicture);
 
         $isHeaderPicture = $deletePicture->getName() === $trick->getHeaderPictureName();
-        
+
         if ($isHeaderPicture) {
             $pictureList = $trick->getPictureList();
             $trick->setHeaderPictureName( $pictureList[1]?->getName());
@@ -73,7 +73,7 @@ class PictureManager
         $this->entityManager->persist($trick);
         $this->entityManager->flush();
 
-        $this->trickPictureFileService->delete($deletePicture->getName());
+        $this->trickPictureFileService->delete($deletePicture);
     }
 
     public function deletePictureFileList(Trick $trick):void
@@ -81,7 +81,7 @@ class PictureManager
         $pictureList = $trick->getPictureList();
 
         foreach ($pictureList as $deletePicture) {
-            $this->trickPictureFileService->delete($deletePicture->getName());
+            $this->trickPictureFileService->delete($deletePicture);
         }
     }
 }
