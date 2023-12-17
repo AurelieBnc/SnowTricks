@@ -23,10 +23,10 @@ class PictureManager
 
     public function addUploadedPictureFile(UploadedFile $pictureUploaded,Trick $trick): void
     {
-        $newNamePicture = $this->trickPictureFileService->storeWithSafeName($pictureUploaded);
+        $newPictureName = $this->trickPictureFileService->storeWithSafeName($pictureUploaded);
         $picture = new Picture;
 
-        $picture->setName($newNamePicture);
+        $picture->setName($newPictureName);
 
         $trick->addPicture($picture);
         $this->entityManager->persist($trick);
@@ -46,14 +46,14 @@ class PictureManager
     public function editUploadedPictureFile(Picture $picture, UploadedFile $uploadedPictureFile, Trick $trick): void
     {
         $pictureName = $picture->getName();
-        $newNamePicture = $this->trickPictureFileService->replace($uploadedPictureFile, $pictureName);
+        $newPictureName = $this->trickPictureFileService->replace($uploadedPictureFile, $pictureName);
 
         if ($pictureName === $trick->getHeaderPictureName()) {
-            $trick->setHeaderPictureName($newNamePicture);
+            $trick->setHeaderPictureName($newPictureName);
             $this->entityManager->persist($trick);
         }
         
-        $picture->setName($newNamePicture); 
+        $picture->setName($newPictureName); 
         $picture->setTrick($trick);
 
         $this->entityManager->persist($picture);
