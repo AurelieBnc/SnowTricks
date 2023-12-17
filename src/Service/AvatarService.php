@@ -13,10 +13,10 @@ Class AvatarService
 
 
     public function __construct(        
-    #[Autowire('%trick.picture.folder%')]
-    private string $folder,
-    #[Autowire('%images_directory%')]
-    private string $imgDirectory,
+        #[Autowire('%trick.picture.folder%')]
+        private string $folder,
+        #[Autowire('%images_directory%')]
+        private string $imgDirectory,
     ) {}
 
     /**

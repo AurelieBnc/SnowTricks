@@ -51,18 +51,10 @@ Class TrickPictureFileService
     /**
      * Function to delete a trick picture
      */
-    public function delete(string $field):bool
+    public function delete(string $pictureName):bool
     {
-        $success = false;        
-
-        $path = $this->imgDirectory.$this->folder;
-        $original = $path.'/'.$field;
-
-        if (file_exists($original)) {
-            unlink($original);
-            $success = true;
-        }
-
-        return $success;
+        $picturePath = $this->imgDirectory . $this->folder . DIRECTORY_SEPARATOR . $pictureName;
+        
+        return  file_exists( $picturePath) && unlink($picturePath);
     }
 }
