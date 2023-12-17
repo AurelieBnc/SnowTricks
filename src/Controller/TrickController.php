@@ -13,7 +13,7 @@ use App\Entity\Picture;
 use App\Form\TrickFormType;
 use App\Form\MediaType;
 use App\Form\PictureType;
-use App\Form\HeaderImageType;
+use App\Form\HeaderPictureNameType;
 use App\Manager\CommentManager;
 use App\Manager\PictureManager;
 use App\Manager\MediaManager;
@@ -56,19 +56,19 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[IsGranted('HEADER_IMAGE_EDIT', 'trick')]
-    #[Route('/{slug}/edit/headerImage', name: 'trick_edit_header_image')]
-    public function editHeaderImage(Trick $trick, Request $request, EntityManagerInterface $entityManager): Response
+    #[IsGranted('HEADER_PICTURE_NAME_EDIT', 'trick')]
+    #[Route('/{slug}/edit/headerPictureName', name: 'trick_edit_header_picture_name')]
+    public function editHeaderPictureName(Trick $trick, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $headerImageForm = $this->createForm(HeaderImageType::class, $trick);
+        $headerPictureNameForm = $this->createForm(HeaderPictureNameType::class, $trick);
 
-        $headerImageForm->handleRequest($request);
-        if ($trick->getHeaderImage() === null) {
+        $headerPictureNameForm->handleRequest($request);
+        if ($trick->getHeaderPictureName() === null) {
             $this->addFlash('info', 'Vous n\'avez pas d\'image d\'en-tête actuellement');
         }
 
-        if ($headerImageForm->isSubmitted() && $headerImageForm->isValid()) {
-            $trick->setHeaderImage($headerImageForm->get('headerImage')->getData());
+        if ($headerPictureNameForm->isSubmitted() && $headerPictureNameForm->isValid()) {
+            $trick->setHeaderPictureName($headerPictureNameForm->get('headerPictureName')->getData());
             $entityManager->flush();
 
             $this->addFlash('success', 'Ton image d\'en-tête a bien été modifiée.');
@@ -78,9 +78,9 @@ class TrickController extends AbstractController
             ]);
         }
         
-        return $this->render('trick/edit/edit_header_image.html.twig', [
-            'headerImageForm' => $headerImageForm->createView(),
-            'headerImage' => $trick->getHeaderImage(),
+        return $this->render('trick/edit/edit_header_picture_name.html.twig', [
+            'headerPictureNameForm' => $headerPictureNameForm->createView(),
+            'headerPictureName' => $trick->getHeaderPictureName(),
         ]);
     }
 
@@ -190,12 +190,12 @@ class TrickController extends AbstractController
         ]);
     }
 
-    #[IsGranted('HEADER_IMAGE_DELETE', 'trick')]
-    #[Route('/{slug}/delete/headerImage', name: 'delete_header_image')]
-    public function deleteHeaderImage(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
+    #[IsGranted('HEADER_PICTURE_NAME_DELETE', 'trick')]
+    #[Route('/{slug}/delete/headerPictureName', name: 'delete_header_picture_name')]
+    public function deleteHeaderPictureName(Trick $trick, EntityManagerInterface $entityManager): RedirectResponse
     {
-         if ($trick->getHeaderImage()) {
-            $trick->setHeaderImage($trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null);
+         if ($trick->getHeaderPictureName()) {
+            $trick->setHeaderPictureName($trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null);
 
             $entityManager->persist($trick);
             $entityManager->flush();

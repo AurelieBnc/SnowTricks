@@ -23,10 +23,10 @@
 
     <div class="card me-auto col-12 col-lg-2 m-3 p-0">
         <a href= "{{ path('trick', {'slug': trick.slug}) }}">
-        {% if trick.headerImage is not null %}
-            <img src="{{ asset('images/uploads/trickImages/'~ trick.headerImage) }}" class="card-img-top m-auto" alt="...">
+        {% if trick.headerPictureName is not null %}
+            <img src="{{ asset('images/uploads/trickImages/'~ trick.headerPictureName) }}" class="home-trick-picture img-fluid card-img-top m-auto" alt="...">
         {% else %}
-            <img src="{{ asset('images/default/defaultImage.jpg') }}" class="card-img-top m-auto" alt="...">
+            <img src="{{ asset('images/default/defaultImage.jpg') }}" class="home-trick-picture img-fluid card-img-top m-auto" alt="...">
         {% endif %}
         </a>
 

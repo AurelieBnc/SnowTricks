@@ -12,24 +12,24 @@
 <div class="my-5 col-12 col-lg-8 m-auto">
     {% include('partial/flash_edit.html.twig') %}
     <div class="form justify-content-around bg-light-form shadow pb-3">
-        {% if headerImage is null %}
+        {% if headerPictureName is null %}
             {% for message in app.flashes('info') %}
             <div class="alert alert-info alert-dismissible fade show text-center">
                 <p>{{ message }} </p>
             </div>
             {% endfor %}
         {% else %}
-            <img src="{{ asset('images/uploads/trickImages/'~ headerImage) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+            <img src="{{ asset('images/uploads/trickImages/'~ headerPictureName) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
         {% endif %}
         <div class="col-12 col-lg-10 m-auto">
             <hr class="border-black border-2 my-5">
         </div>
-        {{ form_errors(headerImageForm) }}
+        {{ form_errors(headerPictureNameForm) }}
 
-        {{ form_start(headerImageForm) }}
+        {{ form_start(headerPictureNameForm) }}
 
-        {{ form_label(headerImageForm.headerImage)}}
-        {% for picture in headerImageForm.headerImage %}
+        {{ form_label(headerPictureNameForm.headerPictureName)}}
+        {% for picture in headerPictureNameForm.headerPictureName %}
         <div class="d-flex flex-row">
             <div class="d-flex flex-column flex-lg-row">
                 {{ form_widget(picture, {'value': picture.vars.label}) }}
@@ -46,7 +46,7 @@
             </button>
         </div>
 
-        {{ form_end(headerImageForm) }}
+        {{ form_end(headerPictureNameForm) }}
 
     </div>
 </div>

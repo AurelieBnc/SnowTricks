@@ -47,7 +47,7 @@ class Trick
     private Collection $pictureList;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $headerImage = null;
+    private ?string $headerPictureName = null;
 
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
@@ -216,14 +216,14 @@ class Trick
         return $this;
     }
 
-    public function getHeaderImage(): ?string
+    public function getHeaderPictureName(): ?string
     {
-        return $this->headerImage;
+        return $this->headerPictureName;
     }
 
-    public function setHeaderImage(?string $headerImage): static
+    public function setHeaderPictureName(?string $headerPictureName): static
     {
-        $this->headerImage = $headerImage;
+        $this->headerPictureName = $headerPictureName;
 
         return $this;
     }

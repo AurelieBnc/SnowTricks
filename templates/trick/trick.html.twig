@@ -3,8 +3,8 @@
 {% block title %}SnowTricks{% endblock %}
 
 {% block head %}
-{% if trick.headerImage is not null %} 
-    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% if trick.headerPictureName is not null %} 
+    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerPictureName) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% else %}
     <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% endif %}

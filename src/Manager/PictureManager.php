@@ -31,7 +31,7 @@ class PictureManager
         $trick->addPicture($picture);
         $this->entityManager->persist($trick);
 
-        $trick->setHeaderImage(
+        $trick->setHeaderPictureName(
             $trick->getPictureList()[0]?->getName() ? $trick->getPictureList()[0]->getName() : null
         );
     }
@@ -48,8 +48,8 @@ class PictureManager
         $pictureName = $picture->getName();
         $newNamePicture = $this->trickPictureFileService->replace($uploadedPictureFile, $pictureName);
 
-        if ($pictureName === $trick->getHeaderImage()) {
-            $trick->setHeaderImage($newNamePicture);
+        if ($pictureName === $trick->getHeaderPictureName()) {
+            $trick->setHeaderPictureName($newNamePicture);
             $this->entityManager->persist($trick);
         }
         
@@ -63,8 +63,8 @@ class PictureManager
     {
         $this->entityManager->remove($deletePicture);
 
-        if ($deletePicture->getName() === $trick->getHeaderImage()) {
-            $trick->setHeaderImage($trick->getPictureList()[1]?->getName() ? $trick->getPictureList()[1]->getName() : null);
+        if ($deletePicture->getName() === $trick->getHeaderPictureName()) {
+            $trick->setHeaderPictureName($trick->getPictureList()[1]?->getName() ? $trick->getPictureList()[1]->getName() : null);
         }
 
         $this->entityManager->persist($trick);
