@@ -63,8 +63,11 @@ class PictureManager
     {
         $this->entityManager->remove($deletePicture);
 
-        if ($deletePicture->getName() === $trick->getHeaderPictureName()) {
-            $trick->setHeaderPictureName($trick->getPictureList()[1]?->getName() ? $trick->getPictureList()[1]->getName() : null);
+        $isHeaderPicture = $deletePicture->getName() === $trick->getHeaderPictureName();
+        
+        if ($isHeaderPicture) {
+            $pictureList = $trick->getPictureList();
+            $trick->setHeaderPictureName( $pictureList[1]?->getName());
         }
 
         $this->entityManager->persist($trick);
