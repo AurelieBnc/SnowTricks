@@ -3,28 +3,30 @@
 {% block title %}Inscription{% endblock %}
 
 {% block body %}
+<section>
+    <h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Création de mon compte perso</h1>
 
-<h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Création de mon compte perso</h1>
-
-<div class="my-5 col-12 col-lg-8 m-auto">
-    <div class="form justify-content-around bg-light-form shadow pb-3">
-
-        {{ form_errors(form) }}
-
-        {{ form_start(form) }}
-
-            {{ form_row(form.username) }} 
-            {{ form_row(form.email) }}
-            {{ form_row(form.plainPassword) }}
-            {{ form_row(form.avatar) }}
-            
-            <div class="d-flex justify-content-center">
-                <button type="submit" class="my-3 fs-3 button-deco">Envoyer</button>
-            </div>
-
-        {{ form_end(form) }}
-        <a href="{{ path('app_login') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai déjà un compte, je me connecte !</a>
-
+    <div class="my-5 col-12 col-lg-8 m-auto">
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+    
+            {{ form_errors(form) }}
+    
+            {{ form_start(form) }}
+    
+                {{ form_row(form.username) }} 
+                {{ form_row(form.email) }}
+                {{ form_row(form.plainPassword) }}
+                {{ form_row(form.avatar) }}
+                
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="my-3 fs-3 button-deco">Envoyer</button>
+                </div>
+    
+            {{ form_end(form) }}
+            <a href="{{ path('app_login') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">J'ai déjà un compte, je me connecte !</a>
+    
+        </div>
     </div>
-</div>
+</section>
+
 {% endblock %}

@@ -3,6 +3,7 @@
 {% block title %}login{% endblock %}
 
 {% block body %}
+<section>
     {% if error %}
     <div class="col-8 d-flex flex-column justify-content-center alert alert-danger text-center fw-bold m-auto my-3">
         Les données de connexion ne correspondent à aucun utilisateur, réessaie!
@@ -40,4 +41,6 @@
 
         </div>
     </div>
+</section>
+
 {% endblock %}

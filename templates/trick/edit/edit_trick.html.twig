@@ -32,10 +32,10 @@
 {% endblock %}
 
 {% block body %}
-<div id="list-medias" class="d-sm-none d-lg-block">
+<section id="list-medias" class="d-sm-none d-lg-block">
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
         {% for picture in trick.pictureList %}
-        <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
+        <figure class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
             <div class="p-3">
                 <div class="d-flex justify-content-end align-items-end p-0">   
@@ -53,7 +53,7 @@
                     </p>
                 </div>            
             </div>    
-        </div>
+        </figure>
         {% endfor %}
 
         {% for media in trick.mediaList %}
@@ -76,7 +76,7 @@
         </div>
         {% endfor %}
     </div>
-</div>
+</section>
 
 {% if (trick.pictureList is not empty) or (trick.mediaList is not empty) %}
 {% include('partial/button_loader.html.twig') %}
@@ -86,7 +86,7 @@
     <hr class="border-black border-2 my-5">
 </div>
 
-<div class="col-12 col-lg-10 m-auto">
+<section class="col-12 col-lg-10 m-auto">
     <div class="row my-5 pb-5 ">
         <div style="height: 3rem;" class="d-flex flex-sm-column flex-lg-row mx-auto justify-content-center text-center list-group">
             <p class="m-0 list-group-item fs-4 fw-bolder">
@@ -102,9 +102,9 @@
             {% endif %}
         </div>
     </div>
-</div>
+</section>
 
-<div class="col-12 col-lg-10 m-auto">
+<section class="col-12 col-lg-10 m-auto">
     {% include('partial/flash_edit.html.twig') %}
 
     <div class="my-5 col-12 col-lg-10 m-auto">
@@ -134,7 +134,7 @@
     
         </div>
     </div>
-</div>
+</section>
 
 <div style="height:150px"></div>
 

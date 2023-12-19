@@ -3,17 +3,17 @@
 {% block title %}Erreur 500 : Erreur serveur {% endblock %}
 
 {% block body %}
-
+<section>
     <h2 class="mt-5 mb-3 d-flex align-items-center justify-content-center text-center">Erreur serveur</h2>
 
     <div class="my-3 col-12 col-lg-8 m-auto">
-        <div class="d-flex">
+        <figure class="d-flex">
             <img src="{{ asset('images/errors/500.jpg' ) }}" alt="page erreur 500" class="img-fluid m-auto">
-        </div>
+        </figure>
         <div class="form justify-content-around bg-light-form shadow m-2">
             <p>Le serveur a rencontré un problème inattendu qui l'empêche de répondre à la requête.</p>
             <a href="{{ path('app_home') }}" class="text-decoration-none fw-medium fst-italic text-black d-flex justify-content-end">Retourner sur la page d'acceuil !</a>
         </div>
     </div>
-
+</section>
 {% endblock %}
