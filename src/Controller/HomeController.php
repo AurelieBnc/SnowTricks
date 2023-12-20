@@ -19,12 +19,10 @@ class HomeController extends AbstractController
         if ($user) {
             if ($user->isVerified() === false) {
                 $this->addFlash('verification', 'Tu dois confirmer ton adresse email.');
-                $this->redirectToRoute('app_home');
-            }
-            if (!$user->isVerified() === false) {
+            } else {
                 $this->addFlash('hello', 'Une bonne journée à toi '.$user->getUsername().', Ride On !');
-                $this->redirectToRoute('app_home');
             }
+            $this->redirectToRoute('app_home');
         }
         $page = $request->query->getInt('page', 1);
 
@@ -32,27 +30,8 @@ class HomeController extends AbstractController
         $trickRepo = $entityManager->getRepository(Trick::class);
         $tricklistPaginated = $trickRepo->findTrickListPaginated($page, 10);
 
-        $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->findAll();
-
         return $this->render('home/home.html.twig', [
             'trickList' => $tricklistPaginated,
-            'pictureList' => $pictureList,
-        ]);
-    }
-
-    #[Route('/trick-list', name: 'complete_trick_list')]
-    public function tricktList(EntityManagerInterface $entityManager): Response
-    {
-        $repo = $entityManager->getRepository(Trick::class);
-        $trickList = $repo->findAll();
-
-        $pictureRepo = $entityManager->getRepository(Picture::class);
-        $pictureList = $pictureRepo->findAll();
-
-        return $this->render('home/home.html.twig', [
-            'trickList' => $trickList,
-            'pictureList' => $pictureList,
         ]);
     }
 }

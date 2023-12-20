@@ -8,12 +8,12 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class HeaderImageType extends AbstractType
+class HeaderPictureNameType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('headerImage', ChoiceType::class, [
+            ->add('headerPictureName', ChoiceType::class, [
                 // $builder->getData(): permet de récupérer l'objet associé au formulaire via les data_class
                 'choices' => $this->getPictureChoices($builder->getData()),
                 'choice_label' => null,

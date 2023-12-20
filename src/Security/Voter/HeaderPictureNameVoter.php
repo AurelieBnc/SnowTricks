@@ -7,10 +7,10 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class HeaderImageVoter extends Voter
+class HeaderPictureNameVoter extends Voter
 {
-    public const EDIT = 'HEADER_IMAGE_EDIT';
-    public const DELETE = 'HEADER_IMAGE_DELETE';
+    public const EDIT = 'HEADER_PICTURE_NAME_EDIT';
+    public const DELETE = 'HEADER_PICTURE_NAME_DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {

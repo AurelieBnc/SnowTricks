@@ -6,29 +6,32 @@
 {% endblock %}
 
 {% block body %}
+<section>
+    <h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Modifier mon image</h1>
 
-<h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Modifier mon image</h1>
-
-<div class="my-5 col-12 col-lg-8 m-auto">
-    {% include('partial/flash_edit.html.twig') %}
-    <div class="form justify-content-around bg-light-form shadow pb-3">
-        <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
- 
-        {{ form_errors(form) }}
-
-        {{ form_start(form) }}
-
-        {{ form_row(form.name) }} 
-            
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="my-3 fs-3 button-deco">            
-                Envoyer
-            </button>
+    <div class="my-5 col-12 col-lg-8 m-auto">
+        {% include('partial/flash_edit.html.twig') %}
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+            <figure>
+                <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+            </figure>
+     
+            {{ form_errors(form) }}
+    
+            {{ form_start(form) }}
+    
+            {{ form_row(form.name) }} 
+                
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="my-3 fs-3 button-deco">            
+                    Envoyer
+                </button>
+            </div>
+    
+            {{ form_end(form) }}
+    
         </div>
-
-        {{ form_end(form) }}
-
     </div>
-</div>
+</section>
 
 {% endblock %}

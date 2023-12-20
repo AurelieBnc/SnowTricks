@@ -20,7 +20,7 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                // 'required' => true,
+                'required' => true,
                 'label' => 'Pseudonyme', 
                 'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
                 'attr' => [
@@ -48,33 +48,33 @@ class RegistrationType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    // 'constraints' => [
-                    //     new Assert\Type('string'),
-                    //     new Assert\Length([
-                    //         'min' => 12,
-                    //         'minMessage' => 'Le mot de passe doit contenir au moins 12 caractères.',
-                    //         // max length allowed by Symfony for security reasons
-                    //         'max' => 4096,
-                    //     ]),
-                    //     // Password must contain at least a upper and lower case
-                    //     new Assert\Regex([
-                    //         'pattern' => '/(?=.*[a-z])(?=.*[A-Z])/',
-                    //         'message' => 'Le mot de passe doit contenir au moins une majuscule et une minuscule.',
-                    //         'match' => true,
-                    //     ]),
-                    //     // Password must contain at least one digit
-                    //     new Assert\Regex([
-                    //         'pattern' => '/\d+/i',
-                    //         'message' => 'Le mot de passe doit contenir au moins un chiffre.',
-                    //         'match' => true,
-                    //     ]),
-                    //     // Password must contain at least one special char from the list (including space)
-                    //     new Assert\Regex([
-                    //         'pattern' => '/[^a-zA-Z0-9\n\r]+/i',
-                    //         'message' => 'Le mot de passe doit contenir au moins un caractère spécial.',
-                    //         'match' => true,
-                    //     ]),
-                    // ],
+                    'constraints' => [
+                        new Assert\Type('string'),
+                        new Assert\Length([
+                            'min' => 12,
+                            'minMessage' => 'Le mot de passe doit contenir au moins 12 caractères.',
+                            // max length allowed by Symfony for security reasons
+                            'max' => 4096,
+                        ]),
+                        // Password must contain at least a upper and lower case
+                        new Assert\Regex([
+                            'pattern' => '/(?=.*[a-z])(?=.*[A-Z])/',
+                            'message' => 'Le mot de passe doit contenir au moins une majuscule et une minuscule.',
+                            'match' => true,
+                        ]),
+                        // Password must contain at least one digit
+                        new Assert\Regex([
+                            'pattern' => '/\d+/i',
+                            'message' => 'Le mot de passe doit contenir au moins un chiffre.',
+                            'match' => true,
+                        ]),
+                        // Password must contain at least one special char from the list (including space)
+                        new Assert\Regex([
+                            'pattern' => '/[^a-zA-Z0-9\n\r]+/i',
+                            'message' => 'Le mot de passe doit contenir au moins un caractère spécial.',
+                            'match' => true,
+                        ]),
+                    ],
                     'label' => 'Mot de passe',
                     'label_attr' =>['class'=> 'fw-bold fs-2 d-flex justify-content-center'],
                     'attr' => [
