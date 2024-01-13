@@ -194,22 +194,22 @@ class Trick
         return $this->pictureList;
     }
 
-    public function addPicture(Picture $pictureList): static
+    public function addPicture(Picture $picture): static
     {
-        if (!$this->pictureList->contains($pictureList)) {
-            $this->pictureList->add($pictureList);
-            $pictureList->setTrick($this);
+        if (!$this->pictureList->contains($picture)) {
+            $this->pictureList->add($picture);
+            $picture->setTrick($this);
         }
 
         return $this;
     }
 
-    public function removePicture(Picture $pictureList): static
+    public function removePicture(Picture $picture): static
     {
-        if ($this->pictureList->removeElement($pictureList)) {
+        if ($this->pictureList->removeElement($picture)) {
             // set the owning side to null (unless already changed)
-            if ($pictureList->getTrick() === $this) {
-                $pictureList->setTrick(null);
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
             }
         }
 
