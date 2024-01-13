@@ -222,9 +222,12 @@ class TrickController extends AbstractController
         $this->denyAccessUnlessGranted('PICTURE_DELETE', $deletePicture);
 
         if (isset($deletePicture)) {
-            $pictureManager->deletePictureAndPictureFile($deletePicture, $trick);
-
-            $this->addFlash('success', 'Ton image a bien été supprimée.'); 
+            if($deletePicture->getName() === $trick->getHeaderPictureName()) {
+                $this->addFlash('error', 'Cette image est ton image d\en-tête, tu dois la modifier avant de pouvoir la supprimer');
+            }else{
+                $pictureManager->deletePictureAndPictureFile($deletePicture, $trick);
+                $this->addFlash('success', 'Ton image a bien été supprimée.'); 
+            }
         } else {
             $this->addFlash('error', 'Cette image n\'a pas été retrouvée.');
         }
