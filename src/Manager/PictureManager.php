@@ -67,7 +67,7 @@ class PictureManager
 
         if ($isHeaderPicture) {
             $pictureList = $trick->getPictureList();
-            $trick->setHeaderPictureName( $pictureList[1]?->getName());
+            $trick->setHeaderPictureName($pictureList[1]?->getName());
         }
 
         $this->entityManager->persist($trick);

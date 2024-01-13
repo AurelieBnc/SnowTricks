@@ -21,7 +21,7 @@
 
     {% for trick in trickList.data %}
 
-    <figure class="card me-auto col-12 col-lg-2 m-3 p-0">
+    <article class="card me-auto col-12 col-lg-2 m-3 p-0" role ="trick_detail">
         <a href= "{{ path('trick', {'slug': trick.slug}) }}">
         {% if trick.headerPictureName is not null %}
             <img src="{{ asset('images/uploads/trickImages/'~ trick.headerPictureName) }}" class="home-trick-picture img-fluid card-img-top m-auto" alt="...">
@@ -49,7 +49,7 @@
             </p>
         </div>
         {% endif %}
-    </figure>
+    </article>
 
     {% endfor %}
 
