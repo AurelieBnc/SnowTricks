@@ -6,32 +6,33 @@
 {% endblock %}
 
 {% block body %}
+<section>
+    <h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Modifier mon lien vidéo Youtube</h1>
 
-<h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Modifier mon lien vidéo Youtube</h1>
-
-<div class="my-5 col-12 col-lg-8 m-auto">
-    {% include('partial/flash_edit.html.twig') %}
-    <div class="form justify-content-around bg-light-form shadow pb-3">
-        <div class="mx-auto mx-lg-3 my-lg-3 p-0">
-            <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <div class="my-5 col-12 col-lg-8 m-auto">
+        {% include('partial/flash_edit.html.twig') %}
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+            <div class="mx-auto mx-lg-3 my-lg-3 p-0">
+                <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+     
+            {{ form_errors(form) }}
+    
+            {{ form_start(form) }}
+    
+            {{ form_label(form.videoUrl) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
+            {{ form_widget(form.videoUrl) }} 
+                
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="my-3 fs-3 button-deco">            
+                    Envoyer
+                </button>
+            </div>
+    
+            {{ form_end(form) }}
+    
         </div>
- 
-        {{ form_errors(form) }}
-
-        {{ form_start(form) }}
-
-        {{ form_label(form.videoUrl) }} <img src="{{ asset('images/logo/youtube-logo.png') }}" id="youtube-logo" class="card-img-top m-auto pb-1 ps-1" alt="...">
-        {{ form_widget(form.videoUrl) }} 
-            
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="my-3 fs-3 button-deco">            
-                Envoyer
-            </button>
-        </div>
-
-        {{ form_end(form) }}
-
     </div>
-</div>
+</section>
 
 {% endblock %}

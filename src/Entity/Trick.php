@@ -3,13 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
+use DateTimeImmutable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[ORM\Entity(repositoryClass: TrickRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: ['title'], message: 'Un trick avec le même titre existe déjà.')]
 class Trick
 {
@@ -34,19 +37,19 @@ class Trick
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Media::class, cascade:['persist','remove'])]
     private Collection $mediaList;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Comment::class, orphanRemoval: true, cascade:['remove'])]
     private Collection $commentList;
 
-    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade:['persist'])]
+    #[ORM\OneToMany(mappedBy: 'trick', targetEntity: Picture::class, cascade:['persist','remove'])]
     private Collection $pictureList;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $headerImage = null;
+    private ?string $headerPictureName = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
     public function __construct()
@@ -90,9 +93,10 @@ class Trick
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    #[ORM\PrePersist]
+    public function setCreatedAt(): static
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new DateTimeImmutable();
 
         return $this;
     }
@@ -102,10 +106,11 @@ class Trick
         return $this->updateDate;
     }
 
-    public function setUpdateDate(?\DateTimeInterface $updateDate): static
+    #[ORM\PreUpdate]
+    public function setUpdateDate(): static
     {
-        $this->updateDate = $updateDate;
-
+        $this->updateDate = new DateTimeImmutable();
+        
         return $this;
     }
 
@@ -189,36 +194,36 @@ class Trick
         return $this->pictureList;
     }
 
-    public function addPicture(Picture $pictureList): static
+    public function addPicture(Picture $picture): static
     {
-        if (!$this->pictureList->contains($pictureList)) {
-            $this->pictureList->add($pictureList);
-            $pictureList->setTrick($this);
+        if (!$this->pictureList->contains($picture)) {
+            $this->pictureList->add($picture);
+            $picture->setTrick($this);
         }
 
         return $this;
     }
 
-    public function removePicture(Picture $pictureList): static
+    public function removePicture(Picture $picture): static
     {
-        if ($this->pictureList->removeElement($pictureList)) {
+        if ($this->pictureList->removeElement($picture)) {
             // set the owning side to null (unless already changed)
-            if ($pictureList->getTrick() === $this) {
-                $pictureList->setTrick(null);
+            if ($picture->getTrick() === $this) {
+                $picture->setTrick(null);
             }
         }
 
         return $this;
     }
 
-    public function getHeaderImage(): ?string
+    public function getHeaderPictureName(): ?string
     {
-        return $this->headerImage;
+        return $this->headerPictureName;
     }
 
-    public function setHeaderImage(?string $headerImage): static
+    public function setHeaderPictureName(?string $headerPictureName): static
     {
-        $this->headerImage = $headerImage;
+        $this->headerPictureName = $headerPictureName;
 
         return $this;
     }
@@ -228,9 +233,9 @@ class Trick
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function computeSlug(SluggerInterface $slugger): static
     {
-        $this->slug = $slug;
+        $this->slug = strtolower($slugger->slug($this->title));
 
         return $this;
     }

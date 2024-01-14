@@ -4,23 +4,21 @@
 
 {% block head %}
 
-{% if pictureList is empty %}
-    <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
-{% elseif trick.headerImage is not null %} 
-    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerImage) }} '); height: 100%;" class="row text-center m-0 p-0">
+{% if trick.headerPictureName is not null %} 
+    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ trick.headerPictureName) }} '); height: 100%;" class="row text-center m-0 p-0">
 {% else %}
-    <div id="bg-trick2" style="background-image: url('{{ asset('images/uploads/trickImages/'~ pictureList.0.name) }} '); height: 100%;" class="row text-center m-0 p-0">
+    <div id="bg-trick1" style="background-image: url('{{ asset('images/background/snowboard1.jpg') }}');" class="row text-center m-0 p-0">
 {% endif %}
         <div class="p-3">
             <div class="d-flex justify-content-end align-items-end p-0">   
                 <p class="px-2 m-0 bg-edit-button edit-button" >
-                    <a href="{{ path('trick_edit_header_image', {'slug': trick.slug}) }}">
+                    <a href="{{ path('trick_edit_header_picture_name', {'slug': trick.slug}) }}">
                         <i id="pencil-icon" class="fa-solid fa-pencil"></i>
                     </a>
                 </p>
                 <p class="px-2 m-0 bg-edit-button edit-button">
                     <a  onclick="return confirm('Es-tu sur de vouloir supprimer l\'image d\'en-tête?')" 
-                        href="{{ path('delete_header_image', {'slug': trick.slug}) }}"
+                        href="{{ path('delete_header_picture_name', {'slug': trick.slug}) }}"
                         title="Supprimer l'image d'en-tête">
                         <i id="trash-icon" class="fa-solid fa-trash"></i>
                     </a>
@@ -34,10 +32,10 @@
 {% endblock %}
 
 {% block body %}
-<div id="list-medias" class="d-sm-none d-lg-block">
+<section id="list-medias" class="d-sm-none d-lg-block">
     <div class="row col-12 pb-5 d-lg-flex m-0 mt-3">
-        {% for picture in pictureList %}
-        <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
+        {% for picture in trick.pictureList %}
+        <figure class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <img src="{{ asset('images/uploads/trickImages/'~ picture.name) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="...">
             <div class="p-3">
                 <div class="d-flex justify-content-end align-items-end p-0">   
@@ -55,10 +53,10 @@
                     </p>
                 </div>            
             </div>    
-        </div>
+        </figure>
         {% endfor %}
 
-        {% for media in mediaList %}
+        {% for media in trick.mediaList %}
         <div class="col-12 col-lg-2 mx-auto mx-lg-3 my-lg-3 p-0">
             <iframe height="315" class="card-img-top m-auto img-fluid img-thumbnail" src="{{ media.videoUrl }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
             <div class="p-3">
@@ -78,9 +76,9 @@
         </div>
         {% endfor %}
     </div>
-</div>
+</section>
 
-{% if (pictureList is not empty) or (mediaList is not empty) %}
+{% if (trick.pictureList is not empty) or (trick.mediaList is not empty) %}
 {% include('partial/button_loader.html.twig') %}
 {% endif %}
 
@@ -88,7 +86,7 @@
     <hr class="border-black border-2 my-5">
 </div>
 
-<div class="col-12 col-lg-10 m-auto">
+<section class="col-12 col-lg-10 m-auto">
     <div class="row my-5 pb-5 ">
         <div style="height: 3rem;" class="d-flex flex-sm-column flex-lg-row mx-auto justify-content-center text-center list-group">
             <p class="m-0 list-group-item fs-4 fw-bolder">
@@ -104,9 +102,9 @@
             {% endif %}
         </div>
     </div>
-</div>
+</section>
 
-<div class="col-12 col-lg-10 m-auto">
+<section class="col-12 col-lg-10 m-auto">
     {% include('partial/flash_edit.html.twig') %}
 
     <div class="my-5 col-12 col-lg-10 m-auto">
@@ -136,7 +134,7 @@
     
         </div>
     </div>
-</div>
+</section>
 
 <div style="height:150px"></div>
 

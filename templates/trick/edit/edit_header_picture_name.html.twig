@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'image d'en-tête{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<section>
+    <h1 class="m-auto my-5 d-flex align-items-center justify-content-center text-center">Modifier mon image d'en-tête</h1>
+
+    <div class="my-5 col-12 col-lg-8 m-auto">
+        {% include('partial/flash_edit.html.twig') %}
+        <div class="form justify-content-around bg-light-form shadow pb-3">
+            {% if headerPictureName is null %}
+                {% for message in app.flashes('info') %}
+                <div class="alert alert-info alert-dismissible fade show text-center">
+                    <p>{{ message }} </p>
+                </div>
+                {% endfor %}
+            {% else %}
+            <figure>
+                <img src="{{ asset('images/uploads/trickImages/'~ headerPictureName) }}" class="card-img-top m-auto img-fluid img-thumbnail" alt="">
+            </figure>
+            {% endif %}
+            <div class="col-12 col-lg-10 m-auto">
+                <hr class="border-black border-2 my-5">
+            </div>
+            {{ form_errors(headerPictureNameForm) }}
+    
+            {{ form_start(headerPictureNameForm) }}
+    
+            {{ form_label(headerPictureNameForm.headerPictureName)}}
+            {% for picture in headerPictureNameForm.headerPictureName %}
+            <div class="d-flex flex-row">
+                <figure class="d-flex flex-column flex-lg-row">
+                    {{ form_widget(picture, {'value': picture.vars.label}) }}
+                    <img src="{{ asset('images/uploads/trickImages/'~ picture.vars.label) }}" 
+                    class="card-img-top m-auto img-fluid img-thumbnail image-mini"  
+                    alt="{{ picture.vars.label }}">
+                </figure>
+            </div>
+            {% endfor %}
+                
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="my-3 fs-3 button-deco">            
+                    Envoyer
+                </button>
+            </div>
+    
+            {{ form_end(headerPictureNameForm) }}
+    
+        </div>
+    </div>
+</section>
+
+{% endblock %}
