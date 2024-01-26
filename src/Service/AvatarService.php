@@ -13,7 +13,7 @@ Class AvatarService
 
 
     public function __construct(        
-        #[Autowire('%trick.picture.folder%')]
+        #[Autowire('%avatar.picture.folder%')]
         private string $folder,
         #[Autowire('%images_directory%')]
         private string $imgDirectory,
@@ -29,7 +29,7 @@ Class AvatarService
             mkdir($path.'/', 0755, true);
         }
 
-        $field = md5(uniqId(rand(), true)).'.png';
+        $imageName = md5(uniqId(rand(), true)).'.png';
         $pictureDatas = getImageSize($picture);
 
         if ($pictureDatas === false) {
@@ -73,8 +73,8 @@ Class AvatarService
 
         $resizePicture = imagecreatetruecolor($this->width, $this->heigth);
         imagecopyresampled($resizePicture, $pictureSource, 0, 0, $src_x, $src_y, $this->width, $this->heigth, $squareSize, $squareSize);
-        imagepng($resizePicture, $path.'/'.$this->width.'x'.$this->heigth.'-'.$field);
+        imagepng($resizePicture, $path.'/'.$this->width.'x'.$this->heigth.'-'.$imageName);
 
-        return $field;
+        return $imageName;
     }
 }
