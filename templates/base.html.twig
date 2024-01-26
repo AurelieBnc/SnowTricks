@@ -60,7 +60,7 @@
     <footer>
         <nav id="footer-desk" class="navbar fixed-bottom bg-dark border-body d-none d-lg-block" data-bs-theme="dark">
             <div class="container-fluid d-flex justify-content-center">
-                <span class="navbar-brand m-0">Footer</span>
+                <span class="navbar-brand m-0">© 2024 Copyright - Shil</span>
             </div>
         </nav>
         <nav id="footer-phone" class="navbar fixed-bottom bg-dark border-body d-block d-lg-none">
@@ -79,7 +79,7 @@
                 {% endif %}
                 {% if not is_granted('IS_AUTHENTICATED') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path("security_registration") }}" title="Connexion">
+                    <a class="nav-link" href="{{ path("app_login") }}" title="Connexion">
                         <i id="bracket-icon" class="fa-solid fa-right-to-bracket"></i>
                     </a>
                 </li>
